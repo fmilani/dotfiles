@@ -14,7 +14,7 @@ offset-y = 0
 radius = 0
 background = ${colors.transparent}
 foreground = ${colors.foreground}
-font-0 = Noto Sans:style=Regular:size=11;5
+font-0 = Noto Sans Mono:style=Regular:size=11;5
 font-1 = Font Awesome 5 Free Regular:style=Regular:size=11;5
 font-2 = Font Awesome 5 Free Solid:style=Solid:size=11;5
 font-3 = Font Awesome 5 Brands Regular:style=Regular:size=11;5
@@ -45,7 +45,7 @@ modules-right = timetracker vpn bluetooth temperature cpu memory wlan pulseaudio
 format-prefix-background = ${colors.transparent}
 format-prefix-foreground = ${colors.accent}
 format-prefix-padding = 0
-format-prefix-padding-left = 3
+format-prefix-padding-left = 0
 label-background = ${colors.transparent}
 label-padding = 1
 
@@ -142,20 +142,20 @@ type = internal/bspwm
 label-focused = 
 ; label-focused-background = ${colors.accent}
 label-focused-foreground = ${colors.accent}
-label-focused-padding = 1
+label-focused-padding = 0
 
 label-occupied = 
 ; label-occupied-background = ${colors.background}
-label-occupied-padding = 1
+label-occupied-padding = 0
 
 label-urgent = 
 label-urgent-background = ${colors.alert}
-label-urgent-padding = 1
+label-urgent-padding = 0
 
 label-empty = 
 ; label-empty-background = ${colors.background}
 label-empty-foreground = ${colors.background-alt}
-label-empty-padding = 1
+label-empty-padding = 0
 ; Separator in between workspaces
 ; label-separator = |
 
