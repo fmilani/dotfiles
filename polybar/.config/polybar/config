@@ -1,0 +1,315 @@
+[colors]
+transparent = #00000000
+background = ${xrdb:background}
+background-alt = ${xrdb:color8}
+foreground = ${xrdb:background}
+foreground-alt = ${xrdb:color8}
+accent = ${xrdb:background}
+alert = ${xrdb:color1}
+
+[bar/base]
+dpi = 192
+height = 48 
+offset-y = 0
+radius = 0
+background = ${colors.transparent}
+foreground = ${colors.foreground}
+font-0 = Noto Sans:style=Regular:size=11;5
+font-1 = Font Awesome 5 Free Regular:style=Regular:size=11;5
+font-2 = Font Awesome 5 Free Solid:style=Solid:size=11;5
+font-3 = Font Awesome 5 Brands Regular:style=Regular:size=11;5
+
+cursor-click = pointer
+wm-restack = bspwm
+override-redirect = true
+
+[bar/main]
+inherit = bar/base
+
+fixed-center = true
+width = 100%
+line-size = 12
+padding = 1
+module-margin-left = 0
+module-margin-right = 0
+dim-value = 1.0
+enable-ipc = true
+cursor-click = pointer
+cursor-scroll =
+
+modules-left = mpd 
+modules-center = bspwm
+modules-right = timetracker vpn bluetooth temperature cpu memory wlan pulseaudio battery date
+
+[module/base]
+format-prefix-background = ${colors.transparent}
+format-prefix-foreground = ${colors.accent}
+format-prefix-padding = 0
+format-prefix-padding-left = 3
+label-background = ${colors.transparent}
+label-padding = 1
+
+[module/mpd]
+inherit = module/base
+type = internal/mpd
+format-online = <label-song> <label-time>
+label-song = %artist:0:20:...% - %album:0:20:...% - %title:0:20:...%
+label-time = %elapsed% / %total%
+
+[module/bbb]
+inherit = module/base
+type = custom/script
+exec = node ~/Projects/bbb-uol-votos/index.js 2>/dev/null
+exec-if = case "$(date +%a)" in sáb|dom) exit -1;; esac
+format-prefix =
+interval = 1800
+
+[module/timetracker]
+inherit = module/base
+type = custom/script
+exec = time-tracker 2>/dev/null
+exec-if = case "$(date +%a)" in sáb|dom) exit -1;; esac
+format-prefix = 
+click-left = punch-time | notify-pipe
+click-right  = ~/Projects/ppp/bin/run pontos | rofi -dmenu -p "Pontos"
+interval = 60
+
+[module/redshift]
+inherit = module/base
+type = custom/script
+exec = redshift -p 2>/dev/null | sed '3!d' | awk '{print $3}'
+format-prefix = 
+interval = 5
+
+[module/cpu-hungry]
+type = custom/script
+exec = cpu-hungry
+interval = 1
+format-prefix = " "
+format-prefix-foreground = ${colors.foreground-alt}
+
+[module/corona]
+type = custom/script
+exec = corona
+interval = 60
+format-prefix = " "
+format-prefix-foreground = ${colors.foreground-alt}
+
+[module/keyboard]
+inherit = module/base
+type = custom/script
+exec = keyboard-manager
+interval = 1
+format-prefix =  
+click-left = keyboard-manager --toggle
+click-right = rofi-keyboard
+
+[module/vpn]
+inherit = module/base
+type = custom/script
+exec = evo-vpn
+interval = 1
+format-prefix = 
+click-left = evo-vpn --toggle
+
+[module/bluetooth]
+inherit = module/base
+type = custom/script
+exec = bluetooth-manager --status
+interval = 1
+format-prefix = 
+click-left = bluetooth-manager --toggle
+click-right = rofi-bluetooth
+
+[module/xwindow]
+type = internal/xwindow
+label = %title:0:20:...%
+
+[module/filesystem]
+type = internal/fs
+interval = 25
+
+mount-0 = /
+
+label-mounted = %{F#0a81f5}%mountpoint%%{F-}: %percentage_used%%
+label-unmounted = %mountpoint% not mounted
+label-unmounted-foreground = ${colors.foreground-alt}
+
+[module/bspwm]
+type = internal/bspwm
+
+; label-focused = %index% 
+label-focused = 
+; label-focused-background = ${colors.accent}
+label-focused-foreground = ${colors.accent}
+label-focused-padding = 1
+
+label-occupied = 
+; label-occupied-background = ${colors.background}
+label-occupied-padding = 1
+
+label-urgent = 
+label-urgent-background = ${colors.alert}
+label-urgent-padding = 1
+
+label-empty = 
+; label-empty-background = ${colors.background}
+label-empty-foreground = ${colors.background-alt}
+label-empty-padding = 1
+; Separator in between workspaces
+; label-separator = |
+
+[module/cpu]
+inherit = module/base
+type = internal/cpu
+format-prefix = ""
+label = %percentage:2%%
+
+[module/memory]
+inherit = module/base
+type = internal/memory
+format-prefix = ""
+label = %percentage_used%%
+
+[module/wlan]
+inherit = module/base
+type = internal/network
+interface = wlp2s0
+interval = 3.0
+
+format-connected-prefix = 
+format-connected-prefix-padding = 0
+format-connected-prefix-padding-left = ${self.format-prefix-padding-left}
+format-connected-prefix-foreground = ${colors.accent}
+format-connected-prefix-background = ${colors.transparent}
+format-connected = %{A3:networkmanager_dmenu:}<label-connected>%{A}
+label-connected = %essid:0:5%
+label-connected-background = ${colors.transparent}
+label-connected-padding = 1
+
+format-disconnected-prefix = 
+format-disconnected-prefix-foreground = ${colors.accent}
+format-disconnected-prefix-background = ${colors.transparent}
+format-disconnected-prefix-padding = 0
+format-disconnected-prefix-padding-left = ${self.format-prefix-padding-left}
+format-disconnected = %{A3:networkmanager_dmenu:}<label-disconnected>%{A}
+label-disconnected = -----
+label-disconnected-background = ${colors.background}
+label-disconnected-padding = 1
+
+[module/date]
+inherit = module/base
+type = internal/date
+interval = 5
+
+date = "%a, %d"
+date-alt = "%a, %b %d"
+time = %H:%M
+time-alt = %H:%M:%S
+
+format-prefix = ""
+label = %date% %time%
+
+[module/pulseaudio]
+inherit = module/base
+type = internal/pulseaudio
+
+format-volume = %{A3:pavucontrol:}<ramp-volume><label-volume>%{A}
+label-volume = %percentage%%
+label-volume-background = ${colors.transparent}
+label-volume-foreground = ${root.foreground}
+label-volume-padding = 1
+
+format-muted = <ramp-volume><label-muted>
+label-muted = ---
+label-muted-background = ${colors.transparent}
+label-muted-padding = 1
+
+ramp-volume-0 = 
+ramp-volume-foreground = ${colors.accent}
+ramp-volume-background = ${colors.transparent}
+ramp-volume-padding = 0
+ramp-volume-padding-left = ${self.format-prefix-padding-left}
+
+[module/battery]
+type = internal/battery
+battery = BAT0
+adapter = ADP1
+full-at = 100
+
+format-charging = <animation-charging><label-charging>
+animation-charging-0 = 
+animation-charging-1 = 
+animation-charging-2 = 
+animation-charging-3 = 
+animation-charging-4 = 
+animation-charging-foreground = ${colors.accent}
+animation-charging-background = ${colors.background}
+animation-charging-padding = 0
+animation-charging-padding-left = 1
+animation-charging-framerate = 500
+label-charging = %percentage%%
+label-charging-background = ${colors.background}
+label-charging-padding = 1
+
+format-discharging = <ramp-capacity><label-discharging>
+format-discharging-padding = 0
+ramp-capacity-0 = 
+ramp-capacity-1 = 
+ramp-capacity-2 = 
+ramp-capacity-3 = 
+ramp-capacity-4 = 
+ramp-capacity-foreground = ${colors.accent}
+ramp-capacity-background = ${colors.background}
+ramp-capacity-padding = 0
+ramp-capacity-padding-left = 1
+label-discharging = %percentage%%
+label-discharging-background = ${colors.background}
+label-discharging-padding = 1
+
+format-full-prefix = ""
+format-full-prefix-padding-left = 1
+format-full-prefix-background = ${colors.background}
+format-full-prefix-foreground = ${colors.accent}
+label-full = Ful
+label-full-background = ${colors.background}
+label-full-padding = 1
+
+[module/temperature]
+inherit = module/base
+type = internal/temperature
+thermal-zone = 0
+; Full path of temperature sysfs path
+; Use `sensors` to find preferred temperature source, then run
+; $ for i in /sys/class/hwmon/hwmon*/temp*_input; do echo "$(<$(dirname $i)/name): $(cat ${i%_*}_label 2>/dev/null || echo $(basename ${i%_*})) $(readlink -f $i)"; done
+; to find path to desired file
+hwmon-path = /sys/devices/platform/coretemp.0/hwmon/hwmon5/temp1_input
+warn-temperature = 90
+
+format-prefix = 
+format = <label>
+label = %temperature-c:5%
+
+format-warn = <label-warn>
+label-warn = %temperature-c%
+label-warn-foreground = ${colors.alert}
+label-warn-background = ${colors.background-alt}
+
+[settings]
+screenchange-reload = false
+compositing-background = source
+compositing-foreground = over
+compositing-overline = over
+compositing-underline = over
+compositing-border = over
+pseudo-transparency = false
+throttle-output = 5
+throttle-output-for = 10
+format-overline = ${colors.transparent}
+format-underline = ${colors.transparent}
+
+[global/wm]
+margin-top = 0
+margin-bottom = 0
+
+; vim:ft=dosini
