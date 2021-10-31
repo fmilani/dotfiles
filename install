@@ -1,7 +1,7 @@
 #!/bin/bash
 
 main() {
-  pushd ~/dotfiles > /dev/null
+  pushd "$(dirname $0)" > /dev/null
   dirs=$(find . -mindepth 1 -maxdepth 1 -depth -type d -not -path '*/\.*' -printf '%f\n')
   for dir in $dirs
   do
