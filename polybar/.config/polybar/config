@@ -47,7 +47,7 @@ format-prefix-foreground = ${colors.accent}
 format-prefix-padding = 0
 format-prefix-padding-left = 0
 label-background = ${colors.transparent}
-label-padding = 1
+label-padding-right = 1
 
 [module/mpd]
 inherit = module/base
@@ -183,9 +183,9 @@ format-connected-prefix-padding-left = ${self.format-prefix-padding-left}
 format-connected-prefix-foreground = ${colors.accent}
 format-connected-prefix-background = ${colors.transparent}
 format-connected = %{A3:networkmanager_dmenu:}<label-connected>%{A}
-label-connected = %essid:0:5%
+label-connected = %essid:0:3%
 label-connected-background = ${colors.transparent}
-label-connected-padding = 1
+label-connected-padding-right = 1
 
 format-disconnected-prefix = 
 format-disconnected-prefix-foreground = ${colors.accent}
@@ -195,15 +195,15 @@ format-disconnected-prefix-padding-left = ${self.format-prefix-padding-left}
 format-disconnected = %{A3:networkmanager_dmenu:}<label-disconnected>%{A}
 label-disconnected = -----
 label-disconnected-background = ${colors.background}
-label-disconnected-padding = 1
+label-disconnected-padding-right = 1
 
 [module/date]
 inherit = module/base
 type = internal/date
 interval = 5
 
-date = "%a, %d"
-date-alt = "%a, %b %d"
+date = "%a,%d"
+date-alt = "%a,%b %d"
 time = %H:%M
 time-alt = %H:%M:%S
 
@@ -218,12 +218,12 @@ format-volume = %{A3:pavucontrol:}<ramp-volume><label-volume>%{A}
 label-volume = %percentage%%
 label-volume-background = ${colors.transparent}
 label-volume-foreground = ${root.foreground}
-label-volume-padding = 1
+label-volume-padding-right = 1
 
 format-muted = <ramp-volume><label-muted>
 label-muted = ---
 label-muted-background = ${colors.transparent}
-label-muted-padding = 1
+label-muted-padding-right = 1
 
 ramp-volume-0 = 
 ramp-volume-foreground = ${colors.accent}
