@@ -53,8 +53,8 @@ label-padding-right = 1
 inherit = module/base
 type = internal/mpd
 format-online = <label-song> <label-time>
-label-song = %artist:0:20:...% - %album:0:20:...% - %title:0:20:...%
-label-time = %elapsed% / %total%
+label-song = %artist:0:20:...%/%album:0:20:...%/%title:0:20:...%
+label-time = %elapsed%/%total%
 
 [module/bbb]
 inherit = module/base
