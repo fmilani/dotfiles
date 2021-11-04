@@ -1,0 +1,47 @@
+configuration {
+    modi: "combi,ssh,filebrowser";
+    font: "Noto Sans 14";
+    location: 2;
+    yoffset: 96;
+    fixed-num-lines: false;
+    show-icons: true;
+    drun-show-actions: true;
+    drun-url-launcher: "jaro";
+    disable-history: false;
+    sidebar-mode: true;
+    combi-modi: "window,drun";
+    matching: "fuzzy";
+    dpi: 192;
+    scroll-method: 1;
+    window-format: "{c}    {t}";
+    theme: "~/.config/rofi/default-theme.rasi";
+    kb-row-tab: "Control+space";
+    kb-row-select: "Tab";
+    me-select-entry: "MouseSecondary";
+    me-accept-entry: "MousePrimary";
+    timeout {
+        action: "kb-cancel";
+        delay:  0;
+    }
+    filebrowser {
+        directories-first: true;
+        display-name: "";
+        sorting-method: "name";
+    }
+    window {
+        close-on-delete: false;
+        display-name: "";
+    }
+    ssh {
+        display-name: "";
+    }
+    drun {
+        display-name: "";
+    }
+    combi {
+        display-name: "";
+    }
+    calc {
+        display-name: "";
+    }
+}
