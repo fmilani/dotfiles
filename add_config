@@ -1,0 +1,11 @@
+#!/bin/env bash
+
+main() {
+  local item="$1"
+  echo "creating folder $item/.config"
+  mkdir -p "$item/.config"
+  echo "moving contents from ~/.config/$item to $item/.config"
+  mv "$HOME/.config/$item" "$item/.config"
+}
+
+main $@
