@@ -1,0 +1,26 @@
+(assoc
+  #:pattern "image/.*"
+  #:program "feh %f")
+(assoc
+  #:pattern "audio/.*"
+  #:program "mpc clear && mpc insert file://%F && mpc next && mpc play")
+(assoc
+  #:pattern "video/.*"
+  #:program "mpv %f")
+(assoc
+  #:pattern "application/pdf"
+  #:program "mupdf %f")
+(assoc
+  #:pattern "^text/.*"
+  #:program "nvim %f"
+  #:term "st -e")
+(assoc
+  #:pattern "^application/json"
+  #:program "nvim %f"
+  #:term "st -e")
+(assoc
+  #:pattern "^https?://www.twitch.tv/.*"
+  #:program "streamlink %f")
+(assoc
+  #:pattern "^https?://.*"
+  #:program "firefox %f")
