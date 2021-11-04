@@ -1,0 +1,27 @@
+#!/bin/sh
+#
+# AUTHOR: fmilani
+#
+# DATE: Sat May 22 2021
+#
+# DESC: Elvi to search Jira
+# elvis: jira		-- Search Jira (evoluservices.atlassian.net)
+. surfraw || exit 1
+
+w3_usage_hook () {
+    cat <<EOF
+Usage: $w3_argv0 [options] [search words]...
+Description:
+  Search Jira (evoluservices.atlassian.net) for issues
+EOF
+    w3_global_usage
+}
+
+w3_config
+w3_parse_args "$@"
+if test -z "$w3_args"; then
+    w3_browse_url "https://evoluservices.atlassian.net/"
+else
+    escaped_args=`w3_url_of_arg $w3_args`
+    w3_browse_url "https://evoluservices.atlassian.net/secure/QuickSearch.jspa?searchString=${escaped_args}"
+fi
