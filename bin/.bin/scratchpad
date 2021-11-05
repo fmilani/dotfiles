@@ -1,0 +1,11 @@
+#!/usr/bin/sh
+
+# if no scratchpad is open, create a new one
+if [ "$(ps -x | grep -c 'scratchpad')" -eq "3" ]; then
+  [[ "$1" != silent ]] && notify-send -t 1500 "No scratchpad found. Opening a new one."
+  st -c scratchpad &
+  sleep 1
+fi
+
+# toggle visibility of the scratchpad
+[[ "$1" != silent ]] && bspc query -N -n .floating | xargs -i sh -c 'bspc query  --node {} -T | grep -q scratchpad && bspc node {} --flag hidden -f'

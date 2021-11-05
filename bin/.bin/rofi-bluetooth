@@ -1,0 +1,12 @@
+#!/bin/bash
+
+device_info=$(bluetooth-manager | rofi -i -dmenu -p "Devices: ")
+
+[[ -z $device_info ]] && exit 0
+
+device_id=$(echo "$device_info" | cut -d ' ' -f 1)
+
+echo $device_id
+echo "$device_info" | grep -q "Connected" \
+  && (bluetoothctl disconnect $device_id && notify-send -t 1500 "Device disconnected") \
+  || (bluetoothctl connect $device_id && notify-send -t 1500 "Device connected")

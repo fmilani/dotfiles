@@ -1,0 +1,6 @@
+#!/bin/bash
+slop=$(slop -f "%g" --bordersize=4 --color=1,0,0,0) || exit 1
+read -r G < <(echo $slop)
+filename="/tmp/screenshot_$(date +%Y-%m-%d-%H-%M-%S).png"
+import -window root -crop $G $filename
+xclip -selection clipboard -t image/png < $filename

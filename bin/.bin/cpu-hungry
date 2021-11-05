@@ -1,0 +1,3 @@
+#!/bin/bash
+
+ps -eo pcpu,comm --sort=-pcpu --no-headers | head -n 1 | awk '{print $1 "% " $2}'

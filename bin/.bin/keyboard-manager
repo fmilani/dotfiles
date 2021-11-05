@@ -1,0 +1,28 @@
+#!/bin/bash
+
+get_variant() {
+  echo $(setxkbmap -query | grep variant | awk '{print $2}')
+}
+
+display() {
+  local variant=$(get_variant)
+  [[ $variant == "intl" ]] && echo "Intl" || echo " Us " 
+}
+
+toggle() {
+  local variant=$(get_variant)
+  [[ $variant == "intl" ]] && setxkbmap -layout us -option "caps:escape" || setxkbmap -layout us -variant intl -option "caps:escape"
+}
+
+main() {
+  case "$1" in
+    --toggle)
+      toggle
+      ;;
+  *)
+      display
+      ;;
+  esac
+}
+
+main $@

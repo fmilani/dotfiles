@@ -1,0 +1,3 @@
+#!/bin/bash
+
+echo $(expr '(' $(date -d 2069-03-30 +%s) - $(date +%s) + 86399 ')' / 604800) "weeks until I turn 80"

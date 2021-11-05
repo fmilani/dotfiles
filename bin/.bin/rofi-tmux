@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+open_sessions=$(tmux list-sessions -F "#S" 2>/dev/null)
+starter_scripts=$(ls ~/.bin/tmux-* | grep -v tmux-launcher | xargs -n 1 basename | cut -d'-' -f 2-)
+unopened_starters=$(comm -13 <(echo "$open_sessions") <(echo "$starter_scripts"))
+
+options=$([[ -n $open_sessions ]] && echo -e "$open_sessions\n$unopened_starters" || echo "$unopened_starters")
+option=$(echo "$options" | rofi -dmenu -p "Tmux session:" -mesg "Select a session to attach or create a new one")
+
+case "$option" in
+  "")
+    # user pressed esc
+    exit 0
+    ;;
+  *)
+    tmux-launcher "$option"
+esac

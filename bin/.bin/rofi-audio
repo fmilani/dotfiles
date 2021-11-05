@@ -1,0 +1,19 @@
+#!/bin/bash
+
+main() {
+  local choice=$(echo -e "Headset\nLaptop" | rofi -dmenu -p "" -mesg "Change audio sink")
+
+  case "$choice" in
+    "Headset")
+      pacmd set-default-sink $(pactl list short sinks | grep HyperX | awk '{print $1}')
+      ;;
+    "Laptop")
+      pacmd set-default-sink $(pactl list short sinks | grep pci | awk '{print $1}')
+      ;;
+    *)
+      echo "Unknown option"
+      ;;
+  esac
+}
+
+main

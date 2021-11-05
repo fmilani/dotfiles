@@ -1,0 +1,22 @@
+#!/bin/bash
+
+start_screencast() {
+  slop=$(slop -f "%x %y %w %h %g %i" --bordersize=4 --color=1,0,0,0) || exit 1
+  read -r X Y W H G ID < <(echo $slop)
+  notify-send "Starting screencast..."
+  ffmpeg \
+	-f x11grab \
+        -framerate 60 \
+	-s "$W"x"$H" \
+	-i :0.0+$X,$Y \
+	-f alsa -i pulse \
+        -r 30 \
+        -c:v h264 -crf 0 -preset ultrafast -c:a aac \
+	~/Videos/screencasts/$(date +%Y-%m-%d-%H-%M-%S).mp4
+}
+
+main() {
+	pgrep -x ffmpeg && kill $(pgrep -x ffmpeg) && notify-send "Screencast stopped" || start_screencast
+}
+
+main

@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+if [ $# -gt 0 ]
+then
+  question=$(echo "$@" | awk -F' > ' '{print $1} ')
+  answer=$(tuxi -r "$question")
+  echo "$question > $answer" >> /tmp/tuxi-history
+fi
+
+tac /tmp/tuxi-history

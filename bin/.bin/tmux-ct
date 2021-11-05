@@ -1,0 +1,30 @@
+#!/bin/env bash
+
+# abort if we're already inside a TMUX session
+[ "$TMUX" == "" ] || exit 0
+
+SESSION_NAME=$(basename $0 | cut -d'-' -f 2-)
+
+existing_node_id=$(xdo id -N tmux)
+[[ -n "$existing_node_id" ]] && bspc node "$existing_node_id" --focus \
+  && tmux switch -t "$SESSION_NAME" \
+  && exit 0
+
+$TERMINAL -c "tmux" -e tmux attach-session -t "$SESSION_NAME" && exit 0
+
+tmux attach-session -t "$SESSION_NAME" && exit 0
+
+DIR="$HOME/Projects/contatempo"
+tmux new-session -s "$SESSION_NAME" -d
+tmux send-keys -t "$SESSION_NAME" "cd $DIR" C-m
+tmux split-window -h -t "$SESSION_NAME" -c "$DIR"
+tmux resize-pane -t "$SESSION_NAME" -R 20
+tmux split-window -v -t "$SESSION_NAME":1.1 -c "$DIR"
+tmux resize-pane -t "$SESSION_NAME":1.1 -U 6
+tmux send-key -t "$SESSION_NAME":1.1 'npm run dev' C-m
+tmux send-keys -t "$SESSION_NAME":1.0 'v .' C-m
+firefox -kiosk -new-window localhost:3000
+tmux select-pane -t 0
+
+[[ -n "$existing_node_id" ]] && tmux switch -t "$SESSION_NAME" \
+  || $TERMINAL -c "tmux" -e tmux attach-session -t "$SESSION_NAME"

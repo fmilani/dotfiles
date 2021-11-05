@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+
+# Script to pipe other script's stdout/stderr to notify-send
+# Usage: $ ./some-script 2>&1 | notify-pipe
+# https://stackoverflow.com/a/61640659/1475639
+
+read notification
+notify-send "Response" "$notification" "$@"

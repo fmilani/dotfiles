@@ -1,0 +1,36 @@
+#!/bin/bash
+
+is_connected() {
+  [[ $(pgrep openfortivpn) ]] && echo 1
+}
+
+show_status() {
+  [[ $(is_connected) ]] && echo "On" || echo "--"
+}
+
+connect() {
+  sudo openfortivpn
+}
+
+disconnect() {
+  rofi -dmenu -password -p "sudo" | sudo -S kill -15 $(pgrep openfortivpn)
+}
+
+toggle() {
+  [[ $(is_connected) ]] && disconnect || connect
+}
+
+main() {
+  local option=$1
+
+  case "$option" in
+    --toggle)
+      toggle
+      ;;
+    *)
+      show_status
+      ;;
+  esac
+}
+
+main $@

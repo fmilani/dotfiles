@@ -1,0 +1,44 @@
+#!/bin/sh
+
+list() {
+  devices_paired=$(bluetoothctl paired-devices | grep Device | cut -d ' ' -f 2)
+  counter=$(echo "$devices_paired" | wc -l)
+
+  list=""
+  while read -r device_paired; do
+    device_info=$(bluetoothctl info "$device_paired")
+    device_alias=$(echo "$device_info" | grep "Alias" | cut -d ' ' -f 2-)
+    list="$list$device_paired $device_alias"
+
+    if echo "$device_info" | grep -q "Connected: yes"; then
+    list="$list [Connected]"
+    fi
+    [ $counter -gt 1 ] && list="$list\n"
+    counter=$((counter - 1))
+  done <<< "$devices_paired"
+  echo -e $list
+}
+
+status() {
+	bluetoothctl show | grep -q "Powered: yes" && echo "On" || echo "--"
+}
+
+toggle() {
+    if bluetoothctl show | grep -q "Powered: no"; then
+        bluetoothctl power on >> /dev/null
+    else
+        bluetoothctl power off >> /dev/null
+    fi
+}
+
+case "$1" in
+    --toggle)
+        toggle
+        ;;
+    --status)
+	status
+	;;
+    *)
+        list
+        ;;
+esac

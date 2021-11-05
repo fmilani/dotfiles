@@ -1,0 +1,17 @@
+#!/bin/env bash
+
+[ "$TMUX" == "" ] || exit 0
+SESSION_NAME=$1
+session_open=$(tmux list-sessions | grep "$SESSION_NAME")
+if [[ -f ~/.bin/tmux-$SESSION_NAME && -z "$session_open" ]]; then
+  ~/.bin/tmux-$SESSION_NAME
+else
+  tmux new-session -s "$SESSION_NAME" -d
+fi
+
+existing_node_id=$(xdo id -N tmux)
+if [[ -n "$existing_node_id" ]]; then
+  bspc node "$existing_node_id" --focus && tmux switch -t "$SESSION_NAME"
+else
+  $TERMINAL -c "tmux" -e tmux attach-session -t "$SESSION_NAME"
+fi

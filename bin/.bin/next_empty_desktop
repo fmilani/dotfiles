@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# gets the id of first not occupied desktop
+bspc query -D -d next.\!occupied

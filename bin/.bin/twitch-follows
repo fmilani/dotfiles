@@ -1,0 +1,34 @@
+#!/bin/bash
+# Gives a list of streamers I follow that are online
+
+get_client_secret() {
+  echo $(cat ~/.cache/twitch-follows/client_secret)
+}
+
+get_token() {
+  local secret=$(get_client_secret)
+  [[ ! -f "/tmp/twitch-follows-token" ]] && curl -s -X POST "https://id.twitch.tv/oauth2/token?client_id=zj1r6doazzfckhrbrfg6i2cc6fjntb&client_secret=${secret}&grant_type=client_credentials" | jq '.access_token' | tr -d '"' > /tmp/twitch-follows-token
+  echo $(cat /tmp/twitch-follows-token)
+}
+
+main() {
+  local CLIENT_ID="zj1r6doazzfckhrbrfg6i2cc6fjntb"
+  local MY_USER_ID=243903765
+  local token=$(get_token)
+  local url="https://api.twitch.tv/helix/users/follows?from_id=${MY_USER_ID}"
+  local streamers_ids=$(curl -s -X GET "$url" -H "client-id: ${CLIENT_ID}" -H "Authorization: Bearer ${token}" | jq '.data[].to_id' | tr -d '"')
+  local query_streamers=""
+  IFS=$'\n'
+  for id in $streamers_ids; do
+    query_streamers="${query_streamers}user_id=${id}&"
+  done
+  unset IFS
+  local streamers_url="https://api.twitch.tv/helix/streams?$query_streamers"
+  local response=$(curl -s -X GET "$streamers_url" -H "client-id: ${CLIENT_ID}" -H "Authorization: Bearer ${token}")
+
+
+  local online_streamers=$(echo $response | jq '.data[] | "\(.user_name) - \(.title)"' | tr -d '"')
+  echo "${online_streamers}"
+}
+
+main

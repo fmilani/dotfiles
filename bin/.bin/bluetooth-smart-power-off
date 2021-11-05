@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# check for connected bluetooth devices and power bluetooth off if none
+check()
+{
+
+  paired_devices=$(bluetoothctl paired-devices | grep Device | cut -d ' ' -f 2)
+
+  no_device_connected=true
+
+  while read -r paired_device; do
+    device_info=$(bluetoothctl info "$paired_device")
+    if echo "$device_info" | grep -q "Connected: yes"; then
+      no_device_connected=false
+      break
+    fi
+  done <<< "$paired_devices"
+
+  [[ "$no_device_connected" = true ]] && bluetoothctl power off >> /dev/null
+}
+
+interval=${1:-300}
+
+echo "Checking every $interval seconds..."
+while true; do
+  check
+  sleep "$interval"
+done

@@ -1,0 +1,25 @@
+#!/bin/bash
+
+main() {
+  local chosen=$(echo -e "Power off\nSuspend\nReboot" | rofi -i -lines 3 -dmenu -p "Shutdown:" -mesg "$(uptime -p)")
+
+  case "$chosen" in
+    "Power off")
+      echo "Powering off"
+      systemctl poweroff
+      ;;
+    "Suspend")
+      echo "Suspending..."
+      systemctl suspend
+      ;;
+    "Reboot")
+      echo "Rebooting..."
+      systemctl reboot
+      ;;
+    *)
+      echo "Unknown option."
+      ;;
+  esac
+}
+
+main

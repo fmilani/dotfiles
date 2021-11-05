@@ -1,0 +1,3 @@
+#!/bin/bash
+
+curl -s https://corona-stats.online/ | grep "Brazil" | sed "s/\s*//g ; s/\x1b\[[0-9;]*m//g" | awk -F'│' '{print $3 " ("$4")"}'

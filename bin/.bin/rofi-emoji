@@ -1,0 +1,8 @@
+#!/bin/bash
+
+chosen=$(cut -d ';' -f1 ~/.local/share/emoji | rofi -dmenu -i -l 10 -p "Emoji: " | sed "s/ .*//")
+
+[ -z "$chosen" ] && exit
+
+echo "$chosen" | tr -d '\n' | xclip -selection clipboard
+notify-send -t 1500 "$chosen copied to clipboard."

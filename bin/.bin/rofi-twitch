@@ -1,0 +1,22 @@
+#!/bin/bash
+
+twitch=https://www.twitch.tv
+
+channelAndTitle=$(twitch-follows | rofi -dmenu -p "Online streamers: " -i)
+[[ -z $channelAndTitle ]] && exit 0
+
+channelName=$(echo $channelAndTitle | awk -F' - ' '{print $1}')
+channelName=${channelName// /} # this removes withspaces
+ret=$(streamlink --json $twitch/$channelName)
+error=$(echo $ret | jq '.error' | tr -d '"')
+
+[[ "$error" != null ]] && notify-send "Error" "$error" && exit 1
+
+notify-send --expire-time=3000 "Tuning in to $channelName"
+# link=$(echo $ret | jq '.streams.best.url' | tr -d '"')
+link=$(echo $ret | jq '.streams."720p60".url // .streams."720p50".url' | tr -d '"')
+# using mpv instead of streamlink directly to use the x11-name flag so
+# we can apply bspwm rules to it
+mpv --x11-name=streaming $link &
+
+exit 0

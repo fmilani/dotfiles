@@ -1,0 +1,12 @@
+#!/bin/bash
+
+args=("$@")
+options=""
+for arg in ${args[*]}
+do
+  options="$options$arg\n"
+done
+
+option=$(echo -e "${options[@]}" | rofi -dmenu -p "Prompt:")
+
+echo "${option}xxx"

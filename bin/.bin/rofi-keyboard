@@ -1,0 +1,13 @@
+#!/bin/bash
+
+layout=$(echo -e "Intl\nUs" | rofi -dmenu -i -p "Keyboard layout: ")
+
+[[ -z $layout ]] && exit 0
+
+if [[ $layout = "Intl" ]]; then
+  setxkbmap -layout us -variant intl -option "caps:escape"
+else
+  setxkbmap -layout us -option "caps:escape"
+fi
+
+exit 0
