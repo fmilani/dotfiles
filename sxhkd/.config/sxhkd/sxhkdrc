@@ -151,7 +151,7 @@ super + shift + {y,u,i,o}
 # ______________    
 
 # Toggle monocle mode
-super + f 
+super + shift + m 
 	bspc desktop -l next
 	
 # Balance tree
@@ -160,6 +160,9 @@ super + f
 
 super + b
         rofi-bookmarks
+
+super + f
+        rofi-finder
 
 super + shift + b
 	rofi-bluetooth
