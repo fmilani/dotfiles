@@ -3,7 +3,9 @@
 index_file=/tmp/.rofi_index_file
 
 update_index() {
-        find Documents Downloads Music Pictures Podcasts Videos -not -type d 2> /dev/null | sed -e 's/^/ /g' -E -e '/png$|jpg$|tiff$|gif$|jpeg$|bmp$/ s/^./ /g' -e '/mp3$|pcm$|wav$|aac$|ogg$|wma$/ s/^./ /g' -e '/wmv$|webm$|m4v$|mkv$|mov$|flv$|avi$|mp4$/ s/^./辶 /g' > "$index_file"
+  find \
+    Documents Downloads Music Pictures Podcasts Videos \
+    -not -type d 2> /dev/null > "$index_file"
 }
 
 if [ -e $index_file ]; then
