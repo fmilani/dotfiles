@@ -56,7 +56,7 @@ bspc rule -a '*:libreofficedev' state=tiled
 bspc rule -a '*:soffice' state=tiled
 bspc rule -a discord desktop=8
 bspc rule -a Slack desktop=9
-bspc rule -a tmux-home follow=on focus=on desktop=10
+bspc rule -a tmux follow=on focus=on desktop=10
 bspc rule -a 'firefox:Toolkit' state=floating rectangle=1280x720+0+0
 
 # scratchpad_width=$(("$screenwidth"-2*"$BORDER_WIDTH"))
