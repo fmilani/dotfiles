@@ -4,7 +4,7 @@ configuration {
     location: 2;
     yoffset: 96;
     fixed-num-lines: false;
-    show-icons: true;
+    show-icons: false;
     drun-show-actions: true;
     drun-url-launcher: "jaro";
     disable-history: false;
