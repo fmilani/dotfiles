@@ -14,7 +14,7 @@ configuration {
     dpi: 192;
     scroll-method: 1;
     window-format: "{c}    {t}";
-    theme: "~/.config/rofi/default-theme.rasi";
+    theme: "~/.config/rofi/gruv-theme.rasi";
     kb-row-tab: "Control+space";
     kb-row-select: "Tab";
     me-select-entry: "MouseSecondary";
@@ -43,5 +43,8 @@ configuration {
     }
     calc {
         display-name: "";
+    }
+    dmenu {
+        display-name: "";
     }
 }
