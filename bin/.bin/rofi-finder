@@ -1,36 +1,18 @@
-#!/bin/dash
-# A fuzzy file-finder and opener based on rofi 
-# Requires: rofi, xdg-utils, nerdfonts
-files=/tmp/.file_list
+#!/bin/bash
 
-update_list() {
-	find \( ! -regex '.*/\..*' \) -type d -not -path '*/\.*' 2> /dev/null | sed -e 's/^\./:~/g' > /tmp/.file_list
-	find \( ! -regex '.*/\..*' \) -not -type d 2> /dev/null | sed -E -e '/png$|jpg$|tiff$|gif$|jpeg$|bmp$/ s/^\./:~/g' -e '/mp3$|pcm$|wav$|aac$|ogg$|wma$/ s/^\./~/g' -e '/wmv$|webm$|m4v$|mkv$|mov$|flv$|avi$|mp4$/ s/^\./辶:~/g' -e 's/^\./:~/g' >> /tmp/.file_list
-	find .config 2> /dev/null | sed -E -e 's/^\./:~\/./g' >> /tmp/.file_list
+index_file=/tmp/.rofi_index_file
+
+update_index() {
+        find Documents Downloads Music Pictures Podcasts Videos -not -type d 2> /dev/null | sed -e 's/^/ /g' -E -e '/png$|jpg$|tiff$|gif$|jpeg$|bmp$/ s/^./ /g' -e '/mp3$|pcm$|wav$|aac$|ogg$|wma$/ s/^./ /g' -e '/wmv$|webm$|m4v$|mkv$|mov$|flv$|avi$|mp4$/ s/^./辶 /g' > "$index_file"
 }
-if [ -e $files ]; then
-	# File list exist, use it
-	input=$(cat $files | rofi -dmenu -p )
-	# Update the list on the background
-	update_list
-	else
-	# There is no file list, create it and show menu only after that
-	update_list
-	input=$(cat $files | rofi -dmenu -p )
+
+if [ -e $index_file ]; then
+  input=$(cat $index_file | rofi -dmenu -p "Find file:")
+  update_index &
+else
+  update_index
+  input=$(cat $index_file | rofi -dmenu -p "Find file:")
 fi
-	case "$(echo $input | cut -d " " -f 1)" in
-		a)
-			exec $BROWSER https://wiki.archlinux.org/index.php/"$(echo $input | cut -d " " -f2-)" &> /dev/null &
-			;;
-		w)
-			exec $BROWSER https://en.wikipedia.org/wiki/"$(echo $input | cut -d " " -f2-)" &> /dev/null &
-			;;
-		s)
-			exec $BROWSER "https://startpage.com/do/search?query=$(echo $input | cut -d " " -f2-)&cat=web&pl=chrome&language=english" &> /dev/null &
-			;;
-		*)
-                        arquivo=$(echo $input | sed 's/^....//g')
-                        echo "$arquivo"
-			exec jaro "$(echo $input | sed 's/^....//g')" &> /dev/null &
-			;;
-	esac
+
+jaro "$(echo $input | sed 's/^..//g')" &> /dev/null &
+
