@@ -53,7 +53,7 @@ label-padding-right = 1
 inherit = module/base
 type = internal/mpd
 format-online = <label-song> <label-time>
-label-song = %artist:0:20:...%/%album:0:20:...%/%title:0:20:...%
+label-song = %artist:0:15:...%/%album:0:15:...%/%title:0:15:...%
 label-time = %elapsed%/%total%
 
 [module/bbb]
@@ -69,7 +69,6 @@ inherit = module/base
 type = custom/script
 exec = time-tracker 2>/dev/null
 exec-if = case "$(date +%a)" in sáb|dom) exit -1;; esac
-format-prefix = 
 click-left = punch-time | notify-pipe
 click-right  = ~/Projects/ppp/bin/run pontos | rofi -dmenu -p "Pontos"
 interval = 60

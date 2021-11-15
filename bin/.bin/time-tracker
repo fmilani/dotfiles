@@ -4,4 +4,4 @@ file="/tmp/ppp_pontos_$(date +%Y%m%d)"
 [ -f "$file" ] || touch "$file"
 n_punches=$(wc -l < "$file")
 time=$(~/Projects/ppp/bin/run tempo)
-[ $(($n_punches%2)) -eq 0 ] && echo " ${time}" || echo " ${time}"
+[ $(($n_punches%2)) -eq 0 ] && echo "${time}" || echo "${time}"
