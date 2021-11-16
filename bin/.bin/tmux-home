@@ -4,13 +4,10 @@ SESSION_NAME=$(basename $0 | cut -d'-' -f 2-)
 tmux new-session -s "$SESSION_NAME" -d
 tmux rename-window "config"
 tmux send-keys -t "$SESSION_NAME":1.0 'v ~/.tmux.conf' C-m
-tmux new-window
-tmux rename-window "news"
+tmux new-window -n "news"
 tmux send-keys -t "$SESSION_NAME":2.0 'newsboat' C-m
-tmux new-window
-tmux rename-window "podcast"
+tmux new-window -n "podcast"
 tmux send-keys -t "$SESSION_NAME":3.0 'podboat' C-m
-tmux new-window
-tmux rename-window "music"
+tmux new-window -n "music"
 tmux send-keys -t "$SESSION_NAME":4.0 'ncmpcpp' C-m
 tmux new-window
