@@ -1,0 +1,9 @@
+#!/bin/env bash
+
+main() {
+  local song=$(mpc | head -n 1)
+  echo "Searching chords for '$song' on ultimate guitar..."
+  surfraw ultimate-guitar "$song"
+}
+
+main $@

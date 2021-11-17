@@ -1,0 +1,27 @@
+#!/bin/sh
+#
+# AUTHOR: fmilani
+#
+# DATE: Tue Nov 16 2021
+#
+# DESC: Elvi to search chords on Ultimate Guitar
+# elvis: ultimate-guitar	-- Search Ultimate Guitar (ultimate-guitar.com)
+. surfraw || exit 1
+
+w3_usage_hook () {
+    cat <<EOF
+Usage: $w3_argv0 [options] [search words]...
+Description:
+  Search Ultimate Guitar (ultimate-guitar) for chords
+EOF
+    w3_global_usage
+}
+
+w3_config
+w3_parse_args "$@"
+if test -z "$w3_args"; then
+    w3_browse_url "https://www.ultimate-guitar.com/"
+else
+    escaped_args=`w3_url_of_arg $w3_args`
+    w3_browse_url "https://www.ultimate-guitar.com/search.php?search_type=title&value=${escaped_args}"
+fi
