@@ -2,7 +2,7 @@ configuration {
     modi: "combi,ssh,filebrowser";
     font: "Noto Sans 14";
     location: 2;
-    yoffset: 96;
+    yoffset: 72;
     fixed-num-lines: false;
     show-icons: false;
     drun-show-actions: true;
