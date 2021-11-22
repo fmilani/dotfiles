@@ -63,6 +63,9 @@ nmap <leader>q <cmd>bdelete<CR>
 vnoremap < <gv
 vnoremap > >gv
 
+" allow gf to open non-existing files
+map gf :edit <cfile><cr>
+
 " show highlighted line's number and relative lines
 set number relativenumber
 
