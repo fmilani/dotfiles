@@ -59,6 +59,10 @@ nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
 nmap <leader>q <cmd>bdelete<CR>
 
+" reselect visual selection after indenting
+vnoremap < <gv
+vnoremap > >gv
+
 " show highlighted line's number and relative lines
 set number relativenumber
 
