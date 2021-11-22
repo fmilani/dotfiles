@@ -59,6 +59,11 @@ nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
 nmap <leader>q <cmd>bdelete<CR>
 
+nmap <silent> <c-k> :wincmd k<CR>
+nmap <silent> <c-j> :wincmd j<CR>
+nmap <silent> <c-h> :wincmd h<CR>
+nmap <silent> <c-l> :wincmd l<CR>
+
 " reselect visual selection after indenting
 vnoremap < <gv
 vnoremap > >gv
