@@ -1,0 +1,13 @@
+#!/bin/env bash
+
+main() {
+  local resource=$1
+  local processess=$(ps -eo comm,p$resource --sort=-p$resource --no-headers | egrep -v '(0.0)')
+  echo "$processess"
+  local choice=$(echo "$processess" | rofi -dmenu -mesg "Selecting a process will kill it")
+  [ ! "$choice" ] && exit 0
+  local process=$(echo "$choice" | awk '{print $1}')
+  pkill --exact "$process"
+}
+
+main "$@"

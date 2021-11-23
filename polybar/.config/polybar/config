@@ -161,13 +161,13 @@ label-empty-padding = 0
 [module/cpu]
 inherit = module/base
 type = internal/cpu
-format-prefix = ""
+format = %{A3:rofi-process-list cpu:}<label>%{A}
 label = %percentage:2%%
 
 [module/memory]
 inherit = module/base
 type = internal/memory
-format-prefix = ""
+format = %{A3:rofi-process-list mem:}<label>%{A}
 label = %percentage_used%%
 
 [module/wlan]
