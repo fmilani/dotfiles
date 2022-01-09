@@ -1,6 +1,6 @@
 configuration {
     modi: "combi,ssh,filebrowser";
-    font: "Noto Sans 14";
+    font: "Noto Sans Mono 14";
     location: 2;
     yoffset: 72;
     fixed-num-lines: false;
@@ -14,7 +14,6 @@ configuration {
     dpi: 192;
     scroll-method: 1;
     window-format: "{c}    {t}";
-    theme: "~/.config/rofi/gruv-theme.rasi";
     kb-row-tab: "Control+space";
     kb-row-select: "Tab";
     me-select-entry: "MouseSecondary";
@@ -48,3 +47,5 @@ configuration {
         display-name: "";
     }
 }
+
+@theme "~/.config/rofi/gruv-theme.rasi"
