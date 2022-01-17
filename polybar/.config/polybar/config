@@ -1,9 +1,9 @@
 [colors]
 transparent = #00000000
 background = ${xrdb:background}
-background-alt = ${xrdb:color8}
+background-alt = ${xrdb:color15}
 foreground = ${xrdb:foreground}
-foreground-alt = ${xrdb:color11}
+foreground-alt = ${xrdb:color15}
 accent = ${xrdb:foreground}
 alert = ${xrdb:color1}
 

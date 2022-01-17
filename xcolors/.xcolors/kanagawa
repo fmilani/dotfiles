@@ -1,0 +1,21 @@
+#define FOREGROUND #DCD7BA
+#define BACKGROUND #1F1F28
+
+#define COLOR0  #1F1F28
+#define COLOR8  #2A2A37
+#define COLOR1  #E46876
+#define COLOR9  #FF5D62
+#define COLOR2  #76946A
+#define COLOR10 #98BB6C
+#define COLOR3  #DCA561
+#define COLOR11 #FF9E3B
+#define COLOR4  #7E9CD8
+#define COLOR12 #7FB4CA
+#define COLOR5  #938AA9
+#define COLOR13 #957FB8
+#define COLOR6  #6A9589
+#define COLOR14 #7AA89F
+#define COLOR7  #727169
+#define COLOR15 #717C7C
+
+#define CURSORCOLOR #e6e6e6

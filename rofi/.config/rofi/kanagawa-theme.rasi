@@ -1,8 +1,8 @@
 * {
-	bg:				#282828;
-	fg:				#ebdbb2;
-	button:				#928374;
-        accent:				#458588;
+	bg:				#1f1f28;
+	fg:				#dcd7ba;
+	button:				#2a2a37;
+        accent:				#957fb8;
 
 	background-color:		@bg;
 	text-color:			@fg;
@@ -14,7 +14,7 @@ window {
 	padding: 			0px;
 	border:				2px;
 	border-color:			@accent;
-	border-radius:                  0px;
+	border-radius:                  8px;
 }
 
 prompt {

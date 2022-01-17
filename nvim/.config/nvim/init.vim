@@ -11,8 +11,6 @@ Plug 'tpope/vim-commentary'
 " Plug 'peitalin/vim-jsx-typescript' " TSX syntax
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'preservim/vimux'
-" Plug 'morhetz/gruvbox'
-Plug 'lifepillar/gruvbox8'
 Plug 'vim-airline/vim-airline'
 Plug 'triglav/vim-visual-increment'
 Plug 'nvim-lua/plenary.nvim' " required for telescope
@@ -30,7 +28,6 @@ let &listchars = 'tab:> ,trail:-,nbsp:+'
 set list
 set inccommand=split
 set clipboard+=unnamedplus
-colorscheme gruvbox8
 set path+=**
 set wildmenu
 let mapleader=" "

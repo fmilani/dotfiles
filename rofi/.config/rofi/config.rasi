@@ -48,4 +48,4 @@ configuration {
     }
 }
 
-@theme "~/.config/rofi/gruv-theme.rasi"
+@theme "~/.config/rofi/kanagawa-theme.rasi"

@@ -1,4 +1,4 @@
-#include "/home/felipe/.xcolors/gruvbox"
+#include "/home/felipe/.xcolors/kanagawa"
 *.foreground: FOREGROUND
 *.background: BACKGROUND
 *.color0:     COLOR0

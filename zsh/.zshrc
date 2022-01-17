@@ -177,3 +177,5 @@ bindkey '^[[B' history-substring-search-down
 export PATH=/home/felipe/.fnm:$PATH
 eval "`fnm env`"
 
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=15"
+
