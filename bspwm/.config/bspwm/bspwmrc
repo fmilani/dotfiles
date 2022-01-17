@@ -3,15 +3,14 @@
 # If refreshing bspwm, remove all previous rules to prevent doubling up.
 bspc rule -r "*"
 
-GAP_SIZE=12
+GAP_SIZE=4
 POLYBAR_HEIGHT=48
 POLYBAR_GAP=0
-BORDER_WIDTH=4
-SCALE=0.8
+BORDER_WIDTH=2
 
 bspc config window_gap $GAP_SIZE
-bspc config top_padding $(($POLYBAR_HEIGHT + $POLYBAR_GAP)) # on HiDPI
-# bspc config top_padding 24 # on low DPI
+# bspc config top_padding $(($POLYBAR_HEIGHT + $POLYBAR_GAP)) # on HiDPI
+bspc config top_padding 24 # on low DPI
 bspc config left_padding 0
 bspc config right_padding 0
 bspc config bottom_padding 0
@@ -33,7 +32,7 @@ bspc config focus_follows_pointer true
 #bspc config pointer_follows_focus true #Some keybindings automatically enable and disable this setting
 
 #Settings for manual splitting
-bspc config split_ratio         0.52
+bspc config split_ratio         0.5
 
 bspc monitor -d 1 2 3 4 5 6 7 8 9 10
 

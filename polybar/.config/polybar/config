@@ -8,8 +8,8 @@ accent = ${xrdb:background}
 alert = ${xrdb:color1}
 
 [bar/base]
-dpi = 192
-height = 48 
+; dpi = 192
+height = 24
 offset-y = 0
 radius = 0
 background = ${colors.transparent}

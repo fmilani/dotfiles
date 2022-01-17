@@ -1,0 +1,26 @@
+#!/bin/env bash
+
+# ADD THIS BELOW TO /etc/udev/rules.d/10-hdmi-hotplug.rules:
+# ACTION=="change", SUBSYSTEM=="drm", ENV{SYSTEMD_WANTS}=="hdmi_hotplug.service"
+
+# ADD THIS BELOW TO /etc/systemd/system/hdmi_hotplug.service:
+# [Unit]
+# Description=udev HDMI Hotplug
+
+# [Service]
+# Type=oneshot
+# ExecStart=/home/felipe/.bin/hdmitoggle
+# RemainAfterExit=yes
+
+if [[ "`cat /sys/class/drm/card0-DP-1/status`" == "connected" ]]
+then
+    xrandr --output eDP-1 --off \
+      --output DP-1 \
+      --mode 2560x1080 \
+      --pos 0x0 \
+      --primary
+    $HOME/.config/bspwm/bspwmrc
+else
+    uselaptopscreen
+fi
+

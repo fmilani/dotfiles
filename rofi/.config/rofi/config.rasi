@@ -1,6 +1,6 @@
 configuration {
     modi: "combi,ssh,filebrowser";
-    font: "Noto Sans Mono 14";
+    font: "Noto Sans Mono 12";
     location: 2;
     yoffset: 72;
     fixed-num-lines: false;
@@ -11,7 +11,7 @@ configuration {
     sidebar-mode: true;
     combi-modi: "window,drun";
     matching: "fuzzy";
-    dpi: 192;
+    /* dpi: 192; */
     scroll-method: 1;
     window-format: "{c}    {t}";
     kb-row-tab: "Control+space";
