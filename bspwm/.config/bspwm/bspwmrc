@@ -88,7 +88,7 @@ bspc config external_rules_command /usr/bin/pseudo_automatic_mode
 scratchpad silent &
 
 # feh --bg-fill ~/Pictures/Awesome_Bridge_11658x6112.png
-feh --bg-center ~/Pictures/wallpaper.png
+feh --bg-fill ~/Pictures/wallpaper.png
 
 # Alter compton settings if using intel graphics
 GRAPHIC_CARD=$(lspci | grep -i "vga" | sed 's/.*://' | sed 's/(.*//' | sed 's/^[ \t]*//')

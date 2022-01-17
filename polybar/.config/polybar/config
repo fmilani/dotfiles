@@ -2,9 +2,9 @@
 transparent = #00000000
 background = ${xrdb:background}
 background-alt = ${xrdb:color8}
-foreground = ${xrdb:background}
-foreground-alt = ${xrdb:color8}
-accent = ${xrdb:background}
+foreground = ${xrdb:foreground}
+foreground-alt = ${xrdb:color11}
+accent = ${xrdb:foreground}
 alert = ${xrdb:color1}
 
 [bar/base]
