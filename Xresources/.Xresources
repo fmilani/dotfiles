@@ -21,7 +21,7 @@
 
 *cursorColor:  CURSORCOLOR
 
-*.font: Source Code Pro:pixelsize=14:antialias=true:autohint=true;
+*.font: UW Ttyp0:size=12:antialias=true:autohint=true;
 *.fontalt0: JoyPixels:pixelsize=14:antialias=true:autohint=true;
 
 /* *.dpi: 192 */

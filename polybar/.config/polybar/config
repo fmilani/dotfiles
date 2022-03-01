@@ -14,7 +14,7 @@ offset-y = 0
 radius = 0
 background = ${colors.transparent}
 foreground = ${colors.foreground}
-font-0 = Noto Sans Mono:style=Regular:size=11;5
+font-0 = UW Ttyp0:style=Regular:size=13;5
 font-1 = Font Awesome 6 Free Regular:style=Regular:size=11;5
 font-2 = Font Awesome 6 Free Solid:style=Solid:size=11;5
 font-3 = Font Awesome 6 Brands Regular:style=Regular:size=11;5
