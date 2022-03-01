@@ -15,9 +15,9 @@ radius = 0
 background = ${colors.transparent}
 foreground = ${colors.foreground}
 font-0 = Noto Sans Mono:style=Regular:size=11;5
-font-1 = Font Awesome 5 Free Regular:style=Regular:size=11;5
-font-2 = Font Awesome 5 Free Solid:style=Solid:size=11;5
-font-3 = Font Awesome 5 Brands Regular:style=Regular:size=11;5
+font-1 = Font Awesome 6 Free Regular:style=Regular:size=11;5
+font-2 = Font Awesome 6 Free Solid:style=Solid:size=11;5
+font-3 = Font Awesome 6 Brands Regular:style=Regular:size=11;5
 
 cursor-click = pointer
 wm-restack = bspwm
@@ -29,7 +29,7 @@ inherit = bar/base
 fixed-center = true
 width = 100%
 line-size = 12
-padding = 1
+padding = 0
 module-margin-left = 0
 module-margin-right = 0
 dim-value = 1.0
@@ -39,14 +39,14 @@ cursor-scroll =
 
 modules-left = mpd 
 modules-center = bspwm
-modules-right = timetracker vpn bluetooth temperature cpu memory wlan pulseaudio battery date
+modules-right = timetracker vpn bluetooth temperature wlan pulseaudio battery date
 
 [module/base]
-format-prefix-background = ${colors.transparent}
+format-prefix-background = ${base.background}
 format-prefix-foreground = ${colors.accent}
 format-prefix-padding = 0
 format-prefix-padding-left = 0
-label-background = ${colors.transparent}
+label-background = ${base.background}
 label-padding-right = 1
 
 [module/mpd]
@@ -180,15 +180,15 @@ format-connected-prefix = 
 format-connected-prefix-padding = 0
 format-connected-prefix-padding-left = ${self.format-prefix-padding-left}
 format-connected-prefix-foreground = ${colors.accent}
-format-connected-prefix-background = ${colors.transparent}
+format-connected-prefix-background = ${base.background}
 format-connected = %{A3:networkmanager_dmenu:}<label-connected>%{A}
 label-connected = %essid:0:3%
-label-connected-background = ${colors.transparent}
+label-connected-background = ${base.background}
 label-connected-padding-right = 1
 
 format-disconnected-prefix = 
 format-disconnected-prefix-foreground = ${colors.accent}
-format-disconnected-prefix-background = ${colors.transparent}
+format-disconnected-prefix-background = ${base.background}
 format-disconnected-prefix-padding = 0
 format-disconnected-prefix-padding-left = ${self.format-prefix-padding-left}
 format-disconnected = %{A3:networkmanager_dmenu:}<label-disconnected>%{A}
@@ -215,18 +215,18 @@ type = internal/pulseaudio
 
 format-volume = %{A3:pavucontrol:}<ramp-volume><label-volume>%{A}
 label-volume = %percentage%%
-label-volume-background = ${colors.transparent}
+label-volume-background = ${base.background}
 label-volume-foreground = ${root.foreground}
 label-volume-padding-right = 1
 
 format-muted = <ramp-volume><label-muted>
 label-muted = ---
-label-muted-background = ${colors.transparent}
+label-muted-background = ${base.background}
 label-muted-padding-right = 1
 
 ramp-volume-0 = 
 ramp-volume-foreground = ${colors.accent}
-ramp-volume-background = ${colors.transparent}
+ramp-volume-background = ${base.background}
 ramp-volume-padding = 0
 ramp-volume-padding-left = ${self.format-prefix-padding-left}
 
@@ -243,13 +243,12 @@ animation-charging-2 = 
 animation-charging-3 = 
 animation-charging-4 = 
 animation-charging-foreground = ${colors.accent}
-animation-charging-background = ${colors.background}
+animation-charging-background = ${base.background}
 animation-charging-padding = 0
-animation-charging-padding-left = 1
 animation-charging-framerate = 500
 label-charging = %percentage%%
-label-charging-background = ${colors.background}
-label-charging-padding = 1
+label-charging-background = ${base.background}
+label-charging-padding-right = 1
 
 format-discharging = <ramp-capacity><label-discharging>
 format-discharging-padding = 0
@@ -259,20 +258,18 @@ ramp-capacity-2 = 
 ramp-capacity-3 = 
 ramp-capacity-4 = 
 ramp-capacity-foreground = ${colors.accent}
-ramp-capacity-background = ${colors.background}
+ramp-capacity-background = ${base.background}
 ramp-capacity-padding = 0
-ramp-capacity-padding-left = 1
 label-discharging = %percentage%%
-label-discharging-background = ${colors.background}
-label-discharging-padding = 1
+label-discharging-background = ${base.background}
+label-discharging-padding-right = 1
 
 format-full-prefix = ""
-format-full-prefix-padding-left = 1
-format-full-prefix-background = ${colors.background}
+format-full-prefix-background = ${base.background}
 format-full-prefix-foreground = ${colors.accent}
 label-full = Ful
-label-full-background = ${colors.background}
-label-full-padding = 1
+label-full-background = ${base.background}
+label-full-padding-right = 1
 
 [module/temperature]
 inherit = module/base
@@ -282,7 +279,7 @@ thermal-zone = 0
 ; Use `sensors` to find preferred temperature source, then run
 ; $ for i in /sys/class/hwmon/hwmon*/temp*_input; do echo "$(<$(dirname $i)/name): $(cat ${i%_*}_label 2>/dev/null || echo $(basename ${i%_*})) $(readlink -f $i)"; done
 ; to find path to desired file
-hwmon-path = /sys/devices/platform/coretemp.0/hwmon/hwmon5/temp1_input
+hwmon-path = /sys/devices/platform/coretemp.0/hwmon/hwmon6/temp2_input
 warn-temperature = 90
 
 format-prefix = 
