@@ -193,7 +193,7 @@ format-disconnected-prefix-padding = 0
 format-disconnected-prefix-padding-left = ${self.format-prefix-padding-left}
 format-disconnected = %{A3:networkmanager_dmenu:}<label-disconnected>%{A}
 label-disconnected = -----
-label-disconnected-background = ${colors.background}
+label-disconnected-background = ${base.background}
 label-disconnected-padding-right = 1
 
 [module/date]
