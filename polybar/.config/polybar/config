@@ -5,6 +5,7 @@ background-alt = ${xrdb:color15}
 foreground = ${xrdb:foreground}
 foreground-alt = ${xrdb:color15}
 accent = ${xrdb:foreground}
+active = ${xrdb:color13}
 alert = ${xrdb:color1}
 
 [bar/base]
@@ -12,12 +13,12 @@ alert = ${xrdb:color1}
 height = 24
 offset-y = 0
 radius = 0
-background = ${colors.transparent}
+background = ${colors.background}
 foreground = ${colors.foreground}
-font-0 = UW Ttyp0:style=Regular:size=13;5
-font-1 = Font Awesome 6 Free Regular:style=Regular:size=11;5
-font-2 = Font Awesome 6 Free Solid:style=Solid:size=11;5
-font-3 = Font Awesome 6 Brands Regular:style=Regular:size=11;5
+font-0 = Noto Sans:style=Regular:size=10;2
+font-1 = Font Awesome 6 Free Regular:style=Regular:size=11;2
+font-2 = Font Awesome 6 Free Solid:style=Solid:size=11;2
+font-3 = Font Awesome 6 Brands Regular:style=Regular:size=11;2
 
 cursor-click = pointer
 wm-restack = bspwm
@@ -28,32 +29,29 @@ inherit = bar/base
 
 fixed-center = true
 width = 100%
-line-size = 12
-padding = 0
-module-margin-left = 0
-module-margin-right = 0
+padding = 2
+module-margin = 2
 dim-value = 1.0
 enable-ipc = true
 cursor-click = pointer
 cursor-scroll =
 
-modules-left = mpd 
-modules-center = bspwm
-modules-right = timetracker vpn bluetooth temperature wlan pulseaudio battery date
+modules-left = bspwm
+modules-center = mpd
+modules-right = timetracker vpn wlan pulseaudio battery date
 
 [module/base]
 format-prefix-background = ${base.background}
 format-prefix-foreground = ${colors.accent}
-format-prefix-padding = 0
-format-prefix-padding-left = 0
+format-prefix-padding-right = 1
 label-background = ${base.background}
-label-padding-right = 1
+label-padding = 0
 
 [module/mpd]
 inherit = module/base
 type = internal/mpd
-format-online = <label-song> <label-time>
-label-song = %artist:0:15:...%/%album:0:15:...%/%title:0:15:...%
+format-online = <label-song> (<label-time>)
+label-song = %title:0:30:...%
 label-time = %elapsed%/%total%
 
 [module/bbb]
@@ -137,26 +135,16 @@ label-unmounted-foreground = ${colors.foreground-alt}
 [module/bspwm]
 type = internal/bspwm
 
-; label-focused = %index% 
-label-focused = 
-; label-focused-background = ${colors.accent}
-label-focused-foreground = ${colors.accent}
-label-focused-padding = 0
+label-focused-foreground = ${colors.foreground}
+label-focused = " %name% "
 
-label-occupied = 
-; label-occupied-background = ${colors.background}
-label-occupied-padding = 0
+label-occupied = " %name% "
+label-occupied-foreground = ${colors.foreground-alt}
 
-label-urgent = 
-label-urgent-background = ${colors.alert}
-label-urgent-padding = 0
+label-urgent-background= ${colors.alert}
 
-label-empty = 
-; label-empty-background = ${colors.background}
+label-empty =
 label-empty-foreground = ${colors.background-alt}
-label-empty-padding = 0
-; Separator in between workspaces
-; label-separator = |
 
 [module/cpu]
 inherit = module/base
@@ -177,24 +165,22 @@ interface = wlp2s0
 interval = 3.0
 
 format-connected-prefix = 
-format-connected-prefix-padding = 0
+format-connected-prefix-padding-right = 1
 format-connected-prefix-padding-left = ${self.format-prefix-padding-left}
 format-connected-prefix-foreground = ${colors.accent}
 format-connected-prefix-background = ${base.background}
 format-connected = %{A3:networkmanager_dmenu:}<label-connected>%{A}
 label-connected = %essid:0:3%
 label-connected-background = ${base.background}
-label-connected-padding-right = 1
 
 format-disconnected-prefix = 
 format-disconnected-prefix-foreground = ${colors.accent}
 format-disconnected-prefix-background = ${base.background}
-format-disconnected-prefix-padding = 0
+format-disconnected-prefix-padding-right = 1
 format-disconnected-prefix-padding-left = ${self.format-prefix-padding-left}
 format-disconnected = %{A3:networkmanager_dmenu:}<label-disconnected>%{A}
 label-disconnected = -----
 label-disconnected-background = ${base.background}
-label-disconnected-padding-right = 1
 
 [module/date]
 inherit = module/base
@@ -213,16 +199,14 @@ label = %date% %time%
 inherit = module/base
 type = internal/pulseaudio
 
-format-volume = %{A3:pavucontrol:}<ramp-volume><label-volume>%{A}
+format-volume = %{A3:pavucontrol:}<ramp-volume> <label-volume>%{A}
 label-volume = %percentage%%
 label-volume-background = ${base.background}
 label-volume-foreground = ${root.foreground}
-label-volume-padding-right = 1
 
-format-muted = <ramp-volume><label-muted>
-label-muted = ---
+format-muted = <ramp-volume> <label-muted>
+label-muted = ------
 label-muted-background = ${base.background}
-label-muted-padding-right = 1
 
 ramp-volume-0 = 
 ramp-volume-foreground = ${colors.accent}
@@ -236,7 +220,7 @@ battery = BAT0
 adapter = ADP1
 full-at = 100
 
-format-charging = <animation-charging><label-charging>
+format-charging = <animation-charging> <label-charging>
 animation-charging-0 = 
 animation-charging-1 = 
 animation-charging-2 = 
@@ -248,9 +232,8 @@ animation-charging-padding = 0
 animation-charging-framerate = 500
 label-charging = %percentage%%
 label-charging-background = ${base.background}
-label-charging-padding-right = 1
 
-format-discharging = <ramp-capacity><label-discharging>
+format-discharging = <ramp-capacity> <label-discharging>
 format-discharging-padding = 0
 ramp-capacity-0 = 
 ramp-capacity-1 = 
@@ -262,14 +245,13 @@ ramp-capacity-background = ${base.background}
 ramp-capacity-padding = 0
 label-discharging = %percentage%%
 label-discharging-background = ${base.background}
-label-discharging-padding-right = 1
 
 format-full-prefix = ""
+format-full-prefix-padding-right = 1
 format-full-prefix-background = ${base.background}
 format-full-prefix-foreground = ${colors.accent}
-label-full = Ful
+label-full = Full
 label-full-background = ${base.background}
-label-full-padding-right = 1
 
 [module/temperature]
 inherit = module/base
