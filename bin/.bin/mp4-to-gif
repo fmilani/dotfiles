@@ -2,6 +2,6 @@
 
 ffmpeg \
   -i $1 \
-  -r 15 \
-  -vf scale=512:-1 \
+  -vf "fps=30,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" \
+  -loop 0 \
   $1.gif
