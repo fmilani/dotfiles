@@ -1,0 +1,4 @@
+#!/bin/sh
+setup-workspaces
+$HOME/.config/bspwm/bspwmrc
+notify-send "Changed display config to $AUTORANDR_CURRENT_PROFILE"

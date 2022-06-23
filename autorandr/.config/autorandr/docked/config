@@ -1,0 +1,25 @@
+output eDP-1
+off
+output DP-1
+off
+output HDMI-1
+off
+output DP-2
+off
+output HDMI-2
+off
+output DVI-I-2-2
+crtc 3
+gamma 0.769:0.667:0.556
+mode 1920x1080
+pos 0x0
+rate 60.00
+rotate right
+x-prop-non_desktop 0
+output DVI-I-1-1
+crtc 4
+gamma 0.769:0.667:0.556
+mode 2560x1080
+pos 1080x840
+rate 60.00
+x-prop-non_desktop 0
