@@ -14,6 +14,9 @@ Plug 'tweekmonster/startuptime.vim'
 Plug 'catppuccin/nvim', {'as': 'catppuccin'}
 Plug 'feline-nvim/feline.nvim'
 Plug 'kyazdani42/nvim-web-devicons'
+Plug 'prettier/vim-prettier', {
+  \ 'do': 'yarn install --frozen-lockfile --production',
+  \ 'for': ['javascript', 'typescript', 'typescriptreact', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
 call plug#end()
 
 set nocompatible "enter the current millenium
@@ -149,4 +152,7 @@ require("feline").setup({
 	components = require('catppuccin.core.integrations.feline'),
 })
 EOF
+
+let g:prettier#autoformat = 1
+let g:prettier#autoformat_require_pragma = 0
 
