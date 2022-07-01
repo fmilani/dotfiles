@@ -1,4 +1,4 @@
-#include "/home/felipe/.xcolors/kanagawa"
+#include "/home/felipe/.xcolors/catppuccin"
 *.foreground: FOREGROUND
 *.background: BACKGROUND
 *.color0:     COLOR0
@@ -19,7 +19,7 @@
 *.color15:    COLOR15
 *.alpha: 1.00
 
-*cursorColor:  CURSORCOLOR
+/* *cursorColor:  CURSORCOLOR */
 
 *.font: SauceCodePro Nerd Font:size=10:antialias=true:autohint=true;
 *.fontalt0: JoyPixels:pixelsize=14:antialias=true:autohint=true;

@@ -1,11 +1,11 @@
 [colors]
 transparent = #00000000
 background = ${xrdb:background}
-background-alt = ${xrdb:color15}
+background-alt = ${xrdb:color8}
 foreground = ${xrdb:foreground}
-foreground-alt = ${xrdb:color15}
-accent = ${xrdb:foreground}
-active = ${xrdb:color13}
+foreground-alt = ${xrdb:color7}
+accent = ${xrdb:color7}
+active = ${xrdb:color5}
 alert = ${xrdb:color1}
 
 [bar/base]
@@ -13,6 +13,7 @@ alert = ${xrdb:color1}
 height = 24
 offset-y = 0
 radius = 0
+line-size = 2
 background = ${colors.background}
 foreground = ${colors.foreground}
 font-0 = Noto Sans:style=Regular:size=10;2
@@ -138,6 +139,7 @@ type = internal/bspwm
 
 label-focused-foreground = ${colors.foreground}
 label-focused = " %name% "
+label-focused-underline = ${colors.active}
 
 label-occupied = " %name% "
 label-occupied-foreground = ${colors.foreground-alt}

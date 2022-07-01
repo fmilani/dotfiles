@@ -4,24 +4,22 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-dadbod'
 Plug 'tpope/vim-commentary'
-" Plug 'dense-analysis/ale'
-" Plug 'pangloss/vim-javascript'    " JavaScript support
-" Plug 'leafgarland/typescript-vim' " TypeScript syntax
-" Plug 'maxmellon/vim-jsx-pretty'   " JS and JSX syntax
-" Plug 'peitalin/vim-jsx-typescript' " TSX syntax
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'preservim/vimux'
-Plug 'vim-airline/vim-airline'
 Plug 'triglav/vim-visual-increment'
 Plug 'nvim-lua/plenary.nvim' " required for telescope
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'branch': '0.5-compat', 'do': ':TSUpdate'}
 Plug 'tweekmonster/startuptime.vim'
+Plug 'catppuccin/nvim', {'as': 'catppuccin'}
+Plug 'feline-nvim/feline.nvim'
+Plug 'kyazdani42/nvim-web-devicons'
 call plug#end()
 
 set nocompatible "enter the current millenium
 syntax enable
 filetype plugin indent on
+colorscheme catppuccin
 set colorcolumn=80
 set hidden
 let &listchars = 'tab:> ,trail:-,nbsp:+'
@@ -40,8 +38,6 @@ let g:netrw_browse_split=4  " open in prior window
 let g:netrw_altv=1          " open splits to the right
 let g:netrw_liststyle=3     " tree view
 let g:netrw_list_hide=netrw_gitignore#Hide()
-
-let g:airline#extensions#tabline#enabled = 1
 
 " Snippets:
 nnoremap ,html :-1read $HOME/.config/nvim/snippets/html.html<CR>9ji
@@ -97,18 +93,6 @@ autocmd BufWritePost */.config/polybar/config !$HOME/.config/polybar/launch
 " reload sxhkd changes
 autocmd BufWritePost */.config/sxhkd/sxhkdrc !pkill -USR1 -x sxhkd
 
-let g:ale_fixers =
-\ {'rust': ['rustfmt'],
-\  'ocaml':['ocamlformat'],
-\  'javascript': ['prettier'],
-\  'js': ['prettier'],
-\  'typescript': ['prettier'],
-\  'html': ['prettier'],
-\  'css': ['prettier'],
-\  'scss': ['prettier']}
-let g:ale_fix_on_save = 1
-let g:ale_linters_explicit = 1
-
 " tsx syntax highlighting
 hi tsxTagName ctermfg=5
 hi tsxCloseTagName ctermfg=5
@@ -161,5 +145,8 @@ require'nvim-treesitter.configs'.setup {
     additional_vim_regex_highlighting = false,
   },
 }
+require("feline").setup({
+	components = require('catppuccin.core.integrations.feline'),
+})
 EOF
 

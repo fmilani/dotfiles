@@ -48,4 +48,4 @@ configuration {
     }
 }
 
-@theme "~/.config/rofi/kanagawa-theme.rasi"
+@theme "~/.config/rofi/catppuccin-theme.rasi"
