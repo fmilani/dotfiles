@@ -57,6 +57,7 @@ bspc rule -a discord desktop=8
 bspc rule -a Slack desktop=9
 bspc rule -a tmux follow=on focus=on desktop=0
 bspc rule -a 'firefox:Toolkit' state=floating rectangle=1280x720+0+0
+bspc rule -a 'Google-chrome:crx_bdpgikbljlobeaeggalahjcnlgkhlfab' desktop=1
 
 # scratchpad_width=$(("$screenwidth"-2*"$BORDER_WIDTH"))
 # scratchpad_height=1000
