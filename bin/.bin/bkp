@@ -1,0 +1,8 @@
+#!/bin/bash
+
+main() {
+  local file=$1
+  cp "$file" "${file}.bkp"
+}
+
+main $@
