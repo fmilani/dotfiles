@@ -302,6 +302,9 @@ shift + Print
 super + s
 	rofi-websearch
 
+super + shift + s
+	rofi-snippets
+
 super + x
 	screenlock
 
