@@ -3,7 +3,7 @@
 # If refreshing bspwm, remove all previous rules to prevent doubling up.
 bspc rule -r "*"
 
-GAP_SIZE=4
+GAP_SIZE=8
 POLYBAR_HEIGHT=48
 POLYBAR_GAP=0
 BORDER_WIDTH=2
