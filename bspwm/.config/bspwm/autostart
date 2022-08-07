@@ -43,4 +43,4 @@ dbus-launch gsettings set org.mate.NotificationDaemon theme 'slider' && sed -i '
 setxkbmap -layout us -variant intl -option "caps:escape"
 
 # sudo ipsec start
-picom -b
+picom --experimental-backend -b
