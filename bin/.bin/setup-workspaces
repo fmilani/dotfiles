@@ -4,9 +4,7 @@ main() {
   case $(autorandr | grep detected | awk '{print $1}') in
     "docked")
       echo docked
-      bspc monitor eDP-1 --remove > /dev/null
-      bspc monitor DVI-I-2-2 -d 1
-      bspc monitor DVI-I-1-1 -d 2 3 4 5 6 7 8 9 0
+      bspc monitor DP-2 -d 1 2 3 4 5 6 7 8 9 0
       ;;
     "mobile")
       echo mobile
@@ -14,7 +12,6 @@ main() {
       ;;
     "work")
       echo work
-      bspc monitor eDP-1 --remove > /dev/null
       bspc monitor DP-1 -d 1 2 3 4 5 6 7 8 9 0
       ;;
     *)
@@ -25,3 +22,4 @@ main() {
 }
 
 main
+
