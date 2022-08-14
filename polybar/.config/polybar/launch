@@ -8,7 +8,12 @@ killall -q polybar
 # Launch bar on every monitor
 echo "---" | tee -a /tmp/polybar.log
 for m in $(polybar --list-monitors | cut -d":" -f1); do
-  MONITOR=$m polybar --reload main >>/tmp/polybar.log 2>&1 &
+  monitor_width=$(xdpyinfo | awk '/dimensions/ {print $2}' | awk -F 'x' '{print $1}')
+  bspwm_gap_size=8
+  echo "width = $(($monitor_width - 2*$bspwm_gap_size))"
+  MONITOR=$m BAR_WIDTH=250 OFFSET=$bspwm_gap_size polybar --reload left >>/tmp/polybar.log 2>&1 &
+  MONITOR=$m BAR_WIDTH=224 OFFSET=$((($monitor_width - 224)/2)) polybar --reload center >>/tmp/polybar.log 2>&1 &
+  MONITOR=$m BAR_WIDTH=360 OFFSET=$(($monitor_width - 360 - $bspwm_gap_size)) polybar --reload right >>/tmp/polybar.log 2>&1 &
 done
 
 echo "Bars launched..."

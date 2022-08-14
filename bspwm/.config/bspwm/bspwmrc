@@ -4,13 +4,13 @@
 bspc rule -r "*"
 
 GAP_SIZE=8
-POLYBAR_HEIGHT=48
-POLYBAR_GAP=0
+POLYBAR_HEIGHT=32
+POLYBAR_TOP_OFFSET=8
 BORDER_WIDTH=2
 
 bspc config window_gap $GAP_SIZE
 # bspc config top_padding $(($POLYBAR_HEIGHT + $POLYBAR_GAP)) # on HiDPI
-bspc config top_padding 24 # on low DPI
+bspc config top_padding $(($POLYBAR_HEIGHT + $POLYBAR_TOP_OFFSET))
 bspc config left_padding 0
 bspc config right_padding 0
 bspc config bottom_padding 0

@@ -4,16 +4,25 @@ background = ${xrdb:background}
 background-alt = ${xrdb:color8}
 foreground = ${xrdb:foreground}
 foreground-alt = ${xrdb:color7}
-accent = ${xrdb:color7}
+accent = ${xrdb:foreground}
 active = ${xrdb:color5}
 alert = ${xrdb:color1}
 
 [bar/base]
-; dpi = 192
-height = 24
-offset-y = 0
-radius = 0
+height = 32
+width = ${env:BAR_WIDTH}
+monitor = ${env:MONITOR:}
+offset-x = ${env:OFFSET}
+offset-y = 8
+radius = 12
 line-size = 2
+padding = 2
+module-margin = 2
+dim-value = 1.0
+fixed-center = true
+cursor-click = pointer
+cursor-scroll =
+enable-ipc = true
 background = ${colors.background}
 foreground = ${colors.foreground}
 font-0 = Noto Sans:style=Regular:size=10;2
@@ -21,26 +30,20 @@ font-1 = Font Awesome 6 Free Regular:style=Regular:size=11;2
 font-2 = Font Awesome 6 Free Solid:style=Solid:size=11;2
 font-3 = Font Awesome 6 Brands Regular:style=Regular:size=11;2
 
-cursor-click = pointer
 wm-restack = bspwm
 override-redirect = true
 
-[bar/main]
+[bar/left]
 inherit = bar/base
+modules-center = spotibar
 
-monitor = ${env:MONITOR:}
-fixed-center = true
-width = 100%
-padding = 2
-module-margin = 2
-dim-value = 1.0
-enable-ipc = true
-cursor-click = pointer
-cursor-scroll =
+[bar/center]
+inherit = bar/base
+modules-center = bspwm
 
-modules-left = bspwm
-modules-center = mpd
-modules-right = timetracker vpn wlan pulseaudio battery date
+[bar/right]
+inherit = bar/base
+modules-center = timetracker vpn temperature wlan pulseaudio battery date
 
 [module/base]
 format-prefix-background = ${base.background}
@@ -48,6 +51,11 @@ format-prefix-foreground = ${colors.accent}
 format-prefix-padding-right = 1
 label-background = ${base.background}
 label-padding = 0
+
+[module/spotibar]
+inherit = module/base
+type = custom/script
+exec = cp=$(spotibar --get-currently-playing); [[ -z $cp ]] && echo Not playing || echo $cp
 
 [module/mpd]
 inherit = module/base
@@ -137,17 +145,17 @@ label-unmounted-foreground = ${colors.foreground-alt}
 [module/bspwm]
 type = internal/bspwm
 
+label-focused = "  "
+label-focused-font = 3
 label-focused-foreground = ${colors.foreground}
-label-focused = " %name% "
-label-focused-underline = ${colors.active}
 
-label-occupied = " %name% "
-label-occupied-foreground = ${colors.foreground-alt}
+label-occupied = "  "
+label-occupied-foreground = ${colors.foreground}
 
 label-urgent-background= ${colors.alert}
 
-label-empty =
-label-empty-foreground = ${colors.background-alt}
+label-empty = "  "
+label-empty-foreground = ${colors.foreground}
 
 [module/cpu]
 inherit = module/base
@@ -264,7 +272,7 @@ thermal-zone = 0
 ; Use `sensors` to find preferred temperature source, then run
 ; $ for i in /sys/class/hwmon/hwmon*/temp*_input; do echo "$(<$(dirname $i)/name): $(cat ${i%_*}_label 2>/dev/null || echo $(basename ${i%_*})) $(readlink -f $i)"; done
 ; to find path to desired file
-hwmon-path = /sys/devices/platform/coretemp.0/hwmon/hwmon6/temp2_input
+hwmon-path = /sys/devices/platform/coretemp.0/hwmon/hwmon7/temp2_input
 warn-temperature = 90
 
 format-prefix = 
