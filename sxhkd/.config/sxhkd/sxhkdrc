@@ -195,8 +195,8 @@ alt + b
 super + g
 	bspc config -d focused window_gap {$gap,$(($gap+$gap)),$(($gap+$gap+$gap))}
 
-super + button{4,5}
-	bspc config -d focused window_gap $((`bspc config -d focused window_gap` {+,-} 2 ))
+# super + button{4,5}
+# 	bspc config -d focused window_gap $((`bspc config -d focused window_gap` {+,-} 2 ))
 #
 # mouse bindings
 # __________________
@@ -328,7 +328,7 @@ super + shift + {comma,period}
         mpc {prev,next}
 
 super + shift + p
-        mpc toggle
+        spotibar --toggle-playback
 
 XF86AudioLowerVolume
 	volume down
