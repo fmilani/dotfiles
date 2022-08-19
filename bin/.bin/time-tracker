@@ -4,12 +4,13 @@ file="/tmp/ppp_pontos_$(date +%Y%m%d)"
 [ -f "$file" ] || touch "$file"
 n_punches=$(wc -l < "$file")
 last_punch=$(cat "$file" | tail -n1)
-if [ $(($n_punches%2)) -eq 0 ];then
+if [ $n_punches -eq 2 ];then
   break_time=$(($(date +%s)-$(date +%s --date "$last_punch")))
   hours=$(($break_time/3600))
   minutes=$(($break_time%3600/60))
-  printf " %02d:%02d" "$hours" "$minutes"
+  printf " %02d:%02d" "$hours" "$minutes"
 else
   time=$(~/Projects/ppp/bin/run tempo)
-  echo " ${time}"
+  [ $(($n_punches%2)) -eq 0 ] && echo " ${time}" || echo " ${time}"
+  echo " ${time}"
 fi
