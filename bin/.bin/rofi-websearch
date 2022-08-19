@@ -9,5 +9,5 @@
 # set your browser (uncomment if needed, some GUI does not detect browser variable)
 # BROWSER=firefox
 
-surfraw -browser=$BROWSER $(sr -elvi | awk -F'-' '{print $1}' | sed '/:/d' | awk '{$1=$1};1' | rofi -dmenu -mesg ">>> Tab = Autocomplete" -i -p "")
+surfraw -browser=$BROWSER $(sr -elvi | awk -F'-' '{print $1}' | sed '/:/d' | awk '{$1=$1};{print $1" "}' | rofi -dmenu -mesg ">>> Tab = Autocomplete" -i -p "")
 
