@@ -1,8 +1,14 @@
+@theme "~/.config/rofi/catppuccin-theme.rasi"
+
+* {
+  background-color: #00000000;
+  text-color: @fg;
+}
+
 configuration {
     modi: "combi,ssh,filebrowser";
     font: "Noto Sans Mono 12";
     location: 2;
-    yoffset: 72;
     fixed-num-lines: false;
     show-icons: false;
     drun-show-actions: true;
@@ -10,32 +16,35 @@ configuration {
     disable-history: false;
     sidebar-mode: true;
     combi-modi: "window,drun";
-    matching: "fuzzy";
-    /* dpi: 192; */
+    combi-display-format: "{mode} {text}";
+    matching: "glob";
     scroll-method: 1;
-    window-format: "{c}    {t}";
+    window-format: "{c} <span weight='light' size='small'><i>{t}</i></span>";
     kb-row-tab: "Control+space";
     kb-row-select: "Tab";
     me-select-entry: "MouseSecondary";
     me-accept-entry: "MousePrimary";
+    inputchange {
+        action: "kb-row-first";
+    }
     timeout {
         action: "kb-cancel";
         delay:  0;
     }
     filebrowser {
         directories-first: true;
-        display-name: "";
+        display-name: "";
         sorting-method: "name";
     }
     window {
         close-on-delete: false;
-        display-name: "";
+        display-name: "";
     }
     ssh {
         display-name: "";
     }
     drun {
-        display-name: "";
+        display-name: "";
     }
     combi {
         display-name: "";
@@ -48,4 +57,83 @@ configuration {
     }
 }
 
-@theme "~/.config/rofi/catppuccin-theme.rasi"
+window {
+        background-color:		@bg;
+	width:				100%;
+        height:				100%;
+	padding: 			25%;
+}
+
+prompt {
+	enabled:			true;
+	horizontal-align:		0.5;
+	vertical-align:			0.5;
+	background-color:		@button;
+	border:                         0px;
+	border-radius:                  12px;
+	font:				"feather 17";
+	padding:			0 1% 0;
+}
+
+entry {
+	placeholder:			"Search";
+	expand:                         true;
+	padding:                        1%;
+	background-color:               @button;
+        placeholder-color:              @fg;
+	border:				0px;
+	border-color:			@button;
+	border-radius:			12px;
+	cursor:				text;
+}
+
+inputbar {
+	children: 			[ entry, prompt ];
+	expand:                         false;
+	spacing:			1%;
+}
+
+listview {
+	columns:                        1;
+	cycle:                          true;
+	dynamic:                        true;
+	layout:                         vertical;
+}
+
+message {
+	padding:			2% 1% 0%;
+	border-color: 			@fg;
+	border:				2px solid 0px 0px;
+}
+
+mainbox {
+	children:                       [ inputbar, listview, message ];
+	spacing:                       	2%;
+}
+
+element {
+	orientation:			vertical;
+        border:				0px;
+	border-radius:			12px;
+	padding:			1%;
+}
+
+element-text {
+	expand:                         true;
+	vertical-align:                 0.5;
+	background-color:               inherit;
+        text-color:                     inherit;
+}
+
+element selected {
+	background-color:               @fg;
+	text-color:                     @selected-text;
+        border: 0px;
+	border-radius:                  12px;
+}
+
+listview, element, element selected, element-icon, element-text {
+	cursor:				pointer;
+}
+
+
