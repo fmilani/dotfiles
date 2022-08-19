@@ -13,7 +13,8 @@ for m in $(polybar --list-monitors | cut -d":" -f1); do
   echo "width = $(($monitor_width - 2*$bspwm_gap_size))"
   MONITOR=$m BAR_WIDTH=250 OFFSET=$bspwm_gap_size polybar --reload left >>/tmp/polybar.log 2>&1 &
   MONITOR=$m BAR_WIDTH=224 OFFSET=$((($monitor_width - 224)/2)) polybar --reload center >>/tmp/polybar.log 2>&1 &
-  MONITOR=$m BAR_WIDTH=360 OFFSET=$(($monitor_width - 360 - $bspwm_gap_size)) polybar --reload right >>/tmp/polybar.log 2>&1 &
+  MONITOR=$m BAR_WIDTH=68 OFFSET=$(($monitor_width - 68 - 380 - 2*$bspwm_gap_size)) polybar --reload timetracker >>/tmp/polybar.log 2>&1 &
+  MONITOR=$m BAR_WIDTH=380 OFFSET=$(($monitor_width - 380 - $bspwm_gap_size)) polybar --reload right >>/tmp/polybar.log 2>&1 &
 done
 
 echo "Bars launched..."
