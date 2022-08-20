@@ -40,13 +40,13 @@ setup-workspaces &
 ###This creates and names desktops for multiple monitors.
 # workspaces_multimonitor &
 
-windowwidth=1280
-windowheight=720
-screenwidth=$(xdpyinfo | awk -F'[ x]+' '/dimensions:/{print $3}')
-screenheight=$(xdpyinfo | awk -F'[ x]+' '/dimensions:/{print $4}')
-windowx=$(("$screenwidth"-"$windowwidth"-2*"$GAP_SIZE"))
-windowy=$(("$screenheight"-"$windowheight"-2*"$GAP_SIZE"))
-bspc rule -a mpv:streaming state=floating sticky=on rectangle="$windowwidth"x"$windowheight"+"$windowx"+"$windowy"
+monitor_width=$(xdpyinfo | awk -F'[ x]+' '/dimensions:/{print $3}')
+monitor_height=$(xdpyinfo | awk -F'[ x]+' '/dimensions:/{print $4}')
+stream_width=$(($monitor_width/4))
+stream_height=$(($monitor_height/4))
+windowx=$(("$monitor_width"-"$stream_width"-2*"$GAP_SIZE"))
+windowy=$(("$monitor_height"-"$stream_height"-2*"$GAP_SIZE"))
+bspc rule -a mpv:streaming state=floating sticky=on rectangle="$stream_width"x"$stream_height"+"$windowx"+"$windowy"
 
 bspc rule -a mpv state=floating
 bspc rule -a screenkey --unmanage
@@ -60,7 +60,7 @@ bspc rule -a tmux follow=on focus=on desktop=0
 bspc rule -a 'firefox:Toolkit' state=floating rectangle=1280x720+0+0
 bspc rule -a 'Google-chrome:crx_bdpgikbljlobeaeggalahjcnlgkhlfab' desktop=1
 
-# scratchpad_width=$(("$screenwidth"-2*"$BORDER_WIDTH"))
+# scratchpad_width=$(("$monitor_width"-2*"$BORDER_WIDTH"))
 # scratchpad_height=1000
 # bspc rule -a scratchpad sticky=on state=floating hidden=on rectangle="$scratchpad_width"x"$scratchpad_height"+0+0
 bspc rule -a scratchpad sticky=on state=floating hidden=on
