@@ -15,7 +15,7 @@ configuration {
     drun-url-launcher: "jaro";
     disable-history: false;
     sidebar-mode: true;
-    combi-modi: "window,drun";
+    combi-modi: "window,drun,tmux:rofi-tmux";
     combi-display-format: "{mode} {text}";
     matching: "glob";
     scroll-method: 1;
@@ -39,6 +39,9 @@ configuration {
     window {
         close-on-delete: false;
         display-name: "";
+    }
+    tmux {
+        display-name: "";
     }
     ssh {
         display-name: "";
