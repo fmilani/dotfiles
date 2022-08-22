@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# hides the timetracker bar on weekends
+while true;
+do
+  polybar-msg -p $(ps aux | grep "polybar.*timetracker" | grep -v grep | awk '{print $2}') cmd $([[ $(date +%a) == "sáb" || $(date +%a) == "dom" ]] && echo hide || echo show) > /dev/null
+  sleep 60
+done
+
+
