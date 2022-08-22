@@ -283,6 +283,9 @@ super + p
 super + slash
         rofi-bangs
 
+super + shift + slash
+        rofi-scripts
+
 super + r
 	rofi -config ~/.config/rofi/style_1.rasi -show combi
 
@@ -313,7 +316,7 @@ super + equal
 
 super + a
         rofi-audio
-	
+
 #
 # Media keys
 #

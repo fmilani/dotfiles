@@ -1,0 +1,16 @@
+#!/bin/bash
+
+[[ -z "$ROFI_OUTSIDE" ]] && echo "This scripts is meant to run on rofi custom mode" && exit -1
+BASE_URL="https://api.github.com/repositories/251039251/contents/snippets" 
+echo -en "\x00no-custom\x1ftrue\n"
+if [[ -z "$@" ]]; then
+  echo "$(curl -s "$BASE_URL" | jq --raw-output '.[] | .name')"
+elif [[ "$@" == *md ]]; then
+  jaro $(curl -s "$BASE_URL/${ROFI_INFO}/$@" | jq --raw-output '.html_url')
+else
+  snippets="$(curl -s "$BASE_URL/$@" | jq --raw-output '.[] | .name')"
+  for snippet in $snippets; do
+    echo -e "${snippet}\x00info\x1f$@"
+  done
+fi
+
