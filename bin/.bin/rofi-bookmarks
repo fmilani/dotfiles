@@ -1,3 +1,0 @@
-#!/bin/bash
-
-surfraw "$(cat ~/.config/surfraw/bookmarks | sed '/^$/d' | sed '/^#/d' | sed '/^\//d' | sort -n | rofi -dmenu -i -mesg "Bookmarks" -p "")"

@@ -1,0 +1,14 @@
+#!/bin/bash
+
+[[ -z "$ROFI_OUTSIDE" ]] && echo "This scripts is meant to run on rofi custom mode" && exit -1
+echo -en "\x00no-custom\x1ftrue\n"
+echo -en "\x00markup-rows\x1ftrue\n"
+
+if [[ -z "$@" ]];then
+  for bookmark in "$(cat ~/.config/surfraw/bookmarks)"; do
+    echo "$bookmark" | awk -F 'http' '{print $1"<span weight=\047light\047 size=\047small\047><i>http"$2"</i></span>"}'
+  done
+else
+  coproc ( surfraw "$@" )
+fi
+

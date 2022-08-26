@@ -1,0 +1,21 @@
+#!/bin/bash
+
+[[ -z "$ROFI_OUTSIDE" ]] && echo "This scripts is meant to run on rofi custom mode" && exit -1
+echo -en "\x00no-custom\x1ftrue\n"
+
+if [[ -z "$@" ]];then
+  echo "Bater ponto"
+  echo "Ver pontos"
+else
+  case "$@" in
+    "Bater ponto")
+      notify-send "Batendo o ponto..."
+      coproc ( punch-time )
+      ;;
+    "Ver pontos")
+      notify-send "Obtendo os pontos do dia..."
+      echo "$(ppp pontos)"
+      ;;
+  esac
+fi
+

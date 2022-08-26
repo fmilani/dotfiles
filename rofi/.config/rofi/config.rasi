@@ -15,7 +15,7 @@ configuration {
     drun-url-launcher: "jaro";
     disable-history: false;
     sidebar-mode: true;
-    combi-modi: "window,drun,tmux:rofi-tmux";
+    combi-modi: "window,drun,tmux:rofi-tmux,pontomais:~/.config/rofi/scripts/pontomais,bookmarks:~/.config/rofi/scripts/bookmarks";
     combi-display-format: "{mode} {text}";
     matching: "glob";
     scroll-method: 1;
@@ -42,6 +42,12 @@ configuration {
     }
     tmux {
         display-name: "";
+    }
+    pontomais {
+        display-name: "";
+    }
+    bookmarks {
+        display-name: "";
     }
     ssh {
         display-name: "";
