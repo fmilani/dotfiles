@@ -1,6 +1,11 @@
 #!/bin/bash
 
 # hides the timetracker bar on weekends
+
+# Checks if the script is already running and exit if so. I don't know why the
+# check has to be "greater than 2", I just accepted it.
+[[ $(pidof -x time-tracker-bar-watcher | wc -w) > 2 ]] && exit 0
+
 while true;
 do
   polybar-msg -p $(ps aux | grep "polybar.*timetracker" | grep -v grep | awk '{print $2}') cmd $([[ $(date +%a) == "sáb" || $(date +%a) == "dom" ]] && echo hide || echo show) > /dev/null
