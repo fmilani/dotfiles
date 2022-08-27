@@ -22,6 +22,13 @@ call plug#end()
 set nocompatible "enter the current millenium
 syntax enable
 filetype plugin indent on
+let g:catppuccin_flavour = "mocha" " latte, frappe, macchiato, mocha
+
+lua << EOF
+require("catppuccin").setup({
+  transparent_background = true,
+})
+EOF
 colorscheme catppuccin
 set colorcolumn=80
 set hidden
