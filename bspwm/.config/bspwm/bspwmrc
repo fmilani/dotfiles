@@ -60,10 +60,10 @@ bspc rule -a tmux follow=on focus=on desktop=0
 bspc rule -a 'firefox:Toolkit' state=floating rectangle=1280x720+0+0
 bspc rule -a 'Google-chrome:crx_bdpgikbljlobeaeggalahjcnlgkhlfab' desktop=1
 
-# scratchpad_width=$(("$monitor_width"-2*"$BORDER_WIDTH"))
-# scratchpad_height=1000
-# bspc rule -a scratchpad sticky=on state=floating hidden=on rectangle="$scratchpad_width"x"$scratchpad_height"+0+0
-bspc rule -a scratchpad sticky=on state=floating hidden=on
+scratchpad_width=860
+scratchpad_height=430
+bspc rule -a scratchpad sticky=on state=floating hidden=on rectangle="$scratchpad_width"x"$scratchpad_height"+"$((($monitor_width - $scratchpad_width)/2))"+$(($POLYBAR_HEIGHT + $POLYBAR_TOP_OFFSET + $GAP_SIZE))
+# bspc rule -a scratchpad sticky=on state=floating hidden=on
 
 bspc rule -a feh state=floating
 
