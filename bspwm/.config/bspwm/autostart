@@ -35,7 +35,6 @@ clipmenud &
 ## mopidy deamon
 mopidy &
 
-time-tracker-bar-watch &
 # xcape here maker Super_L(win key) behave like win+shift+space when it is pressed and released on its own
 xcape -e 'Super_L=Super_L|Shift_L|space' &
 
