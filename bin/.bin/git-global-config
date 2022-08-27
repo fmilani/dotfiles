@@ -1,0 +1,15 @@
+#!/bin/bash
+
+git config --global user.name "Felipe Milani"
+git config --global user.email "felmilani@gmail.com"
+
+git config --global alias.co checkout
+git config --global alias.st status
+git config --global alias.br branch
+
+git config --global pull.rebase true
+git config --global fetch.prune true
+git config --global core.editor 'nvim'
+
+git config --global --add merge.ff false
+git config --global --add pull.ff only
