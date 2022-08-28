@@ -1,0 +1,7 @@
+#!/bin/bash
+
+killall dunst
+dunstify -u low "Summary Low" "This has low urgency"
+dunstify "Summary Normal" "This has normal urgency"
+dunstify "Summary Normal 2" "This too has normal urgency"
+dunstify -u critical "Summary Critical" "This has critical urgency"

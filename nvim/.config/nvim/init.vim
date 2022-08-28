@@ -102,6 +102,8 @@ autocmd BufWritePost */.config/bspwm/bspwmrc !$HOME/.config/bspwm/bspwmrc
 autocmd BufWritePost */.config/polybar/config !$HOME/.config/polybar/launch
 " reload sxhkd changes
 autocmd BufWritePost */.config/sxhkd/sxhkdrc !pkill -USR1 -x sxhkd
+" reload dunst changes
+autocmd BufWritePost */.config/dunst/dunstrc !$HOME/.bin/dunst-test
 
 " tsx syntax highlighting
 hi tsxTagName ctermfg=5
