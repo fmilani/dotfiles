@@ -20,8 +20,6 @@ configuration {
     matching: "glob";
     scroll-method: 1;
     window-format: "{c} <span weight='light' size='small'><i>{t}</i></span>";
-    kb-row-tab: "Control+space";
-    kb-row-select: "Tab";
     me-select-entry: "MouseSecondary";
     me-accept-entry: "MousePrimary";
     inputchange {
