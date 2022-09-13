@@ -1,4 +1,5 @@
 #!/bin/bash
 
-echo $(~/Projects/ppp/bin/run ponto)
+ponto_response=$(~/Projects/ppp/bin/run ponto)
 ~/Projects/ppp/bin/run pontos > "/tmp/ppp_pontos_$(date +%Y%m%d)"
+echo $ponto_response

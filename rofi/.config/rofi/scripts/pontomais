@@ -9,12 +9,10 @@ if [[ -z "$@" ]];then
 else
   case "$@" in
     "Bater ponto")
-      notify-send "Batendo o ponto..."
-      coproc ( punch-time )
+      coproc ( punch-time | notify-pipe )
       ;;
     "Ver pontos")
-      notify-send "Obtendo os pontos do dia..."
-      echo "$(ppp pontos)"
+      coproc ( show-punches )
       ;;
   esac
 fi

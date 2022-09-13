@@ -83,7 +83,7 @@ type = custom/script
 exec = time-tracker 2>/dev/null
 exec-if = case "$(date +%a)" in sáb|dom) exit -1;; esac
 click-left = punch-time | notify-pipe
-click-right  = ~/Projects/ppp/bin/run pontos | rofi -dmenu -p "Pontos"
+click-right  = show-punches
 interval = 60
 
 [module/redshift]

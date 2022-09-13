@@ -1,0 +1,5 @@
+#!/bin/bash
+
+pontos=$(cat "/tmp/ppp_pontos_$(date +%Y%m%d)")
+
+([ -n "$pontos" ] && echo "$pontos" || echo "Nenhum ponto ainda hoje") | rofi -dmenu -mesg "Pontos registrados no pontomais hoje"
