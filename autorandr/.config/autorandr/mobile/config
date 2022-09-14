@@ -6,13 +6,9 @@ output DP-2
 off
 output HDMI-2
 off
-output DVI-I-2-2
-off
-output DVI-I-1-1
-off
 output eDP-1
 crtc 0
-gamma 0.769:0.667:0.556
+gamma 0.769:0.588:0.435
 mode 1280x720
 pos 0x0
 primary
