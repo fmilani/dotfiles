@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+[[ -z "$ROFI_OUTSIDE" ]] && echo "This scripts is meant to run on rofi custom mode" && exit -1
+
 NEW_SESSION_OPTION="Create new session "
 if [[ -z "$@" ]]
 then
