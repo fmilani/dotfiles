@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+[[ -z "$ROFI_OUTSIDE" ]] && echo "This scripts is meant to run on rofi custom mode" && exit -1
+echo -en "\x00no-custom\x1ftrue\n"
+
+if [[ -z "$@" ]];then
+  pactl list short sinks | grep -v DisplayLink | grep -v hdmi-stereo | awk '{printf "%s\x00info\x1f%s\n", $2, $1}'
+else
+  pacmd set-default-sink $ROFI_INFO
+  notify-send "Audio sink changed" "$@"
+fi
+

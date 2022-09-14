@@ -1,8 +1,0 @@
-#!/bin/bash
-
-main() {
-  local choice=$(pactl list short sinks | rofi -dmenu -p "" -mesg "Change audio output" | cut -f1)
-  [ -z "$choice" ] && exit 0
-  pacmd set-default-sink "$choice"
-}
-main
