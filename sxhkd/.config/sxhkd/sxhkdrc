@@ -315,7 +315,7 @@ super + equal
         rofi-calc
 
 super + a
-        rofi-audio
+        rofi -show audio
 
 #
 # Media keys
