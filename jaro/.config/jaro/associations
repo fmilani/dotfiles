@@ -24,3 +24,7 @@
 (assoc
   #:pattern "^https?://.*"
   #:program "firefox %f")
+(assoc
+  #:pattern "^application/zip"
+  #:program "ranger %f"
+  #:term "st -e")

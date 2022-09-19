@@ -1,20 +1,12 @@
 #!/bin/bash
 
-index_file=/tmp/.rofi_index_file
-
-update_index() {
+list_files() {
   find \
-    Documents Downloads Music Pictures Podcasts Videos \
-    -not -type d 2> /dev/null > "$index_file"
+    ~/Documents ~/Downloads ~/Music ~/Pictures ~/Podcasts ~/Videos \
+    -not -type d
 }
 
-if [ -e $index_file ]; then
-  input=$(cat $index_file | rofi -dmenu -p "Find file:")
-  update_index &
-else
-  update_index
-  input=$(cat $index_file | rofi -dmenu -p "Find file:")
-fi
+input=$(list_files | rofi -dmenu)
 
-jaro "$(echo $input | sed 's/^..//g')" &> /dev/null &
+jaro "$input"
 
