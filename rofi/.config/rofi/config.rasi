@@ -29,6 +29,9 @@ configuration {
         action: "kb-cancel";
         delay:  0;
     }
+    finder {
+        display-name: "";
+    }
     filebrowser {
         directories-first: true;
         display-name: "";
