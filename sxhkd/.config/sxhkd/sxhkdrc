@@ -165,7 +165,7 @@ super + b
         rofi-bookmarks
 
 super + f
-        rofi-finder
+        rofi -show finder
 
 super + shift + b
 	rofi-bluetooth

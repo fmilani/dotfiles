@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+[[ -z "$ROFI_OUTSIDE" ]] && echo "This scripts is meant to run on rofi custom mode" && exit -1
+echo -en "\x00no-custom\x1ftrue\n"
+echo -en "\x00use-hot-keys\x1ftrue\n"
+
+list_files(){
+  find \
+    ~/Documents ~/Downloads ~/Music ~/Pictures ~/Podcasts ~/Videos \
+    -not -type d
+}
+
+if [[ -z "$@" ]];then
+  echo -en "\x00message\x1fAlt+1: Delete file\n"
+  list_files
+elif [[ "$@" == "DELETE" ]];then
+  rm "$ROFI_INFO"
+  list_files
+elif [[ "$@" == "cancel" ]];then
+  list_files
+else
+  if [ "$ROFI_RETV" == 10 ];then
+    echo -e "\x00message\x1fConfirm deletion of file $@?"
+    echo "cancel"
+    echo -e "DELETE\x00info\x1f$@"
+  else
+    coproc ( jaro "$@" )
+  fi
+fi
+
