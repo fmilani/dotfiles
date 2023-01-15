@@ -12,12 +12,15 @@ error=$(echo $ret | jq '.error' | tr -d '"')
 
 [[ "$error" != null ]] && notify-send "Error" "$error" && exit 1
 
+link=$(echo $ret | jq '.streams.best.url' | tr -d '"')
+
+[[ "$link" == "null" ]] && notify-send "Couldn't find the stream best url" && exit -1
+
 notify-send --expire-time=3000 "Tuning in to $channelName"
-# link=$(echo $ret | jq '.streams.best.url' | tr -d '"')
-link=$(echo $ret | jq '.streams."720p60".url // .streams."720p50".url' | tr -d '"')
 # using mpv instead of streamlink directly to use the x11-name flag so
 # we can apply bspwm rules to it
 title=$(echo $channelAndTitle | awk -F' - ' '{for (i=2; i<NF; i++) printf $i " - "; print $NF}')
 mpv --x11-name=streaming --title="$title" $link &
+firefox -kiosk -new-window "https://www.twitch.tv/popout/$channelName/chat?popout="
 
 exit 0
