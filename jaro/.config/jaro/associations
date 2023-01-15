@@ -19,6 +19,9 @@
   #:program "nvim %f"
   #:term "st -e")
 (assoc
+  #:pattern "^https?://www.twitch.tv/popout/.*"
+  #:program "firefox -kiosk -new-window %f")
+(assoc
   #:pattern "^https?://www.twitch.tv/.*"
   #:program "streamlink %f")
 (assoc
