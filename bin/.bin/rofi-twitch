@@ -12,9 +12,9 @@ error=$(echo $ret | jq '.error' | tr -d '"')
 
 [[ "$error" != null ]] && notify-send "Error" "$error" && exit 1
 
-link=$(echo $ret | jq '.streams.best.url' | tr -d '"')
+link=$(echo $ret | jq '.streams."720p60".url // .streams."720p".url' | tr -d '"')
 
-[[ "$link" == "null" ]] && notify-send "Couldn't find the stream best url" && exit -1
+[[ "$link" == "null" ]] && notify-send "Couldn't find the stream url" && exit -1
 
 notify-send --expire-time=3000 "Tuning in to $channelName"
 # using mpv instead of streamlink directly to use the x11-name flag so

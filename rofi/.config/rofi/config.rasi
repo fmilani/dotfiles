@@ -15,7 +15,7 @@ configuration {
     drun-url-launcher: "jaro";
     disable-history: false;
     sidebar-mode: true;
-    combi-modi: "window,drun,tmux,pontomais,bookmarks,audio";
+    combi-modi: "window,drun,tmux,pontomais,bookmarks,audio,utils";
     combi-display-format: "{mode} {text}";
     matching: "glob";
     scroll-method: 1;
@@ -52,6 +52,9 @@ configuration {
     }
     audio {
         display-name: "";
+    }
+    utils {
+        display-name: "";
     }
     ssh {
         display-name: "";
