@@ -1,0 +1,3 @@
+#!/bin/bash
+
+grabc | tr -d '\n' | xclip -selection clipboard
