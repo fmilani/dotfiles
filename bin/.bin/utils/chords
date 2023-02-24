@@ -1,0 +1,9 @@
+#!/bin/env bash
+
+main() {
+  local song=$(spt playback --status | awk -F'▶ ' '{print $2}')
+  notify-send "Searching chords" "$song"
+  surfraw ultimate-guitar "$song"
+}
+
+main $@
