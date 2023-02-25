@@ -1,5 +1,6 @@
 * {
-  bg: #1e1e2eaa;
+  bg: #1e1e2e;
+  bg-transparent: #1e1e2edd;
   selected-text: #1e1e2e;
   fg: #d9e0ee;
   button: #6e6c7eaa;
