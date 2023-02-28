@@ -277,7 +277,7 @@ thermal-zone = 0
 ; Use `sensors` to find preferred temperature source, then run
 ; $ for i in /sys/class/hwmon/hwmon*/temp*_input; do echo "$(<$(dirname $i)/name): $(cat ${i%_*}_label 2>/dev/null || echo $(basename ${i%_*})) $(readlink -f $i)"; done
 ; to find path to desired file
-hwmon-path = /sys/devices/platform/coretemp.0/hwmon/hwmon7/temp2_input
+hwmon-path = /sys/devices/platform/coretemp.0/hwmon/hwmon6/temp2_input
 warn-temperature = 90
 
 format-prefix = 
