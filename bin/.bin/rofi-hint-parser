@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# line="#hint:Use {clipboard} on {app} in {location}"
+# line="$@"
+read line
+
+if [[ $line =~ ^#rofi-hint:(.*)$ ]]; then
+    modified_line=""
+
+    IFS=' ' read -ra values <<< "${BASH_REMATCH[1]}"
+
+    for value in "${values[@]}"; do
+        if [[ $value =~ ^\{([^}]*)\}$ ]]; then
+            captured_value="${BASH_REMATCH[1]}"
+
+            # Perform substitution based on the captured value
+            case $captured_value in
+              "clipboard") substituted_value="$(xclip -out -selection clipboard)" ;;
+              *) substituted_value="unknown_value" ;;
+            esac
+
+            modified_line+="$substituted_value "
+        else
+            modified_line+="$value "
+        fi
+    done
+
+    echo "${modified_line% }"
+else
+    echo "Line format does not match the expected pattern."
+fi
+

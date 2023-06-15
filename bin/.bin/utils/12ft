@@ -1,0 +1,6 @@
+#!/bin/env bash
+
+#rofi-hint:Open {clipboard} in 12ft.io
+url=$(xclip -out -selelection clipboard)
+echo "Opening $url in 12ft"
+$BROWSER "https://12ft.io/proxy?q=$url"
