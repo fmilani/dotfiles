@@ -5,7 +5,7 @@
 NEW_SESSION_OPTION="Create new session "
 if [[ -z "$@" ]]
 then
-  open_sessions=$(tmux list-sessions -F "#S" 2>/dev/null)
+  open_sessions=$(tmux list-windows -a -F "#S:#W" 2>/dev/null)
   starter_scripts=$(ls ~/.bin/tmux-* | grep -v tmux-launcher | xargs -n 1 basename | cut -d'-' -f 2-)
   unopened_starters=$(comm -13 <(echo "$open_sessions") <(echo "$starter_scripts"))
   options=$([[ -n $open_sessions ]] && echo -e "$open_sessions\n$unopened_starters" || echo "$unopened_starters")
