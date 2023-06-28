@@ -58,7 +58,7 @@ super + Escape
 #     whid last
 
 super + c
-        CM_LAUNCHER=rofi clipmenu -i -p "Clips"
+        CM_LAUNCHER=rofi clipmenu -i -theme-str "listview \{ require-input: false; \}"
 
 super + shift +c
         mpc-chords
@@ -314,7 +314,7 @@ super + equal
         rofi-calc
 
 super + a
-        rofi -show audio
+        rofi -show audio -theme-str "listview \{require-input: false;\}"
 
 #
 # Media keys

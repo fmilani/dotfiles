@@ -1,7 +1,7 @@
 #!/bin/bash
 
 main() {
-  local chosen=$(echo -e "Power off\nSuspend\nReboot" | rofi -i -lines 3 -dmenu -p "Shutdown:" -mesg "$(uptime -p)")
+  local chosen=$(echo -e "Power off\nSuspend\nReboot" | rofi -i -lines 3 -dmenu -p "Shutdown:" -mesg "$(uptime -p)" -theme-str "listview {require-input: false;}")
 
   case "$chosen" in
     "Power off")
