@@ -327,7 +327,7 @@ super + {comma,period}
         volume {down,up}
 
 super + shift + {comma,period}
-        mpc {prev,next}
+        spt playback --{previous,next}
 
 super + shift + p
         spotibar --toggle-playback
