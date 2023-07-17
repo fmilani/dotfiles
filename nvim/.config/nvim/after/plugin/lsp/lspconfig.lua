@@ -1,4 +1,4 @@
-local lspconfig= require("lspconfig")
+local lspconfig = require("lspconfig")
 local cmp_nvim_lsp = require("cmp_nvim_lsp")
 local typescript = require("typescript")
 
@@ -48,7 +48,7 @@ lspconfig["tailwindcss"].setup({
 	on_attach = on_attach,
 })
 
-lspconfig["sumneko_lua"].setup({
+lspconfig["lua_ls"].setup({
 	capabilities = capabilities,
 	on_attach = on_attach,
 	settings = { -- custom settings for lua
