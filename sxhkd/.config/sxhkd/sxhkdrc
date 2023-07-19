@@ -330,7 +330,7 @@ super + shift + {comma,period}
         spt playback --{previous,next}
 
 super + shift + p
-        spotibar --toggle-playback
+        spt playback --toggle
 
 XF86AudioLowerVolume
 	volume down

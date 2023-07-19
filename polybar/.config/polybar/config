@@ -59,8 +59,8 @@ label-padding = 0
 [module/spotibar]
 inherit = module/base
 type = custom/script
-exec = cp=$(spotibar --get-currently-playing); [[ -z $cp ]] && echo Not playing || echo $cp
-label =  %output:0:30:...%
+exec = spt playback --status
+label = %output:0:30:...%
 
 [module/mpd]
 inherit = module/base
