@@ -174,15 +174,21 @@ bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
 
 # fnm
-export PATH=/home/felipe/.fnm:$PATH
+export PATH="/home/felipe/.local/share/fnm:$PATH"
 eval "`fnm env`"
 
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=15"
 
 
 # pnpm
-export PNPM_HOME="/home/felipe/.local/share/pnpm"
-export PATH="$PNPM_HOME:$PATH"
+#export PNPM_HOME="/home/felipe/.local/share/pnpm"
+#export PATH="$PNPM_HOME:$PATH"
 # pnpm endexport
-PATH=/home/felipe/.meteor:$PATH
+#PATH=/home/felipe/.meteor:$PATH
+
+PATH=$HOME/.bin:$PATH
+
+export EDITOR="nvim"
+export BROWSER="firefox"
+export TERMINAL="st"
 

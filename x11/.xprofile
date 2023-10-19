@@ -1,0 +1,15 @@
+xrdb ~/.Xresources
+
+setxkbmap -layout us -variant intl -option "caps:escape"
+
+xcape -e 'Super_L=Super_L|Shift_L|space' &
+
+TOUCHPAD_ID=$(xinput list --id-only "DELL07E6:00 06CB:76AF Touchpad")
+xinput set-prop "$TOUCHPAD_ID" "libinput Natural Scrolling Enabled" 1
+xinput set-prop "$TOUCHPAD_ID" "libinput Tapping Enabled" 1
+
+/usr/bin/pipewire &
+/usr/bin/pipewire-pulse &
+/usr/bin/wireplumber &
+
+dwmblocks &
