@@ -1,6 +1,6 @@
 (assoc
   #:pattern "image/.*"
-  #:program "feh %f")
+  #:program "sxiv %f")
 (assoc
   #:pattern "audio/.*"
   #:program "mpc clear && mpc insert file://%F && mpc next && mpc play")
@@ -9,7 +9,7 @@
   #:program "mpv %f")
 (assoc
   #:pattern "application/pdf"
-  #:program "mupdf %f")
+  #:program "zathura %f")
 (assoc
   #:pattern "^text/.*"
   #:program "nvim %f"
