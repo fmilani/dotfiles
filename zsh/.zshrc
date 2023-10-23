@@ -186,7 +186,7 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=15"
 # pnpm endexport
 #PATH=/home/felipe/.meteor:$PATH
 
-PATH=$HOME/.bin:$PATH
+PATH=$HOME/.local/bin:$PATH
 
 export EDITOR="nvim"
 export BROWSER="firefox"

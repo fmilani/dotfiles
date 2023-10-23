@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# Get the list of sinks and extract sink name and description
+sink_info=$(pactl list sinks | awk '/Name:/ || /Description:/')
+
+# Store sink names and descriptions in arrays
+names=()
+descriptions=()
+while read -r line; do
+  if [[ $line == *"Name:"* ]]; then
+    name=$(echo "$line" | cut -d ' ' -f 2)
+    names+=("$name")
+  elif [[ $line == "Description:"* ]]; then
+    description=$(echo "$line" | cut -d ' ' -f 2-)
+    descriptions+=("$description")
+  fi
+done <<< "$sink_info"
+
+# Use dmenu to select a sink description
+selected_description=$(printf "%s\n" "${descriptions[@]}" | dmenu -i -p "Select Sink:")
+
+# Find the corresponding sink name
+selected_name=""
+for i in "${!descriptions[@]}"; do
+  if [[ "${descriptions[$i]}" == "$selected_description" ]]; then
+    selected_name="${names[$i]}"
+    break
+  fi
+done
+
+# Set the default sink
+if [ -n "$selected_name" ]; then
+  pactl set-default-sink "$selected_name"
+  notify-send "Default sink set to: $selected_name"
+else
+  notify-send "No sink selected or set failed."
+fi
+
