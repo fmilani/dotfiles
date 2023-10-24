@@ -32,7 +32,5 @@ done
 if [ -n "$selected_name" ]; then
   pactl set-default-sink "$selected_name"
   notify-send "Default sink set to: $selected_name"
-else
-  notify-send "No sink selected or set failed."
 fi
 

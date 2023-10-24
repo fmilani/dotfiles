@@ -1,0 +1,13 @@
+#!/bin/sh
+
+layout=$(echo -e "International\nUnited States" | dmenu -i -p "Keyboard layout: ")
+
+[[ -z $layout ]] && exit 0
+
+if [[ $layout = "International" ]]; then
+  setxkbmap -layout us -variant intl -option "caps:escape"
+else
+  setxkbmap -layout us -option "caps:escape"
+fi
+
+exit 0

@@ -1,0 +1,19 @@
+#!/bin/sh
+
+chosen=$(echo -e "Power off\nSuspend\nReboot" | dmenu -i -p "Power options")
+
+case "$chosen" in
+
+    "Power off")
+      systemctl poweroff
+      ;;
+    "Suspend")
+      systemctl suspend
+      ;;
+    "Reboot")
+      systemctl reboot
+      ;;
+    *)
+      exit 0
+      ;;
+esac
