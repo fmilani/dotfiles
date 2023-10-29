@@ -4,7 +4,7 @@ choice=$(echo -e "Copy to clipboard\nSave to file" | dmenu -i -p "Screenshot")
 
 case $choice in
 	"Copy to clipboard")
-		scrot -e 'xclip -selection clipboard -t image/png -i $f' --select --line mode=edge
+		scrot -e 'xclip -selection clipboard -t image/png -i $f' --select --line mode=edge /tmp/%Y-%m-%d-%H%M%S.png
 		;;
 	"Save to file")
 		scrot $HOME/pictures/screenshots/%Y-%m-%d-%H%M%S.png --select --line mode=edge
