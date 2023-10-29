@@ -1,0 +1,23 @@
+#!/bin/sh
+
+template_sessions=$(ls $HOME/.local/bin/tmux | xargs -n 1 basename)
+
+session=$1
+if [[ ! $session ]]; then
+  session=$(echo "$template_sessions" | dmenu -i -p "Open tmux session")
+fi
+[[ -z "$session" ]] && exit 0
+
+session_exists=$(tmux list-sessions | grep -w $session)
+if [[ ! $session_exists ]]; then
+	$HOME/.local/bin/tmux/$session
+fi
+
+tmux_window=$(comm -12 <(xdotool search --name  'tmux'  | sort) <(xdotool search --class 'tmux'  | sort))
+if [[ $tmux_window ]]; then
+	xdotool windowactivate $tmux_window
+	tmux switch -t $session
+else
+	coproc ( $TERMINAL -c "tmux" -e tmux attach-session -t "$session" )
+fi
+
