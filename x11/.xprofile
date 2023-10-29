@@ -16,4 +16,5 @@ xrandr --output eDP-1 --mode 1280x720
 
 clipmenud &
 dunst &
+dmenu-tmux home &
 dwmblocks &
