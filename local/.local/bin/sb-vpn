@@ -1,0 +1,20 @@
+#!/bin/sh
+
+is_connected() {
+  [[ $(pgrep openfortivpn) ]] && echo 1
+}
+
+show_status() {
+  [[ $(is_connected) ]] && echo "🔒On" || echo "🔒--"
+}
+
+connect() {
+  sudo openfortivpn -c ~/.local/share/openfortivpn/config
+}
+
+main() {
+  local status=$(show_status)
+  echo $status
+}
+
+main

@@ -26,4 +26,4 @@ case $BUTTON in
 	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac
 
-pacman -Qu | grep -Fcv "[ignored]" | sed "s/^/📦/"
+pacman -Qu | grep -Fcv "[ignored]" | awk '{ printf "📦%2d", $1 }'
