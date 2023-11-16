@@ -333,6 +333,10 @@ vim.api.nvim_create_autocmd('BufWritePost', {
   pattern = '/home/felipe/projects/dwm/config.h',
   command = '!cd /home/felipe/projects/dwm/ && sudo make install'
 })
+vim.api.nvim_create_autocmd('BufWritePost', {
+  pattern = '/home/felipe/dotfiles/dunst/.config/dunst/dunstrc',
+  command = '!killall dunst ; dunst & ; test-notification'
+})
 
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
