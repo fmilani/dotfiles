@@ -1,0 +1,14 @@
+#!/bin/sh
+
+dunstify "Test notification" '<a href="https://example.com">It has an URL. Left click to open in browser</a>'
+
+ACTION=$(dunstify --action="default,Default Action" --action="anotherAction,Another Action" "This has action" "left click to call default, right click for context menu")
+
+case "$ACTION" in
+"default")
+	notify-send "default action"
+    ;;
+"anotherAction")
+	notify-send "another action"
+    ;;
+esac
