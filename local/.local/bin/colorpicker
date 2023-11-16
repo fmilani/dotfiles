@@ -1,0 +1,6 @@
+#!/bin/sh
+
+colorpicked=$(grabc | tr -d '\n')
+echo "$colorpicked" | xclip -selection clipboard
+convert -size 32x32 "xc:$colorpicked" /tmp/colorpicked.jpg
+dunstify -I /tmp/colorpicked.jpg "Color picked" "$colorpicked"

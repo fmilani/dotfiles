@@ -1,0 +1,7 @@
+#!/bin/sh
+
+mpv \
+  --demuxer-lavf-format=video4linux2 \
+  --demuxer-lavf-o-set=input_format=mjpeg,video_size=1280x720 \
+  --profile=low-latency \
+  av://v4l2:/dev/video0
