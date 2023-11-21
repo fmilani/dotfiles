@@ -12,6 +12,7 @@ main(){
 				[[ $use_url == "no" ]] && url=""
 			fi
 			bookmarks add "$url"
+			cd ~/dotfiles && git add surfraw/.config/surfraw/bookmarks && git commit -m "add $url to bookmarks" && git push
 			;;
 		"del")
 			bookmarks del
