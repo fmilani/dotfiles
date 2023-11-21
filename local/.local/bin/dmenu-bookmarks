@@ -1,0 +1,25 @@
+#!/bin/sh
+
+main(){
+	local choice=$(echo -e "add\ndel" | dmenu -p "bookmarks")
+	case "$choice" in
+		"add")
+			local url=""
+			local cb=$(xclip -sel clip -o)
+			if [[ $cb == https* ]]; then
+				url=$(echo "$cb" | sed 's|^https://||; s|^www\.||')
+				local use_url=$(echo -e "yes\nno" | dmenu -p "bookmark $url?")
+				[[ $use_url == "no" ]] && url=""
+			fi
+			bookmarks add "$url"
+			;;
+		"del")
+			bookmarks del
+			;;
+		*)
+			exit 0
+			;;
+	esac
+}
+
+main

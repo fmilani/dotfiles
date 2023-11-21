@@ -1,0 +1,45 @@
+#! /bin/bash
+
+BOOKMARKS_PATH=$HOME/.config/surfraw/
+BOOKMARKS_NAME=bookmarks
+
+add() {
+	local url=$1
+	[ -z "$url" ] && url=$(dmenu -p "url")
+	[ -z "$url" ] && exit 0
+	local description=$(dmenu -p "description")
+	[ -z "$description" ] && echo "$url" >> $BOOKMARKS_PATH/$BOOKMARKS_NAME
+	[ -n "$description" ] && echo "$description | $url" >> $BOOKMARKS_PATH/$BOOKMARKS_NAME
+}
+
+ls() {
+	check
+	cat $BOOKMARKS_PATH/$BOOKMARKS_NAME | sort
+}
+
+del() {
+	check
+	local url=$(cat $BOOKMARKS_PATH/$BOOKMARKS_NAME | sort |dmenu -l $(cat $BOOKMARKS_PATH/$BOOKMARKS_NAME | wc -l))
+	[ -z "$url" ] && exit 0
+	local escaped_url=$(printf '%s\n' "$url" | sed -e 's/[]\/$*.^[]/\\&/g')
+	sed -i "/$escaped_url/d" $BOOKMARKS_PATH/$BOOKMARKS_NAME
+}
+
+open_menu() {
+	check
+	cat $BOOKMARKS_PATH/$BOOKMARKS_NAME | sort  | column -s "|" -t | dmenu -l $(cat $BOOKMARKS_PATH/$BOOKMARKS_NAME | wc -l) | awk '{print $(NF)}' | xargs -I '{}' $BROWSER {}
+}
+
+check() {
+	[ ! -s $BOOKMARKS_PATH/$BOOKMARKS_NAME ] && printf "Error: No bookmarks found to display. Try adding some!\n\n" && show_usage && exit 0
+}
+
+[ ! -d $BOOKMARKS_PATH ] && mkdir -p $BOOKMARKS_PATH
+[ ! -f $BOOKMARKS_PATH/$BOOKMARKS_NAME ] && touch $BOOKMARKS_PATH/$BOOKMARKS_NAME
+
+case "$1" in
+	"add") add $2;;
+	"del") del ;;
+	"ls") ls ;;
+	*) open_menu ;;
+esac
