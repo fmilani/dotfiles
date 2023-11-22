@@ -192,3 +192,4 @@ export EDITOR="nvim"
 export BROWSER="firefox"
 export TERMINAL="st"
 
+eval "$(zoxide init zsh)"
