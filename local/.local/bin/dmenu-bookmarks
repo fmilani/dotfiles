@@ -9,10 +9,10 @@ main(){
 			if [[ $cb == https* ]]; then
 				url=$(echo "$cb" | sed 's|^https://||; s|^www\.||')
 				local use_url=$(echo -e "yes\nno" | dmenu -p "bookmark $url?")
-				[[ $use_url == "no" ]] && url=""
+				[[ -z $use_url || $use_url == "no" ]] && url=""
 			fi
 			bookmarks add "$url"
-			cd ~/dotfiles && git add surfraw/.config/surfraw/bookmarks && git commit -m "add $url to bookmarks" && git push
+			# cd ~/dotfiles && git add surfraw/.config/surfraw/bookmarks && git commit -m "add $url to bookmarks" && git push
 			;;
 		"del")
 			bookmarks del
