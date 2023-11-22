@@ -18,7 +18,8 @@
 # Exec = /usr/bin/pkill -RTMIN+8 dwmblocks # Or i3blocks if using i3.
 
 case $BUTTON in
-	1) setsid -f "$TERMINAL" -e sb-packagesupgrade ;;
+	1) tmux new-window -n "upgrade" -t home: "sb-packagesupgrade" ;;
+	# 1) setsid -f "$TERMINAL" -e sb-packagesupgrade ;;
 	2) notify-send "$(/usr/bin/pacman -Qu)" ;;
 	3) notify-send "🎁 Upgrade module" "📦: number of upgradable packages
 - Left click to upgrade packages
