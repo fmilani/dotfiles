@@ -27,7 +27,7 @@ del() {
 
 open_menu() {
 	check
-	cat $BOOKMARKS_PATH/$BOOKMARKS_NAME | sort  | column -s "|" -t | dmenu -l $(cat $BOOKMARKS_PATH/$BOOKMARKS_NAME | wc -l) | awk '{print $(NF)}' | xargs -I '{}' $BROWSER {}
+	cat $BOOKMARKS_PATH/$BOOKMARKS_NAME | sort  | column -s "|" -t | dmenu -l $(cat $BOOKMARKS_PATH/$BOOKMARKS_NAME | wc -l) -p "open bookmark" | awk '{print $(NF)}' | xargs -I '{}' $BROWSER {}
 }
 
 check() {
