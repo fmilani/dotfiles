@@ -179,13 +179,6 @@ eval "`fnm env`"
 
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=15"
 
-
-# pnpm
-#export PNPM_HOME="/home/felipe/.local/share/pnpm"
-#export PATH="$PNPM_HOME:$PATH"
-# pnpm endexport
-#PATH=/home/felipe/.meteor:$PATH
-
 PATH=$HOME/.local/bin:$PATH
 
 export EDITOR="nvim"
@@ -193,3 +186,11 @@ export BROWSER="firefox"
 export TERMINAL="st"
 
 eval "$(zoxide init zsh)"
+
+# pnpm
+export PNPM_HOME="/home/felipe/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
