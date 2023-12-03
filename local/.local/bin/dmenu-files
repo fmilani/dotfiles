@@ -1,0 +1,24 @@
+#!/bin/sh
+
+main() {
+  local print=false
+  while getopts "p" option; do
+    case $option in
+      p)
+        print=true
+        ;;
+      *)
+        echo "Usage: $0 [-p]"
+        exit 1
+        ;;
+    esac
+  done
+  local MAX_LINES=30
+  local files=$(fd . downloads documents pictures videos -t f)
+  local lines=$(echo "$files" | wc -l)
+  local file=$(echo "$files" | dmenu -l "$(( $lines < $MAX_LINES ? $lines : $MAX_LINES ))" -p "open file: ")
+  [ -z "$file" ] && exit 0
+  [ $print == true ] && echo "$file" || jaro "$file"
+}
+
+main "$@"
