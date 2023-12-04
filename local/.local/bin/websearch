@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+main() {
+  sr $(sr -elvi | awk -F'-' '{print $1}' | sed '/:/d' | awk '{$1=$1};{print $1" "}' | dmenu -p "websearch: ")
+}
+
+main "$@"
+
