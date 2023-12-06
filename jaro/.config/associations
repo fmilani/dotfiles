@@ -12,12 +12,13 @@
   #:program "zathura %f")
 (assoc
   #:pattern "^text/.*"
-  #:program "nvim %f"
-  #:term "st -e")
+  #:program "tmux new-window nvim %f")
 (assoc
   #:pattern "^application/json"
-  #:program "nvim %f"
-  #:term "st -e")
+  #:program "tmux new-window nvim %f")
+(assoc
+  #:pattern "^application/xml"
+  #:program "tmux new-window nvim %f")
 (assoc
   #:pattern "^https?://www.twitch.tv/popout/.*"
   #:program "firefox -kiosk -new-window %f")
