@@ -1,5 +1,6 @@
 #!/bin/sh
 
+cd "$HOME"
 main() {
   local print=false
   while getopts "p" option; do
