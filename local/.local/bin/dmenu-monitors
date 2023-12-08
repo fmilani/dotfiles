@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+cd "$(dirname "$0")"
+main() {
+    local choice=$(echo -e "only laptop\nsecond monitor above\nonly second monitor" | dmenu -p "monitors")
+    case $choice in
+        "only laptop")
+            xrandr --output eDP-1 --mode 1280x720 --output DP-2 --off
+            ;;
+        "second monitor above")
+            xrandr --output eDP-1 --mode 1280x720 --output DP-2 --auto --above eDP-1
+            ;;
+        "only second monitor")
+            xrandr --output eDP-1 --off --output DP-2 --auto
+            ;;
+        *)
+            exit 0
+    esac
+}
+
+main "$@"
+
