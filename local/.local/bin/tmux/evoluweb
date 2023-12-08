@@ -1,0 +1,17 @@
+#!/bin/bash
+
+tmux new-session -d -s evoluweb -n merchant -c ~/workspace/evoluweb/apps/merchant
+tmux split-window -h -c "#{pane_current_path}"
+tmux resize-pane -t 0 -x 40%
+tmux send-keys -t 0 'npm run dev' C-m
+tmux send-keys -t 1 'nvim' C-m
+
+tmux new-window -n muicash -c ~/workspace/evoluweb/packages/muicash
+tmux send-keys -t 0 'nvim' C-m
+
+tmux new-window -n muievo -c ~/workspace/evoluweb/packages/design-system
+tmux split-window -h -c "#{pane_current_path}"
+tmux resize-pane -t 0 -x 40%
+tmux send-keys -t 0 'npm run storybook' C-m
+tmux send-keys -t 1 'nvim' C-m
+
