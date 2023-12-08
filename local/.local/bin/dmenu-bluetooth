@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+cd "$(dirname "$0")"
+main() {
+    local names=()
+    local ids=()
+    local devices_paired=$(bluetoothctl devices Paired)
+    local n_devices=$(echo "$devices_paired" | wc -l)
+    while read -r device_paired; do
+        local id=$(echo "$device_paired" | cut -d ' ' -f 2)
+        ids+=("$id")
+        local name=$(echo "$device_paired" | cut -d ' ' -f 3-)
+        local status=$(bluetoothctl info "$id" | grep -q "Connected: yes" && echo "[connected]" || echo "")
+        names+=("$name$status")
+    done <<< "$devices_paired"
+    local selected_name=$(printf "%s\n" "${names[@]}" | dmenu -p "bluetooth devices: " -l "$n_devices")
+
+    [[ -z "$selected_name" ]] && exit 0
+
+    local selected_id=""
+    for i in "${!names[@]}"; do
+        if [[ "${names[$i]}" == "$selected_name" ]]; then
+            selected_id="${ids[$i]}"
+            break
+        fi
+    done
+
+    bluetoothctl info "$selected_id" | grep -q "Connected: yes" && bluetoothctl disconnect "$selected_id" || bluetoothctl connect "$selected_id"
+}
+
+main "$@"
+
