@@ -1,0 +1,17 @@
+# for more details see the sfeedrc(5) and sfeed_update(1) man pages
+# and the README file.
+
+sfeedpath="$HOME/.local/share/sfeed/feeds"
+
+# list of feeds to fetch:
+feeds() {
+	# feed <name> <feedurl> [basesiteurl] [encoding]
+	# feed "reddit openbsd" "https://old.reddit.com/r/openbsd/.rss"
+	# feed "slashdot" "http://rss.slashdot.org/Slashdot/slashdot" "http://slashdot.org"
+	# feed "tweakers" "http://feeds.feedburner.com/tweakers/mixed" "http://tweakers.net" "iso-8859-1"
+	# get youtube Atom feed: curl -s -L 'https://www.youtube.com/user/gocoding/videos' | sfeed_web | cut -f 1
+	# feed "youtube golang" "https://www.youtube.com/feeds/videos.xml?channel_id=UCO3LEtymiLrgvpb59cNsb8A"
+	feed "xkcd" "https://xkcd.com/atom.xml" "https://xkcd.com"
+	feed "show hn" "https://hnrss.org/show?link=comments"
+	feed "best hn" "https://hnrss.org/newest?points=500&link=comments"
+}
