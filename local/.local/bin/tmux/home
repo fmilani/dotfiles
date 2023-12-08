@@ -3,5 +3,8 @@
 session_name=$(basename $0)
 
 tmux new-session -s "$session_name" -d
-tmux rename-window "config"
-tmux send-keys -t "$SESSION_NAME":1.0 'v ~/.config/tmux/tmux.conf' C-m
+tmux rename-window "music"
+tmux send-keys -t "$SESSION_NAME":1.0 'spt' C-m
+
+tmux new-window -n feed
+tmux send-keys -t 0 "sfeed_curses $HOME/.local/share/sfeed/feeds/*" C-m
