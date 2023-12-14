@@ -1,14 +1,21 @@
 #!/bin/sh
 
 start_screencast() {
-  notify-send "$1"
   local audio_flags=$1
+  read -r X Y W H < <(slop -f "%x %y %w %h" --color=1,0,0)
   notify-send "Screencast started"
-  ffmpeg -framerate 30 -f x11grab -i :0.0 $audio_flags \
-	~/videos/screencasts/$(date +%Y-%m-%d-%H%M%S).mp4
+  ffmpeg \
+    -framerate 60 \
+    -f x11grab \
+    -s "$W"x"$H" \
+    -i :0.0+$X,$Y \
+    $audio_flags \
+    ~/videos/screencasts/$(date +%Y-%m-%d-%H%M%S).mp4
 }
 
 main() {
+	pgrep -x ffmpeg && kill $(pgrep -x ffmpeg) && notify-send "Screencast stopped" && exit 0
+
 	local choice=$(echo -e "Yes\nNo" | dmenu -i -p "Screencast with sound?")
 	local audio_flags=""
 	case "$choice" in
@@ -22,7 +29,7 @@ main() {
 	    ;;
         esac
 	    
-	pgrep -x ffmpeg && kill $(pgrep -x ffmpeg) && notify-send "Screencast stopped" || start_screencast "$audio_flags"
+	start_screencast "$audio_flags"
 }
 
 main
