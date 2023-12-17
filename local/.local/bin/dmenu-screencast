@@ -2,7 +2,7 @@
 
 start_screencast() {
   local audio_flags=$1
-  local filename=${2:-$(date +%Y-%m-%d-%H%M%S)}
+  local filename=$2
   read -r X Y W H < <(slop -f "%x %y %w %h" --color=1,0,0)
   [[ -z $X ]] && exit 0
   notify-send "Screencast started"
@@ -12,13 +12,19 @@ start_screencast() {
     -s "$W"x"$H" \
     -i :0.0+$X,$Y \
     $audio_flags \
-    ~/videos/screencasts/${filename// /-}.mp4
+    ${filename}
 }
 
 main() {
-	pgrep -x ffmpeg && kill $(pgrep -x ffmpeg) && notify-send "Screencast stopped" && exit 0
+        local FILENAME_FILE="/tmp/$(basename $0)-last-screencast"
+	if pgrep -x ffmpeg > /dev/null; then
+	  kill $(pgrep -x ffmpeg)
+	  local action=$(notify-send --action 'default=Focus Window' "Screencast stopped" "$(cat $FILENAME_FILE)")
+	  [[ -n "$action" ]] && jaro $(cat "$FILENAME_FILE") &
+	  exit 0
+	fi
 
-	local choice=$(echo -e "yes\nno" | dmenu -i -p "screencast with sound?")
+	local choice=$(echo -e "no\nyes" | dmenu -i -p "screencast with sound?")
 	local audio_flags=""
 	case "$choice" in
 	  "yes")
@@ -31,7 +37,9 @@ main() {
 	    ;;
         esac
 	local name=$(echo "$(date +%Y-%m-%d-%H%M%S)" | dmenu -p "filename: ")
-	start_screencast "$audio_flags" "$name"
+	local filename="$HOME/videos/screencasts/${name// /-}.mp4"
+	echo "$filename" > "$FILENAME_FILE"
+	start_screencast "$audio_flags" "$filename"
 }
 
 main
