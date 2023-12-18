@@ -18,7 +18,7 @@
 # Exec = /usr/bin/pkill -RTMIN+8 dwmblocks # Or i3blocks if using i3.
 
 case $BUTTON in
-	1) tmux new-window -n "weather" -t home: "curl wttr.in/ && echo Press any key to close && read -r _" ;;
+	1) tmux-launch home weather "curl wttr.in/ && echo \"Press <Enter> to exit window\" && read -r _" ;;
 	2) ;;
 	3) notify-send "⛅ Weather module" "Shows the current weather in current location
 - Left click for forecasting more days

@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+if [[ "${TRACE-0}" == "1" ]]; then
+    set -o xtrace
+fi
+
+if [[ "${1-}" =~ ^-*h(elp)?$ ]]; then
+    echo "Usage: $(basename $0) <session> <window> <command>
+
+Runs a command on a new tmux window and focus tmux. When the command exits, the tmux window is closed.
+
+"
+    exit
+fi
+
+cd "$(dirname "$0")"
+main() {
+    local session=$1
+    local window=$2
+    local command=$3
+
+    tmux new-window -t "$session" -n "$window" "$command"
+    xdotool windowactivate $(xwininfo -name tmux | grep "Window id:" | awk '{print $4}')
+}
+
+main "$@"
+
+
