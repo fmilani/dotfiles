@@ -22,7 +22,9 @@ main() {
     local window=$2
     local command=$3
 
-    tmux new-window -t "$session" -n "$window" "$command"
+    tmux new-window -S -t "$session" -n "$window" "$command"
+    tmux switch -t $session
+
     xdotool windowactivate $(xwininfo -name tmux | grep "Window id:" | awk '{print $4}')
 }
 
