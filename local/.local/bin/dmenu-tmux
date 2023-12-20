@@ -1,14 +1,19 @@
 #!/bin/sh
 
 template_sessions=$(ls $HOME/.local/bin/tmux | xargs -n 1 basename)
+open_sessions=$(tmux list-windows -a -F "#S:#W" 2>/dev/null)
+
+unopened_templates=$(comm -13 <(echo "$open_sessions" | cut -d':' -f1 | uniq) <(echo "$template_sessions"))
+
+sessions=$(echo -e "$open_sessions\n$unopened_templates")
 
 session=$1
 if [[ ! $session ]]; then
-  session=$(echo "$template_sessions" | dmenu -i -p "Open tmux session")
+  session=$(echo "$sessions" | sort | dmenu -i -p "Open tmux session")
 fi
 [[ -z "$session" ]] && exit 0
 
-session_exists=$(tmux list-sessions | grep -w $session)
+session_exists=$(tmux list-sessions | grep -w $(echo "$session" | cut -d':' -f1))
 if [[ ! $session_exists ]]; then
 	$HOME/.local/bin/tmux/$session
 fi
