@@ -14,4 +14,5 @@ feeds() {
 	feed "xkcd" "https://xkcd.com/atom.xml" "https://xkcd.com"
 	feed "show hn" "https://hnrss.org/show?link=comments"
 	feed "best hn" "https://hnrss.org/newest?points=500&link=comments"
+	feed "work chronicles" "https://workchronicles.com/feed/"
 }
