@@ -13,4 +13,5 @@ simulate hardware in the browser | withdiode.com
 shell script best practices | sharats.me/posts/shell-script-best-practices/
 typescript interactive course | type-level-typescript.com/
 It takes 6 days to change 1 line of code | edw519.posthaven.com/it-takes-6-days-to-change-1-line-of-code
-twilio plugins PRs | github.com/EvoluServices/twilio-plugins/pulls?q=is%3Apr+is%3Aopen+-reviewed-by%3Afmilani+
+twilio plugins PRs | https://github.com/EvoluServices/twilio-plugins/pulls?q=is%3Apr+is%3Aopen+review%3Anone
+twilio kanban | https://evoluservices.atlassian.net/jira/software/c/projects/TWF/boards/175
