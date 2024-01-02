@@ -2,7 +2,7 @@
 
 cd "$(dirname "$0")"
 main() {
-    local choice=$(echo -e "only laptop\nsecond monitor above\nonly second monitor" | dmenu -p "monitors")
+    local choice=$(echo -e "only laptop\nsecond monitor above\nonly second monitor" | dmenu -p "displays")
     case $choice in
         "only laptop")
             xrandr --output eDP-1 --mode 1280x720 --output DP-2 --off

@@ -18,5 +18,5 @@ spotifyd &
 clipmenud &
 dunst &
 feh --bg-scale pictures/wallpapers/wallpaper &
-dmenu-tmux home &
+tmux-sessions home &
 dwmblocks &

@@ -1,15 +1,15 @@
-#! /bin/bash
+#!/bin/bash
 
 BOOKMARKS_PATH=$HOME/.config/surfraw/
 BOOKMARKS_NAME=bookmarks
 
 add() {
 	local url=$1
-	[ -z "$url" ] && url=$(dmenu -p "url")
 	[ -z "$url" ] && exit 0
-	local description=$(dmenu -p "description")
+	local description=$(echo "" | dmenu -p "description")
 	[ -z "$description" ] && echo "$url" >> $BOOKMARKS_PATH/$BOOKMARKS_NAME
 	[ -n "$description" ] && echo "$description | $url" >> $BOOKMARKS_PATH/$BOOKMARKS_NAME
+	notify-send "Bookmark added" "$url"
 }
 
 ls() {
@@ -19,15 +19,20 @@ ls() {
 
 del() {
 	check
-	local url=$(cat $BOOKMARKS_PATH/$BOOKMARKS_NAME | sort |dmenu -l $(cat $BOOKMARKS_PATH/$BOOKMARKS_NAME | wc -l))
+	local url=$1
 	[ -z "$url" ] && exit 0
 	local escaped_url=$(printf '%s\n' "$url" | sed -e 's/[]\/$*.^[]/\\&/g')
 	sed -i "/$escaped_url/d" $BOOKMARKS_PATH/$BOOKMARKS_NAME
+	notify-send "Bookmark deleted" "$escaped_url"
 }
 
 open_menu() {
 	check
-	cat $BOOKMARKS_PATH/$BOOKMARKS_NAME | sort  | column -s "|" -t | dmenu -l $(cat $BOOKMARKS_PATH/$BOOKMARKS_NAME | wc -l) -p "open bookmark" | awk '{print $(NF)}' | xargs -I '{}' $BROWSER {}
+	local bookmark=$(cat $BOOKMARKS_PATH/$BOOKMARKS_NAME | sort  | column -s "|" -t | dmenu -l $(cat $BOOKMARKS_PATH/$BOOKMARKS_NAME | wc -l) -p "open bookmark")
+	[[ $bookmark == *! ]] && del ${bookmark::-1} && exit 0
+	[[ $bookmark == *+ ]] && add ${bookmark::-1} && exit 0
+
+	echo "$bookmark" | awk '{print $(NF)}' | xargs -I '{}' $BROWSER {}
 }
 
 check() {
