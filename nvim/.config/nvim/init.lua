@@ -337,6 +337,10 @@ vim.api.nvim_create_autocmd('BufWritePost', {
   pattern = '/home/felipe/dotfiles/dunst/.config/dunst/dunstrc',
   command = '!killall dunst ; dunst & ; test-notification'
 })
+vim.api.nvim_create_autocmd('BufWritePost', {
+  pattern = '/home/felipe/workspace/ale/src/*',
+  command = '!cd /home/felipe/workspace/ale/ && npm run build'
+})
 
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
