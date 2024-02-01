@@ -1,3 +1,4 @@
-player=mpv --cache 2048
+player=mpv
+player-args=--cache 4096
 default-stream="best,720p,480p,360p,worst,1080p"
 crunchyroll-username=fmilani
