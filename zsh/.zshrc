@@ -67,6 +67,7 @@ alias ct="nvim ~/.config/tmux/tmux.conf"
 alias cr="nvim ~/.config/rofi/config.rasi"
 alias open="jaro"
 alias cat="bat"
+alias pn="pnpm"
 
 alias gitcount="git shortlog -s -n --all --no-merges"
 alias please='sudo $(fc -ln -1)'
