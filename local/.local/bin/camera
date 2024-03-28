@@ -1,7 +1,17 @@
-#!/bin/sh
+#!/bin/bash
 
-mpv \
-  --demuxer-lavf-format=video4linux2 \
-  --demuxer-lavf-o-set=input_format=mjpeg,video_size=1280x720 \
-  --profile=low-latency \
-  av://v4l2:/dev/video0
+main() {
+  local cameras=$(find /dev -regex '/dev/video[04]')
+  local camera
+  if [[ $(echo "$cameras" | wc -l) > 1 ]]; then
+    camera=$(echo "$cameras" | dmenu -p "camera:")
+  else
+    camera="$cameras"
+  fi
+  mpv \
+    --demuxer-lavf-format=video4linux2 \
+    --demuxer-lavf-o-set=input_format=mjpeg,video_size=1280x720 \
+    --profile=low-latency \
+    av://v4l2:$camera
+}
+main
