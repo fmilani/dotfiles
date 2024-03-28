@@ -1,0 +1,5 @@
+#!/bin/env bash
+
+cat | \
+  "$HOME"/.local/share/piper/piper --model "$HOME"/.local/share/piper/en_US-libritts_r-medium.onnx --output-raw | \
+  aplay -r 22050 -f S16_LE -t raw -
