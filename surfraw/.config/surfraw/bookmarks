@@ -12,7 +12,7 @@ random web 1.0 website | wiby.me/surprise/
 simulate hardware in the browser | withdiode.com
 shell script best practices | sharats.me/posts/shell-script-best-practices/
 typescript interactive course | type-level-typescript.com/
-twilio plugins PRs | https://github.com/EvoluServices/twilio-plugins/pulls?q=is%3Apr+is%3Aopen+review%3Anone
+twilio plugins PRs | https://github.com/EvoluServices/twilio-plugins/pulls?q=review-requested%3Afmilani+is%3Aopen
 twilio kanban | https://evoluservices.atlassian.net/jira/software/c/projects/TWF/boards/175
 it takes 6 days to change 1 line of code | https://edw519.posthaven.com/it-takes-6-days-to-change-1-line-of-code
 nextjs app router training | https://nextjs-app-router-training.vercel.app/
