@@ -10,6 +10,8 @@ case $BUTTON in
 📡: no wifi connection
 📶: wifi connection with quality
 🔒: vpn is active
+
+Connected to $(nmcli -t -f NAME c show --active | head -n 1)
 " ;;
 	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac
@@ -21,8 +23,5 @@ elif [ "$(cat /sys/class/net/w*/operstate 2>/dev/null)" = 'down' ] ; then
 	[ "$(cat /sys/class/net/w*/flags 2>/dev/null)" = '0x1003' ] && wifiicon="📡 " || wifiicon="❌ "
 fi
 
-# TUN
-[ -n "$(cat /sys/class/net/tun*/operstate 2>/dev/null)" ] && tunicon=" 🔒"
-
-printf "%s%s\n" "$wifiicon" "$tunicon"
+printf "%s%s\n" "$wifiicon"
 
