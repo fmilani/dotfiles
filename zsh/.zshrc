@@ -96,8 +96,11 @@ eval "$(fzf --zsh)"
 eval "$(zoxide init --cmd cd zsh)"
 
 # fnm
-export PATH="/home/felipe/.local/share/fnm:$PATH"
-eval "`fnm env`"
+FNM_PATH="/home/felipe/.local/share/fnm"
+if [ -d "$FNM_PATH" ]; then
+  export PATH="/home/felipe/.local/share/fnm:$PATH"
+  eval "`fnm env`"
+fi
 
 # pnpm
 export PNPM_HOME="/home/felipe/.local/share/pnpm"
