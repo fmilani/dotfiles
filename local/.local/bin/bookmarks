@@ -32,7 +32,7 @@ open_menu() {
 	[[ $bookmark == *! ]] && del ${bookmark::-1} && exit 0
 	[[ $bookmark == *+ ]] && add ${bookmark::-1} && exit 0
 
-	echo "$bookmark" | awk '{print $(NF)}' | xargs -I '{}' $BROWSER {}
+	echo "$bookmark" | awk '{print $(NF)}' | xargs -I '{}' jaro {}
 }
 
 check() {
