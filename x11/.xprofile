@@ -2,7 +2,7 @@ xrdb ~/.Xresources
 
 setxkbmap -layout us -variant intl -option "caps:escape"
 
-xcape -e 'Super_L=Super_L|Shift_L|space' &
+xcape -e 'Super_L=Super_L|Shift_L|d' &
 
 TOUCHPAD_ID=$(xinput list --id-only "DELL07E6:00 06CB:76AF Touchpad")
 xinput set-prop "$TOUCHPAD_ID" "libinput Natural Scrolling Enabled" 1
