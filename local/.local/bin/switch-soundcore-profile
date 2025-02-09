@@ -1,0 +1,16 @@
+#!/bin/bash
+
+
+profile=$(pactl list cards | awk -v RS="" -v device="soundcore Liberty 4" '
+    $0 ~ device {
+        match($0, /Active Profile: ([^\n]*)/, arr)
+        if (arr[1] != "")
+            print arr[1]
+    }
+')
+case "$profile" in
+  "a2dp-sink-sbc_xq") pactl set-card-profile bluez_card.E8_EE_CC_4B_7E_1C headset-head-unit ;;
+  *) pactl set-card-profile bluez_card.E8_EE_CC_4B_7E_1C a2dp-sink-sbc_xq ;;
+esac
+
+sigdwmblocks 2

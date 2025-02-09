@@ -31,6 +31,7 @@ done
 # Set the default sink
 if [ -n "$selected_name" ]; then
   pactl set-default-sink "$selected_name"
+  sigdwmblocks 2
   notify-send "Default sink set to: $selected_name"
 fi
 
