@@ -1,0 +1,38 @@
+[user]
+  email = felmilani@gmail.com
+  name = Felipe Milani
+[alias]
+  pr = "!f() { local desc=$@; git push origin HEAD:refs/for/$(git branch --show-current)%m=${desc// /_}; }; f"
+
+[column]
+  ui = auto
+[branch]
+  sort = -committerdate
+[tag]
+  sort = version:refname
+[init]
+  defaultBranch = main
+[diff]
+  algorithm = histogram
+  colorMoved = plain
+  mnemonicPrefix = true
+  renames = true
+[push]
+  autoSetupRemote = true
+  followTags = true
+[fetch]
+  prune = true
+  pruneTags = true
+  all = true
+[help]
+  autocorrect = prompt
+[commit]
+  verbose = true
+[rebase]
+  autoSquash = true
+  autoStash = true
+  updateRefs = true
+[merge]
+  conflictstyle = zdiff3 
+[pull]
+  rebase = true
