@@ -37,7 +37,7 @@ main() {
 	    ;;
         esac
 	local name=$(echo "$(date +%Y-%m-%d-%H%M%S)" | dmenu -p "filename: ")
-	local filename="$HOME/videos/screencasts/${name// /-}.mp4"
+	local filename="$HOME/Videos/screencasts/${name// /-}.mp4"
 	echo "$filename" > "$FILENAME_FILE"
 	start_screencast "$audio_flags" "$filename"
 }
