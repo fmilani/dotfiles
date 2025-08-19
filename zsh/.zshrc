@@ -84,11 +84,11 @@ alias pn="pnpm"
 alias gitcount="git shortlog -s -n --all --no-merges"
 alias please='sudo $(fc -ln -1)'
 
-PATH=$HOME/.local/bin:$HOME/go/bin:$PATH
+PATH=$HOME/.local/bin:$HOME/go/bin:$HOME/python-env/bin:$PATH
 
 # Exports
 export EDITOR="nvim"
-export BROWSER="firefox"
+export BROWSER="zen-browser"
 export TERMINAL="st"
 
 # Shell integrations
@@ -111,3 +111,6 @@ esac
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# opencode
+export PATH=/home/felipe/.opencode/bin:$PATH
