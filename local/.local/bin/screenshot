@@ -7,7 +7,7 @@ case $choice in
 		scrot -e 'xclip -selection clipboard -t image/png -i $f' --select --line mode=edge /tmp/%Y-%m-%d-%H%M%S.png
 		;;
 	"Save to file")
-		scrot $HOME/pictures/screenshots/%Y-%m-%d-%H%M%S.png --select --line mode=edge
+		scrot $HOME/Pictures/screenshots/%Y-%m-%d-%H%M%S.png --select --line mode=edge
 		;;
 	*)
 		exit 0
