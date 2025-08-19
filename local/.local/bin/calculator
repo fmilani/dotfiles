@@ -1,0 +1,16 @@
+#!/bin/sh
+
+main() {
+  local expr=$(echo "" | dmenu -p "calculator: " <&-)
+  local result=$(echo "$expr" | bc)
+  [[ -z "$result" ]] && exit 0
+  echo "$expr = $result" >> /tmp/calculator-history
+  while true
+  do
+    expr=$(tac /tmp/calculator-history | dmenu -l $(cat /tmp/calculator-history | wc -l) -p "calculator: ")
+    result=$(echo "$expr" | bc)
+    [[ -z "$result" ]] && exit 0
+    echo "$expr = $result" >> /tmp/calculator-history
+  done
+}
+main
