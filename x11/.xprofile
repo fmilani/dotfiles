@@ -15,6 +15,6 @@ xinput set-prop "$TOUCHPAD_ID" "libinput Tapping Enabled" 1
 spotifyd &
 clipmenud &
 dunst &
-feh --bg-scale pictures/wallpapers/wallpaper &
+feh --bg-scale Pictures/wallpapers/wallpaper &
 tmux-sessions home &
 dwmblocks &
