@@ -112,5 +112,9 @@ esac
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+webapp() {
+  chromium --app="https://$@"
+}
+
 # opencode
 export PATH=/home/felipe/.opencode/bin:$PATH
