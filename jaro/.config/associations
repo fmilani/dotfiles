@@ -21,14 +21,17 @@
   #:program "tmux new-window nvim %f")
 (assoc
   #:pattern "^https?://www.twitch.tv/popout/.*"
-  #:program "firefox -kiosk -new-window %f")
+  #:program "chromium --app=%f")
 (assoc
   #:pattern "^https?://www.twitch.tv/.*"
   #:program "streamlink %f")
 (assoc
   #:pattern "^https?://.*"
-  #:program "firefox %f")
+  #:program "$BROWSER %f")
 (assoc
   #:pattern "^application/zip"
   #:program "ranger %f"
   #:term "st -e")
+(assoc
+  #:pattern "^application/.*openxml.*"
+  #:program "libreoffice %f")
