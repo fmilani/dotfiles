@@ -23,6 +23,12 @@
   #:pattern "^https?://www.twitch.tv/popout/.*"
   #:program "chromium --app=%f")
 (assoc
+  #:pattern "^https?://www.youtube.com.*"
+  #:program "chromium --app=%f")
+(assoc
+  #:pattern "^https?://meet.google.com.*"
+  #:program "chromium --app=%f")
+(assoc
   #:pattern "^https?://www.twitch.tv/.*"
   #:program "streamlink %f")
 (assoc
