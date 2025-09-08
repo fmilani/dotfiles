@@ -12,6 +12,7 @@ xinput set-prop "$TOUCHPAD_ID" "libinput Tapping Enabled" 1
 /usr/bin/pipewire-pulse &
 /usr/bin/wireplumber &
 
+xss-lock -- xsecurelock &
 spotifyd &
 clipmenud &
 dunst &
