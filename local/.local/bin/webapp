@@ -1,3 +1,10 @@
 #!/bin/bash
 
-$BROWSER --app="$1" "${@:2}"
+url_no_https="${1#https://}"
+url_no_http="${url_no_https#http://}"
+
+wmctrl -xa "$url_no_http"
+
+if [ "$?" -ne 0 ]; then
+  $BROWSER --app="$1" "${@:2}"
+fi
