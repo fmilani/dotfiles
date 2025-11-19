@@ -88,7 +88,7 @@ PATH=$HOME/.local/bin:$HOME/go/bin:$HOME/python-env/bin:$PATH
 
 # Exports
 export EDITOR="nvim"
-export BROWSER="zen-browser"
+export BROWSER="google-chrome-stable"
 export TERMINAL="st"
 
 # Shell integrations
@@ -111,10 +111,6 @@ esac
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-webapp() {
-  chromium --app="https://$@"
-}
 
 # opencode
 export PATH=/home/felipe/.opencode/bin:$PATH
