@@ -1,9 +1,13 @@
 #!/bin/env bash
 
 main() {
-  ffmpeg -t 4 -y -f pulse -ac 2 -i default -f wav ~/.cache/stt_audio.wav >/dev/null 2>&1
-  vosk-transcriber -i "$HOME/.cache/stt_audio.wav" -o "$HOME/.cache/transcript.txt" >/dev/null 2>&1
-  cat "$HOME/.cache/transcript.txt"
+  local l_id=$(notify-send --print-id -t 0 "Listening...")
+  ffmpeg -f alsa -i default -vn -af "silencedetect=noise=-30dB:d=2" -y "$HOME/.cache/stt_audio.wav" 2>&1 |
+    stdbuf -oL awk '/silence_start/ { system("pkill -INT ffmpeg") }'
+  dunstctl close "$l_id"
+  local t_id=$(notify-send --print-id -t 0 "Transcribing...")
+  whisper-cli --language en --model "$HOME/whisper-models/ggml-tiny.bin" -ac 768 "$HOME/.cache/stt_audio.wav" | sed 's/\[.*\] *//'
+  notify-send --replace-id=$t_id "Transcribing...done"
 }
 
 main
