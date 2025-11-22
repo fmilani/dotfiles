@@ -3,8 +3,7 @@
 main(){
   local dir="$HOME/.local/config/snippets"
   local snippet=$(ls $dir | dmenu -p "snippet: ")
-  xclip -sel clip < "$dir/$snippet"
-  notify-send "Snippet copied to clipboard" "$snippet"
+  copy < "$dir/$snippet"
 }
 
 main
