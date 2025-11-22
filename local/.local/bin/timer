@@ -1,0 +1,5 @@
+#!/bin/bash
+
+sleep "$1"
+sfx ringaling
+notify-send -t 3000 "Time complete ($1)" "$2"
