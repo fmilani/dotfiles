@@ -1,0 +1,5 @@
+#!/bin/bash
+
+[[ $# -lt 1 ]] && echo "you need to pass the sound effect as argument." && exit 1
+
+exec mpv --really-quiet --no-video ~/Music/sfx/$1.ogg &
