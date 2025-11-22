@@ -1,5 +1,17 @@
 #!/bin/env bash
 
-cat | \
-  "$HOME"/.local/share/piper/piper --model "$HOME"/.local/share/piper/en_US-libritts_r-medium.onnx --output-raw | \
-  aplay -r 22050 -f S16_LE -t raw -
+MODEL="$HOME"/.local/share/piper/en_US-libritts_r-medium.onnx
+
+main() {
+  if [[ $# -gt 0 ]]; then
+    INPUT="$*"
+    printf "%s" "$INPUT" | \
+      piper-tts --model "$MODEL" --output-raw | \
+      aplay -r 22050 -f S16_LE -t raw -
+  else
+    cat | \
+      piper-tts --model "$MODEL" --output-raw | \
+      aplay -r 22050 -f S16_LE -t raw -
+  fi
+}
+main
