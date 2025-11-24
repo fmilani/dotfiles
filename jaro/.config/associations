@@ -1,9 +1,12 @@
 (assoc
+  #:pattern "image/gif"
+  #:program "mpv --loop=8 %f")
+(assoc
   #:pattern "image/.*"
   #:program "sxiv %f")
 (assoc
   #:pattern "audio/.*"
-  #:program "mpc clear && mpc insert file://%F && mpc next && mpc play")
+  #:program "exec mpv --really-quiet --no-video --player-operation-mode=pseudo-gui %f")
 (assoc
   #:pattern "video/.*"
   #:program "mpv %f")
