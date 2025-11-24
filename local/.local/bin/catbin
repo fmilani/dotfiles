@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -eu
+
+if hash bat 2>/dev/null; then
+  cat_command=bat
+else
+  cat_command=cat
+fi
+
+exec "$cat_command" "$(which $1)"
