@@ -2,8 +2,9 @@
 
 url_no_https="${1#https://}"
 url_no_http="${url_no_https#http://}"
+url_no_http_no_port="${url_no_http%%:*}"
 
-wmctrl -xa "$url_no_http"
+wmctrl -xa "$url_no_http_no_port"
 
 if [ "$?" -ne 0 ]; then
   $BROWSER --app="$1" "${@:2}"
