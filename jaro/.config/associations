@@ -35,6 +35,9 @@
   #:pattern "^https?://www.twitch.tv/.*"
   #:program "streamlink %f")
 (assoc
+  #:pattern "^https?://share.transistor.fm/.*"
+  #:program "transistorfm-player %f")
+(assoc
   #:pattern "^https?://.*"
   #:program "$BROWSER %f")
 (assoc

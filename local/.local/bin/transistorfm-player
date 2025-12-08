@@ -1,0 +1,10 @@
+#!/bin/bash
+
+url=$1
+tmp="$(mktemp)"
+trap 'rm -f "$tmp"' EXIT
+curl -sL --max-redirs 5 "$url" -o "$tmp"
+
+audio="$(grep -Eo "https?://[^\"'\\ >]+(\\.mp3|\\.m4a|\\.ogg|\\.opus)(\\?[^\"'\\ >]*)?" "$tmp" | head -n1)"
+
+exec mpv --no-video "$audio"
