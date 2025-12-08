@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+if [[ "${TRACE-0}" == "1" ]]; then
+    set -o xtrace
+fi
+
+if [[ "${1-}" =~ ^-*h(elp)?$ ]]; then
+    echo 'Usage: mpvc <status|toggle>
+
+This is an awesome bash script to make your life better.
+
+'
+    exit
+fi
+
+is_running() {
+  running=$(ss -x -a | grep /tmp/mpvsocket || true)
+  test "$running"
+}
+get_status() {
+  s=$(is_running && echo '{ "command": ["get_property", "pause"] }' | socat - /tmp/mpvsocket || echo "not_running")
+  if [ "$s" == "not_running" ]; then
+    echo "$s"
+  else
+    paused=$(echo "$s" | jq '.data')
+    [ "$paused" == true ] && echo "paused" || echo "playing"
+  fi
+}
+
+toggle() {
+  is_running && echo '{ "command": ["cycle", "pause"] }' | socat - /tmp/mpvsocket >/dev/null
+}
+
+stop() {
+  pkill -15 mpv
+}
+
+main() {
+  local command="$1"
+  if [ "$command" == "status" ]; then
+    get_status
+    exit 0
+  fi
+  if [ "$command" == "toggle" ]; then
+    toggle
+    exit 0
+  fi
+  if [ "$command" == "stop" ]; then
+    stop
+    exit 0
+  fi
+}
+
+main "$@"
+
