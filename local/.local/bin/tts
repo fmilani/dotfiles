@@ -14,4 +14,4 @@ main() {
       aplay -r 22050 -f S16_LE -t raw -
   fi
 }
-main
+main "$@"
