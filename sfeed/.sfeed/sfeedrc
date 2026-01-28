@@ -16,4 +16,7 @@ feeds() {
 	feed "best hn" "https://hnrss.org/newest?points=500&link=comments"
 	feed "work chronicles" "https://workchronicles.com/feed/"
 	feed "tomorrow.fm" "https://feeds.transistor.fm/tomorrow"
+	feed "notes on work" "https://feeds.transistor.fm/building-livewire"
+	feed "uses this" "https://usesthis.com/feed.atom"
+	feed "paged out" "https://pagedout.institute/rss.xml"
 }
