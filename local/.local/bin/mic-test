@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+set -e
+
+DURATION=5
+TMP_FILE="$(mktemp /tmp/mic-test-XXXXXX.wav)"
+
+notify-send "$(basename $0)" "🎙️ Recording from microphone for ${DURATION}s..."
+arecord -d "$DURATION" -f cd -t wav "$TMP_FILE"
+
+notify-send "$(basename $0)" "🔊 Playing back the recording..."
+aplay "$TMP_FILE"
+
+rm -f "$TMP_FILE"
+echo "✅ Done"
+
