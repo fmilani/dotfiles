@@ -3,20 +3,17 @@
 LAPTOP="eDP-1"
 ULTRA="DP-2"
 
-# Virtual monitor names
 LEFT="DP-2-left"
 CENTER="DP-2-center"
 RIGHT="DP-2-right"
 
-# Helper: remove virtual monitors if they exist
 cleanup_monitors() {
-  xrandr --delmonitor "$LEFT"   2>/dev/null
-  xrandr --delmonitor "$CENTER" 2>/dev/null
-  xrandr --delmonitor "$RIGHT"  2>/dev/null
+  xrandr --delmonitor "$LEFT" >/dev/null 2>&1
+  xrandr --delmonitor "$CENTER" >/dev/null 2>&1
+  xrandr --delmonitor "$RIGHT"  >/dev/null 2>&1
 }
 
-# Check if DP-2 is currently active
-if xrandr | grep -q "^$ULTRA connected .*2560x1080"; then
+if xrandr | grep -Eq "^$ULTRA connected .*2560x1080|^$ULTRA disconnected" ; then
   echo "→ Switching to laptop screen ($LAPTOP)"
 
   cleanup_monitors
@@ -25,7 +22,7 @@ if xrandr | grep -q "^$ULTRA connected .*2560x1080"; then
     --output "$ULTRA" --off \
     --output "$LAPTOP" --mode 1280x720 --primary
 
-elif xrandr | grep -q "^$ULTRA connected"; then
+else
   echo "→ Switching to ultrawide split (3 monitors on $ULTRA)"
 
   cleanup_monitors
@@ -38,7 +35,5 @@ elif xrandr | grep -q "^$ULTRA connected"; then
     --setmonitor "$LEFT"   640/300x1080/340+0+0     "$ULTRA" \
     --setmonitor "$CENTER" 1280/600x1080/340+640+0  none \
     --setmonitor "$RIGHT"  640/300x1080/340+1920+0  none
-else
-  notify-send "$(basename $0)" "Can't switch to $ULTRA. Not connected."
 fi
 
