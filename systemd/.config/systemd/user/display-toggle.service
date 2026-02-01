@@ -1,0 +1,33 @@
+;  we also need to tell udev which user session to notify.
+;  create the file /etc/udev/rules.d/99-display-toggle.rules
+;  with the content below
+;  ACTION=="change", SUBSYSTEM=="drm", ENV{HOTPLUG}=="1", RUN+="/usr/local/bin/trigger-user-display-toggle.sh"
+;
+;  also create the script /usr/local/bin/trigger-user-display-toggle.sh
+;  with content below:
+; !/bin/sh
+; set -eu
+;
+; USER_NAME="felipe"
+; USER_ID=$(id -u "$USER_NAME")
+;
+; export XDG_RUNTIME_DIR="/run/user/$USER_ID"
+; export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
+;
+; exec /usr/bin/systemctl --machine="${USER_NAME}@.host" --user start display-toggle.service
+
+[Unit]
+Description=Toggle displays on dock/undock
+After=graphical-session.target
+
+[Service]
+Type=oneshot
+
+# X11 session variables (REQUIRED for xrandr)
+Environment=DISPLAY=:0
+Environment=XAUTHORITY=%h/.Xauthority
+
+ExecStart=%h/.local/bin/display-toggle
+
+[Install]
+WantedBy=default.target
