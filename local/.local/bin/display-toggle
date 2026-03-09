@@ -32,8 +32,7 @@ else
     --output "$ULTRA" --mode 2560x1080 --pos 0x0 --primary
 
   xrandr \
-    --setmonitor "$LEFT"   640/300x1080/340+0+0     "$ULTRA" \
-    --setmonitor "$CENTER" 1280/600x1080/340+640+0  none \
-    --setmonitor "$RIGHT"  640/300x1080/340+1920+0  none
+    --setmonitor "$LEFT"   1600/800x1080/340+0+0        "$ULTRA" \
+    --setmonitor "$RIGHT"  960/400x1080/340+1600+0    none
 fi
 
