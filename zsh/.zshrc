@@ -114,3 +114,10 @@ esac
 
 # opencode
 export PATH=/home/felipe/.opencode/bin:$PATH
+
+# bun completions
+[ -s "/home/felipe/.bun/_bun" ] && source "/home/felipe/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
