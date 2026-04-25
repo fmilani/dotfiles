@@ -17,7 +17,7 @@ main() {
   local MAX_LINES=30
   local files=$(fd . Downloads Documents Pictures Videos -t f)
   local lines=$(echo "$files" | wc -l)
-  local file=$(echo "$files" | dmenu -l "$(( $lines < $MAX_LINES ? $lines : $MAX_LINES ))" -p "open file: ")
+  local file=$(echo "$files" | dmenu -i -l "$(( $lines < $MAX_LINES ? $lines : $MAX_LINES ))" -p "open file: ")
   [ -z "$file" ] && exit 0
   [ $print == true ] && echo "$file" || jaro "$file"
 }
