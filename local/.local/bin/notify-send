@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+# use dunstify if installed, grouping by summary
+if command -v dunstify >/dev/null 2>&1; then
+    exec dunstify -h "string:x-dunst-stack-tag:$summary" "$@"
+else
+    exec /usr/bin/notify-send "$@"
+fi
