@@ -10,10 +10,6 @@ xinput set-prop "$TOUCHPAD_ID" "libinput Tapping Enabled" 1
 
 xrandr --output eDP-1 --mode 1280x720 --output DP-2 --off
 
-/usr/bin/pipewire &
-/usr/bin/pipewire-pulse &
-/usr/bin/wireplumber &
-
 xss-lock -- xsecurelock &
 spotifyd &
 export CM_DIR="$HOME/.local/share/clipmenu"
