@@ -1,0 +1,4 @@
+#!/bin/env bash
+
+webapp "https://www.chatgpt.com" --profile-directory="Default"
+
