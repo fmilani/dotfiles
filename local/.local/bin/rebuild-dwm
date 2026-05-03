@@ -1,0 +1,17 @@
+#!/bin/bash
+
+pushd ~/projects/dwm
+dunstify -h string:x-dunst-stack-tag:reload-dwm "Reloading dwm..."
+log_file=$(mktemp /tmp/rebuild-dwm.XXXXXX.log)
+
+if sudo make clean install >"$log_file" 2>&1; then
+  xdotool key super+shift+q
+  dunstify -h string:x-dunst-stack-tag:reload-dwm -t 2000 "Reloading dwm...done!"
+else
+  action=$(dunstify -h string:x-dunst-stack-tag:reload-dwm -t 5000 --action="default,Open logs" "Reloading dwm...fail!" "click to see the logs")
+
+  if [ "$action" = "default" ]; then
+    xdg-open "$log_file" &
+  fi
+fi
+popd
