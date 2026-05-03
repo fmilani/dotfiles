@@ -1,3 +1,0 @@
-#!/bin/bash
-exec google-chrome-stable --profile-directory="Profile 1" --new-tab "$@"
-

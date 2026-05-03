@@ -1,0 +1,7 @@
+#!/bin/bash
+
+wmctrl -xa chrome-work
+if [ "$?" -ne 0 ]; then
+  google-chrome-stable --user-data-dir="$HOME/.config/google-chrome-evolu" --class=chrome-work --new-tab "$@"
+fi
+

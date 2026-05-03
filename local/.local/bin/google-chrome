@@ -1,0 +1,7 @@
+#!/bin/bash
+
+wmctrl -xa Google-chrome.google-chrome
+if [ "$?" -ne 0 ]; then
+  google-chrome-stable --profile-directory="Default" --new-tab "$@"
+fi
+
