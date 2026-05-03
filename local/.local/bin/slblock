@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# helper script for slstatus and dwm with status2d patch
+# it formats the output of scripts according to status2d
+# color format
+# USAGE: slblock $(script)
+bg="#222222"
+sep="#005577"
+
+main() {
+  local output="$*"
+  [[ -z "$output" ]] && exit 0
+  printf "^b%s^ %s ^b%s^ " "$bg" "$output" "$sep"
+}
+main "$@"
