@@ -1,0 +1,11 @@
+#!/bin/bash
+
+status=$(cat "/sys/class/power_supply/BAT0/status" 2>&1)
+[[ "$status" == "Full" ]] && exit 0;
+
+capacity=$(cat "/sys/class/power_supply/BAT0/capacity" 2>&1)
+if [[ "$status" == "Charging" ]]; then
+  echo "󰂄 ${capacity}%"
+else
+  echo "${capacity}%"
+fi

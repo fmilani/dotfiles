@@ -1,0 +1,18 @@
+#!/bin/bash
+
+main() {
+  local ram=$(awk '
+$1=="MemTotal:"      {t=$2}
+$1=="MemFree:"       {f=$2}
+$1=="Buffers:"       {b=$2}
+$1=="Cached:"        {c=$2}
+$1=="Shmem:"         {s=$2}
+$1=="SReclaimable:"  {r=$2}
+END {
+    used = t - f - b - c - r + s
+    printf "%.1fGi\n", used/1024/1024
+}
+' /proc/meminfo)
+  echo "$ram"
+}
+main

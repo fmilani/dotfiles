@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+cache="/tmp/pacman-updates"
+ttl=300  # seconds (5 min)
+
+now=$(date +%s)
+last=0
+
+[ -f "$cache" ] && last=$(stat -c %Y "$cache")
+if [ $((now - last)) -gt $ttl ]; then
+    pacman -Qu --quiet 2>/dev/null | wc -l > "$cache"
+fi
+[ -f "$cache" ] || echo 0 > "$cache"
+
+count=$(cat "$cache")
+[[ "$count" -ne 0 ]] && echo "updates available"
+

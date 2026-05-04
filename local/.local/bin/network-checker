@@ -1,0 +1,9 @@
+#!/bin/sh
+
+iface=$(iw dev | awk '$1=="Interface"{print $2; exit}')
+
+[ -z "$iface" ] && echo "No internet" && exit
+
+if ! ip addr show "$iface" | grep -q "inet "; then
+  echo "No internet"
+fi
