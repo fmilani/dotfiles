@@ -1,4 +1,4 @@
 #!/bin/bash
-export BROWSER="google-chrome-work"
+export BROWSER="google-chrome-evolu"
 exec /usr/bin/slack "$@"
 
