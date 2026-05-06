@@ -16,4 +16,4 @@ clipmenud &
 dunst &
 feh --bg-scale Pictures/wallpapers/wallpaper &
 tmux-sessions home &
-dwmblocks &
+slstatus &
