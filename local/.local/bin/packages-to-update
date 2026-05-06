@@ -2,16 +2,28 @@
 
 cache="/tmp/pacman-updates"
 ttl=300  # seconds (5 min)
+force=0
+
+case "${1:-}" in
+    -f|--force)
+        force=1
+        ;;
+    "")
+        ;;
+    *)
+        printf 'usage: %s [-f|--force]\n' "${0##*/}" >&2
+        exit 2
+        ;;
+esac
 
 now=$(date +%s)
 last=0
 
 [ -f "$cache" ] && last=$(stat -c %Y "$cache")
-if [ $((now - last)) -gt $ttl ]; then
+if [ "$force" -eq 1 ] || [ $((now - last)) -gt $ttl ]; then
     pacman -Qu --quiet 2>/dev/null | wc -l > "$cache"
 fi
 [ -f "$cache" ] || echo 0 > "$cache"
 
 count=$(cat "$cache")
-[[ "$count" -ne 0 ]] && echo "updates available"
-
+[[ "$count" -ne 0 ]] && echo "$count updates"

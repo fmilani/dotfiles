@@ -3,6 +3,7 @@
 printf "Beginning updating.\\n"
 
 yay -Syyu
+packages-to-update --force
 
 printf "\\nUpdating complete.\\nPress <Enter> to exit window.\\n\\n"
 read -r _
