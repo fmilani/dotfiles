@@ -39,7 +39,7 @@
   #:program "transistorfm-player %f")
 (assoc
   #:pattern "^(https://)?gerrit.evoluservices.com.*"
-  #:program "google-chrome-work %f")
+  #:program "google-chrome-evolu %f")
 (assoc
   #:pattern "^https?://.*"
   #:program "$BROWSER %f")
