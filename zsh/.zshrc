@@ -89,7 +89,7 @@ PATH=$HOME/.local/bin:$HOME/go/bin:$HOME/python-env/bin:$PATH
 # Exports
 export EDITOR="nvim"
 export BROWSER="google-chrome-stable"
-export TERMINAL="st"
+export TERMINAL="ghostty"
 
 # Shell integrations
 eval "$(fzf --zsh)"
