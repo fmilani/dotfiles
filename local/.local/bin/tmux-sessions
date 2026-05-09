@@ -18,11 +18,8 @@ if [[ ! $session_exists ]]; then
 	$HOME/.local/bin/tmux/$session
 fi
 
-tmux_window=$(comm -12 <(xdotool search --name  'tmux'  | sort) <(xdotool search --class 'tmux'  | sort))
-if [[ $tmux_window ]]; then
-	xdotool windowactivate $tmux_window
-	tmux switch -t $session
-else
-	coproc ( $TERMINAL -c "tmux" -e tmux attach-session -t "$session" )
+wmctrl -xa tmux
+if [ "$?" -ne 0 ]; then
+  coproc ( ghostty --x11-instance-name=tmux -e tmux attach-session -t "$session" )
 fi
 
