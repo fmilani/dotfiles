@@ -21,5 +21,7 @@ fi
 wmctrl -xa tmux
 if [ "$?" -ne 0 ]; then
   coproc ( ghostty --x11-instance-name=tmux -e tmux attach-session -t "$session" )
+else
+  tmux switch -t $session
 fi
 
