@@ -3,6 +3,9 @@
   name = Felipe Milani
 [alias]
   pr = "!f() { local desc=$@; git push origin HEAD:refs/for/$(git branch --show-current)%m=${desc// /_}; }; f"
+  wta = "!f() { git worktree add -b \"$1\" \"../$1\"; }; f"
+  wtr = "!f() { git worktree remove \"../$1\" && git branch --delete \"$1\"; }; f"
+  wtl = "!f() { git worktree list; }; f"
 
 [column]
   ui = auto
