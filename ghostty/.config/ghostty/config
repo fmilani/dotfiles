@@ -56,3 +56,6 @@ window-decoration = none
 
 # Disable clipboard copy toast
 app-notifications = no-clipboard-copy
+
+# Close windows without confirmation
+confirm-close-surface = false
