@@ -1,5 +1,11 @@
 xrdb ~/.Xresources
 
+# Make GUI/session variables available to D-Bus/systemd activated services.
+# Required for xdg-desktop-portal-gtk file chooser dialogs under startx/dwm.
+export XDG_CURRENT_DESKTOP=dwm
+export XDG_SESSION_TYPE=x11
+dbus-update-activation-environment --systemd DISPLAY XAUTHORITY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE DBUS_SESSION_BUS_ADDRESS
+
 setxkbmap -layout us -variant intl -option "caps:escape"
 
 xcape -e 'Super_L=Super_L|Shift_L|d' &
