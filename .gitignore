@@ -1,4 +1,5 @@
 /nvim/.config/nvim/plugged
+/tmux/.config/tmux/plugins/
 
 # downloaded binaries
 beeper
