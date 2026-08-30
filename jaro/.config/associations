@@ -41,6 +41,12 @@
   #:pattern "^(https://)?gerrit.evoluservices.com.*"
   #:program "google-chrome-evolu %f")
 (assoc
+  #:pattern "^https://evoluservices.enterprise.slack.com.*"
+  #:program "google-chrome-evolu %f")
+(assoc
+  #:pattern "^https://evoluservices.atlassian.net.*"
+  #:program "google-chrome-evolu %f")
+(assoc
   #:pattern "^https?://.*"
   #:program "$BROWSER %f")
 (assoc
