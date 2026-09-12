@@ -16,10 +16,12 @@ xinput set-prop "$TOUCHPAD_ID" "libinput Tapping Enabled" 1
 
 xrandr --output eDP-1 --mode 1280x720 --output DP-2 --off
 
-xss-lock -- xsecurelock &
+# fastcompmgr removes XSecureLock's composite obscurer in an incompatible order.
+XSECURELOCK_COMPOSITE_OBSCURER=0 xss-lock -- xsecurelock &
 export CM_DIR="$HOME/.local/share/clipmenu"
 clipmenud &
 dunst &
+pgrep -x fastcompmgr >/dev/null || fastcompmgr >/tmp/fastcompmgr.log 2>&1 &
 feh --bg-scale Pictures/wallpapers/wallpaper &
 tmux-sessions home &
 slstatus &
