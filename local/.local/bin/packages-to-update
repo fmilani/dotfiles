@@ -26,4 +26,4 @@ fi
 [ -f "$cache" ] || echo 0 > "$cache"
 
 count=$(cat "$cache")
-[[ "$count" -ne 0 ]] && echo "$count updates"
+[[ "$count" -ne 0 ]] && printf '󰏓 %s\n' "$count"

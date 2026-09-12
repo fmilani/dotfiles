@@ -13,6 +13,6 @@ END {
     printf "%.1fGi\n", used/1024/1024
 }
 ' /proc/meminfo)
-  echo "$ram"
+  printf '  %s\n' "$ram"
 }
 main

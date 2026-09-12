@@ -1,11 +1,28 @@
 #!/bin/bash
 
-status=$(cat "/sys/class/power_supply/BAT0/status" 2>&1)
-[[ "$status" == "Full" ]] && exit 0;
+battery=/sys/class/power_supply/BAT0
+[[ -r "$battery/status" && -r "$battery/capacity" ]] || exit 0
 
-capacity=$(cat "/sys/class/power_supply/BAT0/capacity" 2>&1)
+status=$(<"$battery/status")
+capacity=$(<"$battery/capacity")
+
+# Hide the block when TLP has paused charging or the battery is full.
+case "$status" in
+  Charging|Discharging) ;;
+  *) exit 0 ;;
+esac
+
+# Material Design battery glyphs from JetBrains Mono Nerd Font, 0–100%.
+normal_icons=(󰂎 󰁺 󰁻 󰁼 󰁽 󰁾 󰁿 󰂀 󰂁 󰂂 󰁹)
+charging_icons=(󰢟 󰢜 󰂆 󰂇 󰂈 󰢝 󰂉 󰢞 󰂊 󰂋 󰂅)
+
+level=$(((capacity + 5) / 10))
+((level > 10)) && level=10
+
 if [[ "$status" == "Charging" ]]; then
-  echo "󰂄 ${capacity}%"
+  icon=${charging_icons[level]}
 else
-  echo "${capacity}%"
+  icon=${normal_icons[level]}
 fi
+
+printf '%s %s%%\n' "$icon" "$capacity"
