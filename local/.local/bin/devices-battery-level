@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+
+command -v bluetoothctl >/dev/null || exit 0
+
+icon_for_type() {
+  case "$1" in
+    *keyboard*)                         printf '󰌌' ;;
+    *mouse*|*touchpad*)                 printf '󰍽' ;;
+    *gaming*|*gamepad*|*joystick*)      printf '󰊴' ;;
+    *headset*|*headphone*|*earbud*)     printf '󰋎' ;;
+    *speaker*|audio-*)                  printf '󰓃' ;;
+    *phone*)                            printf '󰄜' ;;
+    *tablet*)                           printf '󰓶' ;;
+    *computer*|*desktop*|*laptop*)      printf '󰟀' ;;
+    *watch*)                            printf '󰖉' ;;
+    *)                                  printf '󰂯' ;;
+  esac
+}
+
+battery_from_upower() {
+  local mac="$1" device percentage
+  local suffix="${mac//:/_}"
+
+  command -v upower >/dev/null || return
+
+  while IFS= read -r device; do
+    [[ "$device" == *"_dev_$suffix" ]] || continue
+    percentage=$(upower -i "$device" 2>/dev/null |
+      awk '/^[[:space:]]*percentage:/ { print $2; exit }')
+    if [[ -n "$percentage" ]]; then
+      printf '%s' "$percentage"
+      return
+    fi
+  done < <(upower -e 2>/dev/null)
+}
+
+results=()
+while read -r prefix mac _; do
+  [[ "$prefix" == Device ]] || continue
+
+  info=$(bluetoothctl info "$mac" 2>/dev/null)
+  grep -q '^[[:space:]]*Connected: yes$' <<<"$info" || continue
+
+  type=$(awk -F ': ' '/^[[:space:]]*Icon:/ { print $2; exit }' <<<"$info")
+  percentage=$(awk '
+    /^[[:space:]]*Battery Percentage:/ && match($0, /\([0-9]+\)/) {
+      value = substr($0, RSTART + 1, RLENGTH - 2)
+      print value "%"
+      exit
+    }
+  ' <<<"$info")
+  [[ -n "$percentage" ]] || percentage=$(battery_from_upower "$mac")
+  [[ -n "$percentage" ]] || continue
+
+  results+=("$(icon_for_type "$type") $percentage")
+done < <(bluetoothctl devices 2>/dev/null)
+
+((${#results[@]})) && printf '%s\n' "${results[*]}"
