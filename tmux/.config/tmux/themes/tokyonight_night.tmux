@@ -7,6 +7,10 @@ set -g mode-style "fg=#7aa2f7,bg=#3b4261"
 set -g message-style "fg=#7aa2f7,bg=#3b4261,fill=#3b4261"
 set -g message-command-style "fg=#7aa2f7,bg=#3b4261"
 
+# True per-pane transparency is not available in tmux. Use a darker
+# background for inactive panes and the theme background for the active pane.
+set -g window-style "bg=#101117"
+set -g window-active-style "bg=#1a1b26"
 set -g pane-border-style "fg=#3b4261"
 set -g pane-active-border-style "fg=#7aa2f7"
 
