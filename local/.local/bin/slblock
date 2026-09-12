@@ -5,11 +5,11 @@
 # color format
 # USAGE: slblock $(script)
 bg="#222222"
-sep="#005577"
+gap=4
 
 main() {
   local output="$*"
   [[ -z "$output" ]] && exit 0
-  printf "^b%s^ %s ^b%s^ " "$bg" "$output" "$sep"
+  printf "^Rb%s^ %s ^R^^f%s^" "$bg" "$output" "$gap"
 }
 main "$@"
