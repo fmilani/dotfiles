@@ -11,8 +11,12 @@ set -g message-command-style "fg=#7aa2f7,bg=#3b4261"
 # background for inactive panes and the theme background for the active pane.
 set -g window-style "bg=#101117"
 set -g window-active-style "bg=#1a1b26"
-set -g pane-border-style "fg=#3b4261"
-set -g pane-active-border-style "fg=#7aa2f7"
+# Make the selected pane obvious even when applications paint their own
+# background (for example, Neovim).
+set -g pane-border-lines "heavy"
+set -g pane-border-indicators "both"
+set -g pane-border-style "fg=#24283b"
+set -g pane-active-border-style "fg=#7dcfff"
 
 set -g status "on"
 set -g status-justify "left"
