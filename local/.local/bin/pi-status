@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+status_file=${PI_STATUS_FILE:-/tmp/pi.status}
+status=stopped
+
+if [[ -r "$status_file" ]] && read -r recorded_status pid _ < "$status_file"; then
+  if [[ "$recorded_status" == "stopped" ]]; then
+    status=stopped
+  elif [[ "$pid" =~ ^[0-9]+$ ]] && kill -0 "$pid" 2>/dev/null; then
+    status=$recorded_status
+  fi
+fi
+
+case "$status" in
+  working) printf '󰔟\n' ;; # Timer sand, optically centered
+  idle)    printf '󰏤\n' ;;          # Pause
+  *)       printf '󰓛\n' ;; # Stop
+esac
