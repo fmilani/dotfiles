@@ -1,3 +1,0 @@
-#!/bin/bash
-
-rofi -show snip -modi "snip:$HOME/.bin/snippets"

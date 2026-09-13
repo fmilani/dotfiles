@@ -1,6 +1,0 @@
-#!/bin/sh
-setup-workspaces
-$HOME/.config/bspwm/bspwmrc
-picom --experimental-backend -b
-redshift -P -O 3500
-notify-send "Changed display config to $AUTORANDR_CURRENT_PROFILE"

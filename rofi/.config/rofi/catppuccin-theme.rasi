@@ -1,9 +1,0 @@
-* {
-  bg: #1e1e2e;
-  bg-transparent: #1e1e2edd;
-  selected-text: #1e1e2e;
-  fg: #d9e0ee;
-  button: #6e6c7eaa;
-  accent: #ddb6f2;
-}
-
