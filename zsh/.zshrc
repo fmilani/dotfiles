@@ -12,20 +12,28 @@ if [ ! -d "$ZINIT_HOME" ]; then
 fi
 source "${ZINIT_HOME}/zinit.zsh"
 
-# Add in zsh plugins
+# Load the prompt and completion definitions immediately.
 zinit ice depth=1; zinit light romkatv/powerlevel10k
-zinit light zsh-users/zsh-syntax-highlighting
 zinit light zsh-users/zsh-completions
-zinit light zsh-users/zsh-autosuggestions
-zinit light Aloxaf/fzf-tab
 
-# Add in zsh plugins
+# Keep command aliases available immediately.
 zinit snippet OMZP::git
 zinit snippet OMZP::sudo
 zinit snippet OMZP::archlinux
-zinit snippet OMZP::command-not-found
 
-autoload -U compinit && compinit
+autoload -Uz compinit
+() {
+  setopt localoptions extendedglob
+  local dump="${ZDOTDIR:-$HOME}/.zcompdump-${ZSH_VERSION}"
+  # Reuse the cache, but rebuild/check completion security at least daily.
+  # Remove this versioned dump to refresh immediately after plugin changes.
+  if [[ -n ${dump}(#qN.mh-24) ]]; then
+    compinit -C -d "$dump"
+  else
+    compinit -d "$dump" && touch "$dump"
+  fi
+}
+zinit cdreplay -q
 
 # Key bindings
 bindkey -e
@@ -59,7 +67,8 @@ setopt hist_find_no_dups
 # Completion styling
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
-zstyle ':completion:*' rehash true
+# Run `rehash` manually if a newly installed command is missing from completion.
+zstyle ':completion:*' rehash false
 zstyle ':completion:*' menu no
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
@@ -99,7 +108,8 @@ eval "$(zoxide init --cmd cd zsh)"
 FNM_PATH="/home/felipe/.local/share/fnm"
 if [ -d "$FNM_PATH" ]; then
   export PATH="/home/felipe/.local/share/fnm:$PATH"
-  eval "`fnm env`"
+  # Avoid fnm's shell detection on every startup.
+  eval "$(fnm env --shell zsh)"
 fi
 
 # pnpm
@@ -121,3 +131,13 @@ export PATH=/home/felipe/.opencode/bin:$PATH
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+
+# Load UI plugins just after the first prompt, without load messages.
+# fzf-tab must load after compinit and fzf's shell integration.
+zinit ice wait'0a' lucid
+zinit light Aloxaf/fzf-tab
+zinit ice wait'0b' lucid
+zinit light zsh-users/zsh-autosuggestions
+# Syntax highlighting must load after the other widget integrations.
+zinit ice wait'0c' lucid
+zinit light zsh-users/zsh-syntax-highlighting
