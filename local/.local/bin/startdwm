@@ -1,5 +1,7 @@
 #!/bin/sh
 
+mkdir -p "$HOME/.local/share/dwm" || exit 1
+
 while true; do
     dwm 2> ~/.local/share/dwm/dwm.log
 done
