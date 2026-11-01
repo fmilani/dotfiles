@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# Show the hottest CPU package only when it exceeds 80 degrees Celsius.
+LC_ALL=C sensors 'coretemp-*' 2>/dev/null | awk '
+/^Package id [0-9]+:/ {
+    temperature = $4 + 0
+    if (temperature > hottest)
+        hottest = temperature
+}
+END {
+    if (hottest > 80)
+        printf " %g°C\n", hottest
+}
+'
