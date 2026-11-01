@@ -1,3 +1,4 @@
 #!/bin/env bash
+# dmenu-label: WhatsApp
 
 webapp "https://web.whatsapp.com" --profile-directory="Default" "$@"

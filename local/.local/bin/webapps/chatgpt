@@ -1,4 +1,5 @@
 #!/bin/env bash
+# dmenu-label: ChatGPT
 
 webapp "https://www.chatgpt.com" --profile-directory="Default"
 

@@ -1,3 +1,4 @@
 #!/bin/env bash
+# dmenu-label: Twitch
 
 webapp "https://www.twitch.tv" --profile-directory="Default"

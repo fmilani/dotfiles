@@ -1,3 +1,4 @@
 #!/bin/env bash
+# dmenu-label: tldraw
 
 webapp "https://tldraw.com/" --profile-directory="Default"

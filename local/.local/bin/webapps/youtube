@@ -1,3 +1,4 @@
 #!/bin/env bash
+# dmenu-label: YouTube
 
 webapp "https://www.youtube.com" --profile-directory="Default"

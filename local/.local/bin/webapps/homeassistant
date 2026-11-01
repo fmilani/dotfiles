@@ -1,3 +1,4 @@
 #!/bin/bash
+# dmenu-label: Home Assistant
 
 webapp "http://homeassistant.local:8123/"
