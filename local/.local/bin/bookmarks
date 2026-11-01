@@ -1,50 +1,105 @@
 #!/bin/bash
 
-BOOKMARKS_PATH=$HOME/.config/surfraw/
-BOOKMARKS_NAME=bookmarks
+BOOKMARKS_PATH="$HOME/.config/surfraw"
+BOOKMARKS_FILE="$BOOKMARKS_PATH/bookmarks"
 
 add() {
-	local url=$1
-	[ -z "$url" ] && exit 0
-	local description=$(echo "" | dmenu -p "description")
-	[ -z "$description" ] && echo "$url" >> $BOOKMARKS_PATH/$BOOKMARKS_NAME
-	[ -n "$description" ] && echo "$description | $url" >> $BOOKMARKS_PATH/$BOOKMARKS_NAME
-	notify-send "Bookmark added" "$url"
+	local bookmark=${1:-}
+	local description
+
+	[[ -n "$bookmark" ]] || return 0
+	description=$(printf '' | dmenu -p "description")
+	if [[ -n "$description" ]]; then
+		printf '%s | %s\n' "$description" "$bookmark" >> "$BOOKMARKS_FILE"
+	else
+		printf '%s\n' "$bookmark" >> "$BOOKMARKS_FILE"
+	fi
+	notify-send "Bookmark added" "$bookmark"
 }
 
-ls() {
-	check
-	cat $BOOKMARKS_PATH/$BOOKMARKS_NAME | sort
+delete_bookmark() {
+	local bookmark=${1:-}
+	local escaped
+
+	[[ -n "$bookmark" ]] || return 0
+	escaped=$(printf '%s' "$bookmark" | sed 's/[][\.^$*\/]/\\&/g')
+	sed -i "/$escaped/d" "$BOOKMARKS_FILE"
+	notify-send "Bookmark deleted" "$bookmark"
 }
 
-del() {
-	check
-	local url=$1
-	[ -z "$url" ] && exit 0
-	local escaped_url=$(printf '%s\n' "$url" | sed -e 's/[]\/$*.^[]/\\&/g')
-	sed -i "/$escaped_url/d" $BOOKMARKS_PATH/$BOOKMARKS_NAME
-	notify-send "Bookmark deleted" "$escaped_url"
+list_bookmarks() {
+	check || return
+	sort "$BOOKMARKS_FILE"
+}
+
+# Machine-readable provider records: source<TAB>label<TAB>value.
+list_records() {
+	[[ -s "$BOOKMARKS_FILE" ]] || return 0
+
+	sort "$BOOKMARKS_FILE" | awk '
+		function trim(value) {
+			sub(/^[[:space:]]+/, "", value)
+			sub(/[[:space:]]+$/, "", value)
+			return value
+		}
+
+		/^[[:space:]]*$/ { next }
+
+		{
+			separator = index($0, "|")
+			if (separator) {
+				description = trim(substr($0, 1, separator - 1))
+				url = trim(substr($0, separator + 1))
+				printf "bookmarks\t%s | %s\t%s\n", description, url, url
+			} else {
+				url = trim($0)
+				printf "bookmarks\t%s\t%s\n", url, url
+			}
+		}
+	'
+}
+
+open_bookmark() {
+	local url=${1:-}
+	[[ -n "$url" ]] || return 0
+	jaro "$url"
 }
 
 open_menu() {
-	check
-	local bookmark=$(cat $BOOKMARKS_PATH/$BOOKMARKS_NAME | sort  | column -s "|" -t | dmenu -l $(cat $BOOKMARKS_PATH/$BOOKMARKS_NAME | wc -l) -p "open bookmark")
-	[[ $bookmark == *! ]] && del ${bookmark::-1} && exit 0
-	[[ $bookmark == *+ ]] && add ${bookmark::-1} && exit 0
+	local bookmark url
 
-	echo "$bookmark" | awk '{print $(NF)}' | xargs -I '{}' jaro {}
+	check || return
+	bookmark=$(column -s "|" -t < "$BOOKMARKS_FILE" | sort | dmenu -l "$(wc -l < "$BOOKMARKS_FILE")" -p "open bookmark")
+	[[ -n "$bookmark" ]] || return 0
+
+	if [[ "$bookmark" == *+ ]]; then
+		add "${bookmark%+}"
+		return
+	fi
+	if [[ "$bookmark" == *! ]]; then
+		delete_bookmark "${bookmark%!}"
+		return
+	fi
+
+	url=$(awk '{print $NF}' <<< "$bookmark")
+	open_bookmark "$url"
 }
 
 check() {
-	[ ! -s $BOOKMARKS_PATH/$BOOKMARKS_NAME ] && printf "Error: No bookmarks found to display. Try adding some!\n\n" && show_usage && exit 0
+	if [[ ! -s "$BOOKMARKS_FILE" ]]; then
+		printf 'No bookmarks found.\n' >&2
+		return 1
+	fi
 }
 
-[ ! -d $BOOKMARKS_PATH ] && mkdir -p $BOOKMARKS_PATH
-[ ! -f $BOOKMARKS_PATH/$BOOKMARKS_NAME ] && touch $BOOKMARKS_PATH/$BOOKMARKS_NAME
+mkdir -p "$BOOKMARKS_PATH"
+touch "$BOOKMARKS_FILE"
 
-case "$1" in
-	"add") add $2;;
-	"del") del ;;
-	"ls") ls ;;
+case ${1:-} in
+	--list) list_records ;;
+	--open) open_bookmark "${2:-}" ;;
+	ls) list_bookmarks ;;
+	add) add "${2:-}" ;;
+	del) delete_bookmark "${2:-}" ;;
 	*) open_menu ;;
 esac

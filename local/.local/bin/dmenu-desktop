@@ -1,0 +1,160 @@
+#!/bin/bash
+
+SOURCE=desktop
+MAX_LINES=30
+CACHE_DIR=${XDG_CACHE_HOME:-"$HOME/.cache"}
+CACHE="$CACHE_DIR/dmenu-desktop"
+CACHE_CONTEXT="$CACHE_DIR/dmenu-desktop.context"
+CONTEXT="${XDG_CURRENT_DESKTOP:-}|${XDG_SESSION_DESKTOP:-}|${XDG_DATA_HOME:-}|${XDG_DATA_DIRS:-}"
+
+DATA_HOME=${XDG_DATA_HOME:-"$HOME/.local/share"}
+DATA_DIRS=${XDG_DATA_DIRS:-"/usr/local/share:/usr/share"}
+APPLICATION_DIRS=("$DATA_HOME/applications")
+IFS=: read -r -a data_dirs <<< "$DATA_DIRS"
+for data_dir in "${data_dirs[@]}"; do
+  APPLICATION_DIRS+=("$data_dir/applications")
+done
+
+refresh_cache() {
+  local temporary_cache
+
+  mkdir -p "$CACHE_DIR"
+  temporary_cache=$(mktemp "$CACHE_DIR/dmenu-desktop.XXXXXX") || return 1
+
+  if ! python3 > "$temporary_cache" <<'PY'
+from collections import Counter
+
+import gi
+
+gi.require_version("Gio", "2.0")
+from gi.repository import Gio
+
+SOURCE = "desktop"
+EXCLUDED_APP_IDS = {
+    "avahi-discover.desktop",
+    "bssh.desktop",
+    "bvnc.desktop",
+    "cmake-gui.desktop",
+    "fcitx5-configtool.desktop",
+    "lsp-plugins.desktop",
+    "mpv.desktop",
+    "nvim.desktop",
+    "qv4l2.desktop",
+    "qvidcap.desktop",
+    "ranger.desktop",
+    "vim.desktop",
+}
+EXCLUDED_APP_ID_PREFIXES = (
+    "java-",
+    "jconsole-",
+    "jshell-",
+)
+
+
+def clean_field(value):
+    return " ".join(value.replace("\t", " ").splitlines()).strip()
+
+
+apps_by_id = {}
+for app in Gio.AppInfo.get_all():
+    app_id = app.get_id()
+    if not app_id or not app.should_show():
+        continue
+    if app_id in EXCLUDED_APP_IDS or app_id.startswith(EXCLUDED_APP_ID_PREFIXES):
+        continue
+    if not hasattr(app, "get_filename") or not app.get_filename():
+        continue
+    apps_by_id.setdefault(app_id, app)
+
+apps = list(apps_by_id.values())
+name_counts = Counter(clean_field(app.get_display_name()).casefold() for app in apps)
+records = []
+
+for app in apps:
+    app_id = app.get_id()
+    name = clean_field(app.get_display_name())
+    desktop_file = app.get_filename()
+    if not name or not desktop_file:
+        continue
+
+    label = name
+    if name_counts[name.casefold()] > 1:
+        label = f"{name} ({app_id})"
+
+    records.append((label, desktop_file))
+
+for label, desktop_file in sorted(records, key=lambda record: (record[0].casefold(), record[1])):
+    print(f"{SOURCE}\t{label}\t{desktop_file}")
+PY
+  then
+    rm -f "$temporary_cache"
+    return 1
+  fi
+
+  mv "$temporary_cache" "$CACHE"
+  printf '%s\n' "$CONTEXT" > "$CACHE_CONTEXT"
+}
+
+cache_is_stale() {
+  local cached_context changed_path
+  local existing_dirs=()
+
+  [[ -s "$CACHE" && -f "$CACHE_CONTEXT" ]] || return 0
+  [[ "$0" -nt "$CACHE" ]] && return 0
+
+  IFS= read -r cached_context < "$CACHE_CONTEXT"
+  [[ "$cached_context" == "$CONTEXT" ]] || return 0
+
+  for directory in "${APPLICATION_DIRS[@]}"; do
+    [[ -d "$directory" ]] && existing_dirs+=("$directory")
+  done
+
+  ((${#existing_dirs[@]})) || return 1
+  changed_path=$(find "${existing_dirs[@]}" \( -type d -o -name '*.desktop' \) -newer "$CACHE" -print -quit 2>/dev/null)
+  [[ -n "$changed_path" ]]
+}
+
+ensure_cache() {
+  if cache_is_stale; then
+    refresh_cache
+  fi
+}
+
+list_records() {
+  ensure_cache || return
+  cat "$CACHE"
+}
+
+open_application() {
+  local desktop_file=${1:-}
+
+  [[ -n "$desktop_file" ]] || return 0
+  gio launch "$desktop_file"
+}
+
+open_menu() {
+  local line_count selected source label desktop_file
+
+  ensure_cache || return
+  [[ -s "$CACHE" ]] || return 0
+
+  line_count=$(wc -l < "$CACHE")
+  ((line_count > MAX_LINES)) && line_count=$MAX_LINES
+
+  selected=$(cut -f2 "$CACHE" | dmenu -i -l "$line_count" -p "Open application" "$@") || return 0
+  [[ -n "$selected" ]] || return 0
+
+  while IFS=$'\t' read -r source label desktop_file; do
+    if [[ "$label" == "$selected" ]]; then
+      open_application "$desktop_file"
+      return
+    fi
+  done < "$CACHE"
+}
+
+case ${1:-} in
+  --list) list_records ;;
+  --open) open_application "${2:-}" ;;
+  --refresh) refresh_cache ;;
+  *) open_menu "$@" ;;
+esac

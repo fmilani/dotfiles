@@ -1,19 +1,32 @@
 #!/bin/sh
 
-chosen=$(echo -e "Power off\nSuspend\nReboot" | dmenu -i -p "Power options")
+# Machine-readable provider records: source<TAB>label<TAB>value.
+list_records() {
+  printf 'power\tPower off\tpoweroff\n'
+  printf 'power\tSuspend\tsuspend\n'
+  printf 'power\tReboot\treboot\n'
+}
 
-case "$chosen" in
+run_action() {
+  case "${1:-}" in
+    poweroff) systemctl poweroff ;;
+    suspend) systemctl suspend ;;
+    reboot) systemctl reboot ;;
+  esac
+}
 
-    "Power off")
-      systemctl poweroff
-      ;;
-    "Suspend")
-      systemctl suspend
-      ;;
-    "Reboot")
-      systemctl reboot
-      ;;
-    *)
-      exit 0
-      ;;
+open_menu() {
+  chosen=$(printf 'Power off\nSuspend\nReboot\n' | dmenu -i -p "Power options")
+
+  case "$chosen" in
+    "Power off") run_action poweroff ;;
+    "Suspend") run_action suspend ;;
+    "Reboot") run_action reboot ;;
+  esac
+}
+
+case "${1:-}" in
+  --list) list_records ;;
+  --open) run_action "${2:-}" ;;
+  *) open_menu ;;
 esac

@@ -1,0 +1,82 @@
+#!/bin/bash
+
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+WEBAPPS_DIR="$SCRIPT_DIR/webapps"
+SOURCE=webapp
+
+set_webapp_label() {
+  local script=$1
+  local line name
+
+  WEBAPP_LABEL=
+  while IFS= read -r line; do
+    if [[ "$line" == "# dmenu-label: "* ]]; then
+      WEBAPP_LABEL=${line#\# dmenu-label: }
+      break
+    fi
+  done < "$script"
+
+  if [[ -z "$WEBAPP_LABEL" ]]; then
+    name=${script##*/}
+    WEBAPP_LABEL=${name//[-_]/ }
+    WEBAPP_LABEL=${WEBAPP_LABEL^}
+  fi
+
+  WEBAPP_LABEL=${WEBAPP_LABEL//$'\t'/ }
+}
+
+# Machine-readable provider records: source<TAB>label<TAB>value.
+list_records() {
+  local script name
+
+  shopt -s nullglob
+  for script in "$WEBAPPS_DIR"/*; do
+    [[ -f "$script" && -x "$script" ]] || continue
+    name=${script##*/}
+    set_webapp_label "$script"
+    printf '%s\t%s\t%s\n' "$SOURCE" "$WEBAPP_LABEL" "$name"
+  done
+  shopt -u nullglob
+}
+
+open_webapp() {
+  local name=${1:-}
+  local script
+
+  [[ -n "$name" && "$name" != */* && "$name" != .* ]] || return 0
+  script="$WEBAPPS_DIR/$name"
+
+  if [[ ! -f "$script" || ! -x "$script" ]]; then
+    printf 'Webapp not found: %s\n' "$name" >&2
+    return 1
+  fi
+
+  exec "$script"
+}
+
+open_menu() {
+  local records selected source label name
+
+  records=$(list_records)
+  [[ -n "$records" ]] || return 0
+
+  selected=$(
+    while IFS=$'\t' read -r source label name; do
+      printf '%s\n' "$label"
+    done <<< "$records" | dmenu -i -p "Open webapp" "$@"
+  ) || return 0
+  [[ -n "$selected" ]] || return 0
+
+  while IFS=$'\t' read -r source label name; do
+    if [[ "$label" == "$selected" ]]; then
+      open_webapp "$name"
+      return
+    fi
+  done <<< "$records"
+}
+
+case ${1:-} in
+  --list) list_records ;;
+  --open) open_webapp "${2:-}" ;;
+  *) open_menu "$@" ;;
+esac

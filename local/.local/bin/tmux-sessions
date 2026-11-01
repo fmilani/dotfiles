@@ -1,27 +1,70 @@
-#!/bin/sh
+#!/bin/bash
 
-template_sessions=$(ls $HOME/.local/bin/tmux | xargs -n 1 basename)
-open_sessions=$(tmux list-windows -a -F "#S:#W" 2>/dev/null)
+TMUX_SESSION_DIR="$HOME/.local/bin/tmux"
 
-unopened_templates=$(comm -13 <(echo "$open_sessions" | cut -d':' -f1 | uniq) <(echo "$template_sessions"))
+list_choices() {
+  local -A open_names=()
+  local choice template name
 
-sessions=$(echo -e "$open_sessions\n$unopened_templates")
+  while IFS= read -r choice; do
+    [[ -n "$choice" ]] || continue
+    printf '%s\n' "$choice"
+    open_names["${choice%%:*}"]=1
+  done < <(tmux list-windows -a -F '#S:#W' 2>/dev/null)
 
-session=$1
-if [[ ! $session ]]; then
-  session=$(echo "$sessions" | sort | dmenu -i -p "Open tmux session")
-fi
-[[ -z "$session" ]] && exit 0
+  shopt -s nullglob
+  for template in "$TMUX_SESSION_DIR"/*; do
+    [[ -f "$template" ]] || continue
+    name=${template##*/}
+    [[ -v "open_names[$name]" ]] || printf '%s\n' "$name"
+  done
+  shopt -u nullglob
+}
 
-session_exists=$(tmux list-sessions | grep -w $(echo "$session" | cut -d':' -f1))
-if [[ ! $session_exists ]]; then
-	$HOME/.local/bin/tmux/$session
-fi
+# Machine-readable provider records: source<TAB>label<TAB>value.
+list_records() {
+  local choice
 
-wmctrl -xa tmux
-if [ "$?" -ne 0 ]; then
-  coproc ( ghostty --x11-instance-name=tmux -e tmux attach-session -t "$session" )
-else
-  tmux switch -t $session
-fi
+  while IFS= read -r choice; do
+    [[ -n "$choice" ]] || continue
+    printf 'tmux\t%s\t%s\n' "$choice" "$choice"
+  done < <(list_choices | sort -u)
+}
 
+open_session() {
+  local target=${1:-}
+  local session_name template
+
+  [[ -n "$target" ]] || return 0
+  session_name=${target%%:*}
+
+  if ! tmux has-session -t "=$session_name" 2>/dev/null; then
+    template="$TMUX_SESSION_DIR/$target"
+    if [[ ! -x "$template" ]]; then
+      printf 'No tmux session or template named %s.\n' "$target" >&2
+      return 1
+    fi
+    "$template"
+  fi
+
+  if wmctrl -xa tmux 2>/dev/null; then
+    tmux switch-client -t "$target"
+  else
+    coproc { exec ghostty --x11-instance-name=tmux -e tmux attach-session -t "$target"; }
+  fi
+}
+
+open_menu() {
+  local target
+
+  target=$(list_choices | sort -u | dmenu -i -p "Open tmux session")
+  [[ -n "$target" ]] || return 0
+  open_session "$target"
+}
+
+case ${1:-} in
+  --list) list_records ;;
+  --open) open_session "${2:-}" ;;
+  '') open_menu ;;
+  *) open_session "$1" ;;
+esac

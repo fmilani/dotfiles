@@ -1,0 +1,187 @@
+#!/bin/bash
+
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+CACHE_DIR=${XDG_CACHE_HOME:-"$HOME/.cache"}/dmenu-combi
+workdir=$(mktemp -d)
+records="$workdir/records"
+menu="$workdir/menu"
+providers=(tmux-sessions herdr-tabs powermenu audio-sinks filesearch dmenu-desktop dmenu-webapps bookmarks)
+pids=()
+FORCE_REFRESH=false
+REFRESH_ONLY=false
+trap 'rm -rf "$workdir"' EXIT
+
+if [[ ${1:-} == --refresh ]]; then
+  FORCE_REFRESH=true
+  REFRESH_ONLY=true
+  shift
+fi
+
+mkdir -p "$CACHE_DIR"
+
+SEARCH_DIRS=(
+  "$HOME/Downloads"
+  "$HOME/Documents"
+  "$HOME/Pictures"
+  "$HOME/Videos"
+)
+
+DATA_HOME=${XDG_DATA_HOME:-"$HOME/.local/share"}
+DATA_DIRS=${XDG_DATA_DIRS:-"/usr/local/share:/usr/share"}
+APPLICATION_DIRS=("$DATA_HOME/applications")
+IFS=: read -r -a data_dirs <<< "$DATA_DIRS"
+for data_dir in "${data_dirs[@]}"; do
+  APPLICATION_DIRS+=("$data_dir/applications")
+done
+
+DESKTOP_CONTEXT="${XDG_CURRENT_DESKTOP:-}|${XDG_SESSION_DESKTOP:-}|${XDG_DATA_HOME:-}|${XDG_DATA_DIRS:-}"
+FILE_CACHE_TTL=30
+
+paths_are_newer() {
+  local cache=$1
+  shift
+  local path
+
+  for path in "$@"; do
+    [[ "$path" -nt "$cache" ]] && return 0
+  done
+  return 1
+}
+
+cache_is_stale() {
+  local provider=$1
+  local cache="$CACHE_DIR/$provider.records"
+  local context_file="$CACHE_DIR/$provider.context"
+  local timestamp_file="$CACHE_DIR/$provider.timestamp"
+  local cached_context refreshed_at
+
+  [[ -f "$cache" ]] || return 0
+  [[ "$SCRIPT_DIR/$provider" -nt "$cache" ]] && return 0
+
+  case "$provider" in
+    bookmarks)
+      [[ "$HOME/.config/surfraw/bookmarks" -nt "$cache" ]]
+      ;;
+    filesearch)
+      [[ -f "$timestamp_file" ]] || return 0
+      IFS= read -r refreshed_at < "$timestamp_file"
+      if ((EPOCHSECONDS < refreshed_at || EPOCHSECONDS - refreshed_at >= FILE_CACHE_TTL)); then
+        return 0
+      fi
+      paths_are_newer "$cache" "${SEARCH_DIRS[@]}"
+      ;;
+    dmenu-desktop)
+      [[ -f "$context_file" ]] || return 0
+      IFS= read -r cached_context < "$context_file"
+      [[ "$cached_context" == "$DESKTOP_CONTEXT" ]] || return 0
+      paths_are_newer "$cache" "${APPLICATION_DIRS[@]}"
+      ;;
+    dmenu-webapps)
+      paths_are_newer "$cache" "$SCRIPT_DIR/webapps" "$SCRIPT_DIR/webapps"/*
+      ;;
+    powermenu)
+      return 1
+      ;;
+    *)
+      return 0
+      ;;
+  esac
+}
+
+refresh_cached_provider() {
+  local provider=$1
+  local cache="$CACHE_DIR/$provider.records"
+  local context_file="$CACHE_DIR/$provider.context"
+  local temporary_cache
+
+  temporary_cache=$(mktemp "$CACHE_DIR/$provider.XXXXXX") || return 1
+
+  if [[ "$provider" == dmenu-desktop && "$FORCE_REFRESH" == true ]]; then
+    "$SCRIPT_DIR/dmenu-desktop" --refresh >/dev/null || {
+      rm -f "$temporary_cache"
+      return 1
+    }
+  fi
+
+  if ! "$SCRIPT_DIR/$provider" --list > "$temporary_cache"; then
+    rm -f "$temporary_cache"
+    return 1
+  fi
+
+  mv "$temporary_cache" "$cache"
+  printf '%s\n' "$EPOCHSECONDS" > "$CACHE_DIR/$provider.timestamp"
+  if [[ "$provider" == dmenu-desktop ]]; then
+    printf '%s\n' "$DESKTOP_CONTEXT" > "$context_file"
+  fi
+}
+
+# Dynamic providers run in parallel. Fresh cached providers are read directly,
+# avoiding a separate shell process for each one.
+record_files=()
+for provider in "${providers[@]}"; do
+  case "$provider" in
+    tmux-sessions|herdr-tabs|audio-sinks)
+      provider_output="$workdir/$provider"
+      "$SCRIPT_DIR/$provider" --list > "$provider_output" &
+      pids+=("$!")
+      record_files+=("$provider_output")
+      ;;
+    *)
+      provider_cache="$CACHE_DIR/$provider.records"
+      if [[ "$FORCE_REFRESH" == true ]] || cache_is_stale "$provider"; then
+        refresh_cached_provider "$provider" &
+        pids+=("$!")
+      fi
+      record_files+=("$provider_cache")
+      ;;
+  esac
+done
+
+for pid in "${pids[@]}"; do
+  wait "$pid" || true
+done
+
+existing_record_files=()
+for record_file in "${record_files[@]}"; do
+  [[ -f "$record_file" ]] && existing_record_files+=("$record_file")
+done
+
+((${#existing_record_files[@]})) && cat "${existing_record_files[@]}" > "$records"
+
+if [[ "$REFRESH_ONLY" == true ]]; then
+  exit 0
+fi
+
+awk -F '\t' '
+  NF >= 3 && $1 != "" && $2 != "" && $3 != "" {
+    printf "[%s] %s\n", $1, $2
+  }
+' "$records" > "$menu"
+
+if [[ ${1:-} == --list ]]; then
+  cat "$menu"
+  exit 0
+fi
+
+[[ -s "$menu" ]] || exit 0
+
+line_count=$(wc -l < "$menu")
+((line_count > 20)) && line_count=20
+
+selected=$(dmenu -i -l "$line_count" -p "Open" "$@" < "$menu") || exit 0
+[[ -n "$selected" ]] || exit 0
+
+while IFS=$'\t' read -r source label value; do
+  [[ "$selected" == "[$source] $label" ]] || continue
+
+  case "$source" in
+    bookmarks) exec "$SCRIPT_DIR/bookmarks" --open "$value" ;;
+    tmux) exec "$SCRIPT_DIR/tmux-sessions" --open "$value" ;;
+    herdr) exec "$SCRIPT_DIR/herdr-tabs" --open "$value" ;;
+    power) exec "$SCRIPT_DIR/powermenu" --open "$value" ;;
+    audio) exec "$SCRIPT_DIR/audio-sinks" --open "$value" ;;
+    files) exec "$SCRIPT_DIR/filesearch" --open "$value" ;;
+    desktop) exec "$SCRIPT_DIR/dmenu-desktop" --open "$value" ;;
+    webapp) exec "$SCRIPT_DIR/dmenu-webapps" --open "$value" ;;
+  esac
+done < "$records"

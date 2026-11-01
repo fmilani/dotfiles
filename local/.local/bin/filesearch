@@ -1,25 +1,49 @@
-#!/bin/sh
+#!/bin/bash
 
-cd "$HOME"
-main() {
-  local print=false
-  while getopts "p" option; do
-    case $option in
-      p)
-        print=true
-        ;;
-      *)
-        echo "Usage: $0 [-p]"
-        exit 1
-        ;;
-    esac
-  done
-  local MAX_LINES=30
-  local files=$(fd . Downloads Documents Pictures Videos -t f)
-  local lines=$(echo "$files" | wc -l)
-  local file=$(echo "$files" | dmenu -i -l "$(( $lines < $MAX_LINES ? $lines : $MAX_LINES ))" -p "open file: ")
-  [ -z "$file" ] && exit 0
-  [ $print == true ] && echo "$file" || jaro "$file"
+SEARCH_DIRS=(Downloads Documents Pictures Videos)
+MAX_LINES=30
+
+list_files() {
+  cd "$HOME" || return
+  fd . "${SEARCH_DIRS[@]}" -t f
 }
 
-main "$@"
+# Machine-readable provider records: source<TAB>label<TAB>value.
+list_records() {
+  cd "$HOME" || return
+  fd . "${SEARCH_DIRS[@]}" -t f | awk -v home="$HOME" '
+    NF { printf "files\t%s\t%s/%s\n", $0, home, $0 }
+  '
+}
+
+open_file() {
+  local file=${1:-}
+
+  [[ -n "$file" ]] || return 0
+  jaro "$file"
+}
+
+open_menu() {
+  local print_selection=${1:-false}
+  local files lines file
+
+  files=$(list_files)
+  [[ -n "$files" ]] || return 0
+
+  lines=$(wc -l <<< "$files")
+  file=$(printf '%s\n' "$files" | dmenu -i -l "$((lines < MAX_LINES ? lines : MAX_LINES))" -p "open file: ")
+  [[ -n "$file" ]] || return 0
+
+  if [[ "$print_selection" == true ]]; then
+    printf '%s\n' "$file"
+  else
+    open_file "$HOME/$file"
+  fi
+}
+
+case ${1:-} in
+  --list) list_records ;;
+  --open) open_file "${2:-}" ;;
+  -p) open_menu true ;;
+  *) open_menu ;;
+esac

@@ -1,0 +1,62 @@
+#!/bin/bash
+# Pick a Herdr tab with dmenu and focus it.
+
+SOURCE=herdr
+
+# Machine-readable provider records: source<TAB>label<TAB>value.
+# label: "[machine] space / tab  · programs (status)", value: tab id.
+list_records() {
+  herdr-app ls 2>/dev/null | jq -r --arg src "$SOURCE" '
+    .spaces[] as $s
+    | $s.tabs[]
+    | ([.terminals[]
+        | select(.app != null)
+        | .app + (if .status then " (" + .status + ")" else "" end)]
+       | join(", ")) as $apps
+    | [ $src,
+        ((if $s.machine then "[" + $s.machine + "] " else "" end)
+          + $s.name + " / " + .name
+          + (if .active and $s.active then " *" else "" end)
+          + (if $apps != "" then "  · " + $apps else "" end)
+         | gsub("\t"; " ")),
+        .id ]
+    | @tsv'
+}
+
+focus_tab() {
+  local id=${1:-}
+
+  [[ -n "$id" ]] || return 0
+  herdr-app do tab.select --id "$id" >/dev/null || {
+    notify-send "Herdr" "Could not focus tab $id"
+    return 1
+  }
+  # Bring the Herdr window to the front.
+  wmctrl -x -a herdr-app.herdr-app 2>/dev/null
+}
+
+open_menu() {
+  local records selected source label id lines
+
+  records=$(list_records)
+  [[ -n "$records" ]] || return 0
+
+  lines=$(wc -l <<< "$records")
+  ((lines > 20)) && lines=20
+
+  selected=$(cut -f2 <<< "$records" | dmenu -i -l "$lines" -p "Herdr tab" "$@") || return 0
+  [[ -n "$selected" ]] || return 0
+
+  while IFS=$'\t' read -r source label id; do
+    if [[ "$label" == "$selected" ]]; then
+      focus_tab "$id"
+      return
+    fi
+  done <<< "$records"
+}
+
+case ${1:-} in
+  --list) list_records ;;
+  --open) focus_tab "${2:-}" ;;
+  *) open_menu "$@" ;;
+esac

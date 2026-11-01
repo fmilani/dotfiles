@@ -1,37 +1,82 @@
 #!/bin/bash
 
-# Get the list of sinks and extract sink name and description
-sink_info=$(pactl list sinks | awk '/Name:/ || /Description:/')
-
-# Store sink names and descriptions in arrays
 names=()
 descriptions=()
-while read -r line; do
-  if [[ $line == *"Name:"* ]]; then
-    name=$(echo "$line" | cut -d ' ' -f 2)
-    names+=("$name")
-  elif [[ $line == "Description:"* ]]; then
-    description=$(echo "$line" | cut -d ' ' -f 2-)
-    descriptions+=("$description")
-  fi
-done <<< "$sink_info"
 
-# Use dmenu to select a sink description
-selected_description=$(printf "%s\n" "${descriptions[@]}" | dmenu -i -p "Select Sink:")
+load_sinks() {
+  local line name description
 
-# Find the corresponding sink name
-selected_name=""
-for i in "${!descriptions[@]}"; do
-  if [[ "${descriptions[$i]}" == "$selected_description" ]]; then
-    selected_name="${names[$i]}"
-    break
-  fi
-done
+  while IFS= read -r line; do
+    line=${line#"${line%%[![:space:]]*}"}
 
-# Set the default sink
-if [ -n "$selected_name" ]; then
-  pactl set-default-sink "$selected_name"
+    case "$line" in
+      Name:*)
+        name=${line#Name: }
+        ;;
+      Description:*)
+        description=${line#Description: }
+
+        # Do not offer the Dell dock's digital output.
+        if [[ "$name" == *DisplayLink_Dell_Universal_Dock_D6000* ]] ||
+           [[ "$description" == "Dell Universal Dock D6000"* ]]; then
+          continue
+        fi
+
+        names+=("$name")
+        descriptions+=("$description")
+        ;;
+    esac
+  done < <(pactl list sinks | awk '/Name:/ || /Description:/')
+}
+
+# Machine-readable provider records: source<TAB>label<TAB>value.
+list_records() {
+  pactl list sinks | awk '
+    /^[[:space:]]*Name:/ {
+      name = $0
+      sub(/^[[:space:]]*Name:[[:space:]]*/, "", name)
+    }
+
+    /^[[:space:]]*Description:/ {
+      description = $0
+      sub(/^[[:space:]]*Description:[[:space:]]*/, "", description)
+
+      if (name !~ /DisplayLink_Dell_Universal_Dock_D6000/ &&
+          description !~ /^Dell Universal Dock D6000/) {
+        printf "audio\t%s\t%s\n", description, name
+      }
+    }
+  '
+}
+
+set_default_sink() {
+  local name=${1:-}
+
+  [[ -n "$name" ]] || return 0
+  pactl set-default-sink "$name" || return
   sigdwmblocks 2
-  notify-send "Default sink set to: $selected_name"
-fi
+  notify-send "Default sink set to: $name"
+}
 
+open_menu() {
+  local selected_description i
+
+  load_sinks
+  ((${#descriptions[@]})) || return 0
+
+  selected_description=$(printf '%s\n' "${descriptions[@]}" | dmenu -i -p "Select Sink:")
+  [[ -n "$selected_description" ]] || return 0
+
+  for i in "${!descriptions[@]}"; do
+    if [[ "${descriptions[$i]}" == "$selected_description" ]]; then
+      set_default_sink "${names[$i]}"
+      return
+    fi
+  done
+}
+
+case ${1:-} in
+  --list) list_records ;;
+  --open) set_default_sink "${2:-}" ;;
+  *) open_menu ;;
+esac
