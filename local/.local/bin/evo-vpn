@@ -1,0 +1,181 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+CONFIG="$HOME/.local/share/openfortivpn/config"
+MAX_CERT_RETRIES=2
+DNS_CHECK_HOST="ci2.evoluservices.com"
+DNS_CHECK_INTERVAL=30
+
+case "${1:-}" in
+  status)
+    if pgrep -x openfortivpn >/dev/null; then
+      echo "󰀑 vpn"
+    fi
+    exit 0
+    ;;
+  "" | connect) ;;
+  *)
+    echo "Usage: $(basename "$0") [connect|status]" >&2
+    exit 1
+    ;;
+esac
+
+if pgrep -x openfortivpn >/dev/null; then
+  echo "VPN is already connected (openfortivpn is already running)."
+  exit 0
+fi
+
+update_trusted_cert() {
+  local cert="$1"
+
+  if grep -Eq '^trusted-cert[[:space:]]*=' "$CONFIG"; then
+    sed -i -E "s/^trusted-cert[[:space:]]*=.*/trusted-cert = $cert/" "$CONFIG"
+  else
+    printf '\ntrusted-cert = %s\n' "$cert" >>"$CONFIG"
+  fi
+}
+
+extract_trusted_cert() {
+  local log="$1"
+
+  grep -Eio -- '(^|[[:space:]])(--)?trusted-cert([[:space:]]+|[[:space:]]*=[[:space:]]*)[0-9a-f]{64}|new[^[:cntrl:]]*[0-9a-f]{64}' "$log" \
+    | grep -Eio '[0-9a-f]{64}' \
+    | tail -n1 || true
+}
+
+is_auth_error() {
+  local log="$1"
+
+  grep -Eqi 'Could not authenticate|Please check the password|authentication failed|invalid password|permission denied' "$log"
+}
+
+update_password() {
+  local password="$1"
+  local tmp
+
+  tmp="$(mktemp)"
+  awk -v password="$password" '
+    BEGIN { updated = 0 }
+    /^[[:space:]]*password[[:space:]]*=/ {
+      print "password = " password
+      updated = 1
+      next
+    }
+    { print }
+    END {
+      if (!updated) {
+        print "password = " password
+      }
+    }
+  ' "$CONFIG" >"$tmp"
+  mv "$tmp" "$CONFIG"
+}
+
+prompt_for_password() {
+  local password
+
+  if ! tty -s; then
+    echo "openfortivpn authentication failed, but there is no TTY to prompt for a new password." >&2
+    return 1
+  fi
+
+  echo "openfortivpn authentication failed. Your VPN password may need to be changed."
+  printf "New VPN password: " >/dev/tty
+  IFS= read -rs password </dev/tty
+  printf '\n' >/dev/tty
+
+  if [[ -z "$password" ]]; then
+    echo "Password not changed: empty password." >&2
+    return 1
+  fi
+
+  update_password "$password"
+  echo "Updated VPN password in $CONFIG; retrying."
+}
+
+vpn_pid=""
+restart_requested=0
+
+stop_vpn() {
+  local pid="${1:-}"
+
+  if [[ -z "$pid" ]]; then
+    return
+  fi
+
+  if kill -0 "$pid" 2>/dev/null; then
+    kill "$pid" 2>/dev/null || true
+    sleep 2
+  fi
+
+}
+
+cleanup() {
+  stop_vpn "$vpn_pid"
+}
+trap cleanup EXIT
+trap 'cleanup; exit 130' INT TERM
+
+attempt=0
+while true; do
+  log_file="$(mktemp)"
+  restart_requested=0
+
+  sudo -n openfortivpn -c "$CONFIG" > >(tee "$log_file") 2>&1 &
+  vpn_pid=$!
+
+  while kill -0 "$vpn_pid" 2>/dev/null; do
+    for ((elapsed = 0; elapsed < DNS_CHECK_INTERVAL; elapsed++)); do
+      sleep 1
+
+      if ! kill -0 "$vpn_pid" 2>/dev/null; then
+        break
+      fi
+    done
+
+    if ! kill -0 "$vpn_pid" 2>/dev/null; then
+      break
+    fi
+
+    if ! ping -c 1 -W 3 "$DNS_CHECK_HOST" >/dev/null 2>&1; then
+      echo "DNS check failed for $DNS_CHECK_HOST; restarting openfortivpn."
+      restart_requested=1
+      stop_vpn "$vpn_pid"
+      break
+    fi
+  done
+
+  set +e
+  wait "$vpn_pid"
+  status=$?
+  set -e
+  vpn_pid=""
+
+  if (( restart_requested )); then
+    rm -f "$log_file"
+    continue
+  fi
+
+  if (( status == 0 )); then
+    rm -f "$log_file"
+    exit 0
+  fi
+
+  if is_auth_error "$log_file"; then
+    rm -f "$log_file"
+    prompt_for_password
+    continue
+  fi
+
+  cert="$(extract_trusted_cert "$log_file")"
+  rm -f "$log_file"
+
+  if [[ -n "$cert" && $attempt -lt $MAX_CERT_RETRIES ]]; then
+    ((attempt += 1))
+    echo "openfortivpn reported a new trusted cert; updating $CONFIG and retrying."
+    update_trusted_cert "$cert"
+    continue
+  fi
+
+  exit "$status"
+done
