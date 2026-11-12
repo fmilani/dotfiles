@@ -25,4 +25,4 @@ pgrep -x fastcompmgr >/dev/null || fastcompmgr >/tmp/fastcompmgr.log 2>&1 &
 feh --bg-scale Pictures/wallpapers/wallpaper &
 tmux-sessions home &
 slstatus &
-starthandy &
+start-dictation &

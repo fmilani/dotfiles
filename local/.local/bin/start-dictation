@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+hex &
+
+for _ in {1..50}; do
+    if wmctrl -xa Hex 2>/dev/null; then
+        sleep 0.2
+        xdotool key --clearmodifiers Control_R+q
+        exit 0
+    fi
+    sleep 0.1
+done
+
+echo "Hex window did not appear" >&2
+exit 1
